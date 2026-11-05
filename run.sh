@@ -5,7 +5,8 @@ set -u
 ROOT="${0:A:h}"
 cd "$ROOT" || exit 1
 SKILL_DIR="$HOME/.claude/skills/pokemon-party-ko"
-MAX_PER_RUN=${MAX_PER_RUN:-5}
+MAX_PER_RUN=${MAX_PER_RUN:-20}
+MIN_SEASON=${MIN_SEASON:-5}  # M-5 이후 시즌을 모두 동기화한다. SEASONS를 주면 그 시즌만 본다.
 MAX_RANK=${MAX_RANK:-200}
 PUSH=1; [[ "${1:-}" == "--no-push" ]] && PUSH=0
 # ~/.zshenv가 회사 GITHUB_TOKEN을 넣으므로 이 레포 push에는 쓰지 않는다(SSH 배포 키 사용).
@@ -28,7 +29,7 @@ EOF
 }
 
 log "start (max $MAX_PER_RUN, rank <= $MAX_RANK)"
-SEASON_ARGS=(); [[ -n "${SEASONS:-}" ]] && SEASON_ARGS=(--seasons "$SEASONS")
+SEASON_ARGS=(--min-season "$MIN_SEASON"); [[ -n "${SEASONS:-}" ]] && SEASON_ARGS=(--seasons "$SEASONS")
 CANDS=$(python3 -I scripts/fetch_candidates.py state/done.json --max-rank "$MAX_RANK" "${SEASON_ARGS[@]}") || { log "candidate fetch failed"; exit 1; }
 COUNT=$(print -r -- "$CANDS" | python3 -I -c 'import json,sys; print(len(json.load(sys.stdin)))')
 log "candidates: $COUNT"

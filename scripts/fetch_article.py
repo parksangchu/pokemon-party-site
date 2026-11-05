@@ -101,6 +101,17 @@ def pokesol_body(url):
     return art["title"], body
 
 
+def naver_body(url):
+    """네이버 블로그 본문은 iframe 안의 PostView에 있다. 이미지는 data-lazy-src가 원본이다."""
+    m = re.search(r"blog\.naver\.com/([\w-]+)/(\d+)", url)
+    s = get(f"https://blog.naver.com/PostView.naver?blogId={m.group(1)}&logNo={m.group(2)}")
+    title = re.search(r"<title>(.*?)</title>", s, re.S)
+    title = html.unescape(title.group(1)).replace(": 네이버 블로그", "").strip() if title else ""
+    body = s[s.find('<div class="se-main-container"'):]
+    body = re.sub(r'<img[^>]*?\bdata-lazy-src="([^"]+)"[^>]*>', r'<img src="\1">', body)
+    return title, body
+
+
 def generic_body(url):
     s = get(url)
     title = re.search(r"<title>(.*?)</title>", s, re.S)
@@ -120,6 +131,8 @@ def main():
         title, body = note_body(url)
     elif "pokesol.app/" in url:
         title, body = pokesol_body(url)
+    elif "blog.naver.com/" in url:
+        title, body = naver_body(url)
     else:
         title, body = generic_body(url)
     body = re.sub(r"<(script|style)[^>]*>.*?</\1>", "", body, flags=re.S)
