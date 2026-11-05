@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>사사부코 M-7 85위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-grass:#4fa83d; --t-electric:#e0b21a; --t-flying:#6f9fe0;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>사사부코의 시즌 M-7 최종 85위 파티 · 메가스코빌런 축</h1>
+  <p class="lede">일본 유저 사사부코(ささぶこ, sasabuko_0125)의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 공격을 받으면 상대를 화상 입히는 메가스코빌런을 축으로, 특수 어태커를 맡는 마기라스와 두 번째 메가인 메가갑주무사를 조합한 파티입니다. 작성자에게는 첫 최종 두 자리 순위이자 첫 최종 챔피언 클래스입니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>85위</b></div>
+    <div class="chip">최종 레이트<b>2359.019</b></div>
+    <div class="chip">시즌 / 레귤레이션<b>M-7 / M-C</b></div>
+    <div class="chip">기간<b>2026.10.07 ~ 11.04</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66이며 이 파티는 6마리 모두 합계 66입니다. 아래 막대와 오른쪽 숫자가 포인트이고, 가운데 숫자가 실수치입니다. 원문에는 스크린샷이 없어 수치는 원문의 개체 카드 값입니다. 카드는 메가 후 실수치만 보여 주므로 <b>메가 전 실수치(스코빌런·갑주무사)는 포인트와 종족값으로 계산한 값</b>이고, 같은 계산식이 카드의 6마리 수치와 모두 일치하는 것을 확인했습니다. 원문에 PP가 없어 PP는 적지 않았습니다. 순위·레이트·시즌은 pokedb 기준이고, 레귤레이션과 기간은 같은 시즌을 다룬 다른 글의 결과 화면 기준입니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><b>메가스코빌런</b></td><td>불면 → 하바네로분출</td><td>스코빌런나이트</td><td>대담</td><td>질투의불꽃 / 기가드레인 / 방어 / 씨뿌리기</td></tr>
+    <tr><td>2</td><td><b>마기라스</b></td><td>모래날림</td><td>유루열매</td><td>신중</td><td>암석봉인 / 탁쳐서떨구기 / 스텔스록 / 잠자기</td></tr>
+    <tr><td>3</td><td><b>타부자고</b></td><td>황금몸</td><td>풍선</td><td>조심</td><td>골드러시 / 섀도볼 / 나쁜음모 / HP회복</td></tr>
+    <tr><td>4</td><td><b>메가갑주무사</b></td><td>위기회피 → 단단한발톱</td><td>갑주무사나이트</td><td>용감</td><td>만나자마자 / 유턴 / 아이언헤드 / 드릴라이너</td></tr>
+    <tr><td>5</td><td><b>에써르</b> ♂</td><td>사이코메이커</td><td>구애스카프</td><td>겁쟁이</td><td>와이드포스 / 매지컬플레임 / 트릭 / 매지컬샤인</td></tr>
+    <tr><td>6</td><td><b>드래펄트</b></td><td>틈새포착</td><td>생명의구슬</td><td>조심</td><td>용성군 / 섀도볼 / 화염방사 / 기습</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>대면 파티에서 운이 덜 작용하는 축으로</h3>
+    <p>작성자는 그동안 대면 파티를 주로 썼지만, 첫 턴에 무엇을 내느냐로 승부가 모두 갈려 승률이 안정되지 않았습니다. 그래서 운에 되도록 덜 좌우되는 포켓몬을 축으로 삼기로 했습니다.</p>
+    <ul>
+      <li>메가스코빌런은 공격을 받으면 반드시 상대를 화상 상태로 만들 수 있습니다.</li>
+      <li>명중이 불안한 기술은 씨뿌리기뿐이고, 최악의 경우 쓰지 않아도 됩니다.</li>
+      <li>환경 상위인 갑주무사, 한카리아스, 누리레느에 비교적 강하게 나설 수 있다고 느꼈습니다.</li>
+    </ul>
+    <p>이런 이유로 메가스코빌런을 최대한 살리는 파티를 짜기 시작했습니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가스코빌런 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.952</span><h3>메가스코빌런</h3><span class="badge">에이스</span>
+    <span class="types"><span class="type" style="background:var(--t-grass)">풀</span><span class="type" style="background:var(--t-fire)">불꽃</span></span>
+    <div class="meta"><span>도구 <b>스코빌런나이트</b></span><span>특성 <b>불면 → 하바네로분출</b></span><span>성격 <b>대담</b> (방어↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">172</span><span class="v">172</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">115</span><span class="v down">142</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">123</span><span class="v up">145</span><span class="bar"><i style="width:84.4%"></i></span><span class="p">27</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">128</span><span class="v">158</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">85</span><span class="v">105</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">102</span><span class="v">102</span><span class="bar"><i style="width:21.9%"></i></span><span class="p">7</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>질투의불꽃</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>기가드레인</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>방어</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>씨뿌리기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H</dt><dd>줄일 이유가 없어 최대로 줬습니다.</dd>
+    <dt>B</dt><dd>되도록 높였습니다.</dd>
+    <dt>S</dt><dd>최속 메가갑주무사를 앞지릅니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>이 파티의 에이스입니다. 물리 어태커에 교체로 들어가 어떻게든 상대를 화상 입히는 것이 목표입니다.</li>
+    <li>물리 어태커와의 맞대결에 매우 강하고, 방어로 상대를 살피는 것도 강해서 선봉으로 내고 싶은 포켓몬입니다.</li>
+    <li>메가갑주무사의 랭크 2단계 오른 흡혈은 버티지 못합니다. 그대로 랭크업 발판이 되어 끝나는 일을 피하려고 최속 메가갑주무사를 앞지를 만큼 스피드에 줬습니다.</li>
+    <li>메가팬텀, 메가리자몽X, 메가보만다, 메가번치코, 드닐레이브 등의 랭크업 발판이 되면 뒤 포켓몬의 대응이 늦어지므로 주의해야 합니다.</li>
+    <li>스텔스록 피해가 아프고 화력이 낮아 한카리아스, 하마돈, 브리두라스에게 휘둘리기 쉽습니다.</li>
+    <li>선봉 한카리아스와 대면하면 어떤 형태든 씨뿌리기부터 시작하게 됩니다. 다만 메가한카리아스Z라면 크게 깎이는 데다, 씨뿌리기를 넣어도 방어를 읽히면 뒤의 물리 어태커를 화상 입힐 수는 있어도 대면에서 이길 수 없게 됩니다.</li>
+    <li>메가한카리아스Z를 읽고 방어부터 시작해도, 메가형이 아니라 스텔스록·압정뿌리기·드래곤테일을 든 구성이면 뒤 포켓몬으로 사이클을 돌릴 수 없게 됩니다. 선봉 한카리아스에 낼 때는 선출 단계에서 메가형인지 아닌지를 어느 정도 읽고 내는 것이 좋습니다.</li>
+    <li>스텔스록을 까는 포켓몬과, 스텔스록에 강한 풍선 타부자고와의 콤비가 기본입니다.</li>
+    <li>변덕쟁이의 운 요소는 메가스코빌런에 필요 없다고 봐서 특성은 불면으로 했습니다. 불면이 발동한 경우는 거의 없었으니, 운 좋은 전개를 노린다면 변덕쟁이로 넣어도 괜찮을 수 있습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 마기라스 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.248</span><h3>마기라스</h3>
+    <span class="types"><span class="type" style="background:var(--t-rock)">바위</span><span class="type" style="background:var(--t-dark)">악</span></span>
+    <div class="meta"><span>도구 <b>유루열매</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>신중</b> (특방↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">207</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">154</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">132</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">103</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v up">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">81</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>암석봉인</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>탁쳐서떨구기</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록</div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>잠자기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H·D</dt><dd>HP와 특방에 풀 배분했습니다.</dd>
+    <dt>B</dt><dd>남은 포인트입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>특수 어태커에 약한 메가스코빌런과 상성이 매우 좋습니다. 특히 메가스코빌런이 약한 리자몽Y와 메가팬텀에 압도적으로 강합니다.</li>
+    <li>운용은 단순합니다. 메가스코빌런을 견제하려고 나온 특수 어태커에 교체로 들어갑니다. 그 뒤 스텔스록이나 탁쳐서떨구기로 압박하는 움직임이 매우 강력합니다.</li>
+    <li>암석봉인이 있어 상대의 랭크업 발판도 잘 되지 않는 믿음직한 포켓몬입니다.</li>
+    <li>특공 특화 누리레느의 문포스 정도는 모래바람 아래에서 HP 절반도 들어오지 않습니다. 물이나 페어리 타입이 나왔다고 교체하지 말고 그대로 맞붙는 선택지도 고려해야 합니다.</li>
+    <li>독 등을 섞는 받이 파티에는 스텔스록+잠자기로 강하게 나서고, 여차하면 무승부로 끌고 갈 수 있습니다. 그래서 받이 파티에는 메가스코빌런이 없어도 넣고 싶은 포켓몬입니다.</li>
+    <li>메가팬텀이 기합구슬을 들고 있는 경우가 있습니다. 메가팬텀을 상대로는 메가스코빌런 대신 메가갑주무사를 적극적으로 선출하면 좋습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 타부자고 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.1000</span><h3>타부자고</h3>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>풍선</b></span><span>특성 <b>황금몸</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">194</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">72</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">195</span><span class="bar"><i style="width:78.1%"></i></span><span class="p">25</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">111</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">113</span><span class="bar"><i style="width:28.1%"></i></span><span class="p">9</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>골드러시</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>나쁜음모</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>HP회복</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H</dt><dd>풀 배분했습니다.</dd>
+    <dt>C</dt><dd>되도록 높였습니다.</dd>
+    <dt>S</dt><dd>준속 누리레느를 앞지릅니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>스텔스록에 약한 이 파티의 스텔스록 대책 자리입니다.</li>
+    <li>메가스코빌런+마기라스로는 받이를 뚫을 수 없어 중요한 존재입니다.</li>
+    <li>당시 스피드에 배분한 명상·잠자기 누리레느가 유행해서, 준속 누리레느를 앞지르는 스피드를 의식했습니다.</li>
+    <li>이 파티는 명상을 쌓는 페어리 타입인 메가플라엣테, 누리레느, 님피아, 픽시, 브리무음에 상당히 약합니다. 이런 상대가 보이면 타부자고를 적극적으로 내고 싶습니다.</li>
+    <li>안개제거를 무효로 할 수 있어 메가리자몽Y+안개제거 핫삼 또는 아머까오 조합에도 매우 강합니다.</li>
+    <li>HP·방어 위주로 쓰면 화상 입은 한카리아스를 랭크업 발판으로 삼을 수 있지만, 화력이 모자라 본래 역할인 받이 뚫기가 안 됩니다. 그래서 작성자는 HP·특공 위주를 추천합니다.</li>
+    <li>아머까오가 잡아야 할 상대이지만, 그대로 내면 유턴에 풍선이 터지면서 한카리아스 등이 나옵니다. 메가 자리가 갑주무사일 때는 상대가 울퉁불퉁멧을 든 것이 보여도 유턴부터 시작할 수밖에 없다는 점이 조금 아쉽습니다.</li>
+    <li>슈캐열매로 넣어도 괜찮을 수 있다고 합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 메가갑주무사 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.768</span><h3>메가갑주무사</h3><span class="badge">두 번째 메가</span>
+    <span class="types"><span class="type" style="background:var(--t-bug)">벌레</span><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>갑주무사나이트</b></span><span>특성 <b>위기회피 → 단단한발톱</b></span><span>성격 <b>용감</b> (공격↑ 스피드↓)</span><span>메가 전 타입 <b>벌레·물</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">182</span><span class="v">182</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">194</span><span class="v up">222</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">162</span><span class="v">197</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">80</span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">110</span><span class="v">140</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">54</span><span class="v down">54</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-bug)">벌레</span>만나자마자</div>
+      <div class="move"><span class="type" style="background:var(--t-bug)">벌레</span>유턴</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>아이언헤드</div>
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>드릴라이너</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H·A</dt><dd>HP와 공격에 풀 배분했습니다.</dd>
+    <dt>S</dt><dd>하마돈보다 느리게 움직이려고 최저 스피드로 맞췄습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>메가스코빌런이 잘 통하지 않는 대면 파티, 받이 파티, 바톤터치 파티, 랭크업 파티에 내는 두 번째 메가입니다.</li>
+    <li>메가루카리오Z, 메가거북왕, 드닐레이브, 메가플라엣테, 메가이상해꽃, 메가마폭시, 메가번치코, 메가한카리아스Z 등에는 기본적으로 메가갑주무사를 선출했습니다.</li>
+    <li>할 일은 단순합니다. 다른 포켓몬으로 어떻게든 상대를 만나자마자의 확정 범위까지 깎은 뒤 만나자마자를 씁니다. 유리한 대면에서는 유턴으로 뒤 포켓몬에 부담을 주며 교체합니다.</li>
+    <li>단순하지만 강한 포켓몬이며, 작성자는 이번 시즌 가장 강한 메가라고 봅니다.</li>
+    <li>메가진화 전에 스텔스록을 밟거나 아머까오의 울퉁불퉁멧에 깎이면 플라엣테를 이기지 못하는 경우가 많습니다. 플라엣테 파티에는 메가갑주무사와 타부자고를 함께 선출하길 추천합니다.</li>
+    <li>이 파티는 번치코, 에이스번, 파라블레이즈가 상당히 부담스럽습니다. 다만 에이스번과 파라블레이즈의 불꽃 기술에는 위기회피가 발동하지 않은 상태로 버티며 드릴라이너로 크게 깎을 수 있습니다.</li>
+    <li>메가번치코도 서로 마지막 한 마리끼리 대면이라면 플레어드라이브의 반동까지 더해 쓰러뜨릴 수 있습니다.</li>
+    <li>선봉 한카리아스와 대면하면 메가형인지, 애초에 불꽃 기술이 있는지 알 수 없어 유불리를 전혀 모르는 채 시작합니다. 기합의띠형, 메가형 등 모든 선봉 한카리아스에 어느 정도 대응할 수 있는 것은 메가진화 없이 쓰는 유턴입니다. 그래서 선봉 한카리아스와 만나면 메가진화 없이 유턴을 추천합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 에써르 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.876</span><h3>에써르 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-psychic)">에스퍼</span><span class="type" style="background:var(--t-normal)">노말</span></span>
+    <div class="meta"><span>도구 <b>구애스카프</b></span><span>특성 <b>사이코메이커</b></span><span>성격 <b>겁쟁이</b> (스피드↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">147</span><span class="bar"><i style="width:37.5%"></i></span><span class="p">12</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">75</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">157</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">150</span><span class="bar"><i style="width:68.75%"></i></span><span class="p">22</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>와이드포스</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>매지컬플레임</div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>트릭</div>
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>매지컬샤인</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H</dt><dd>남은 포인트입니다.</dd>
+    <dt>C</dt><dd>되도록 높였습니다.</dd>
+    <dt>S</dt><dd>원문 표기는 "최속 151족 앞지르기"(最速151族抜き)입니다. 스피드 종족값 151이라면 실수치 150으로 앞지를 수 없어 표기를 그대로 옮겼습니다(뜻 확인 필요).</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>에써르+거북왕 구성과 메가루카리오Z를 막으려고 넣었습니다.</li>
+    <li>에써르+거북왕이 유행할 때 고릴타 등을 넣으면 필드를 덮어쓰는 싸움이 벌어졌습니다. 그래서 "차라리 사이코필드를 먼저 깔고 5턴을 흘려보내면 되지 않을까"라고 생각해 채용했습니다.</li>
+    <li>스텔스록 요원+에써르+거북왕, 에써르+거북왕+포푸니크 어느 쪽에도 강하게 나설 수 있습니다.</li>
+    <li>스텔스록 요원이 브리두라스이면 매지컬플레임을, 에스퍼 기술이 통하는 상대이면 와이드포스를 쓰면 됩니다.</li>
+    <li>선봉 에써르끼리 만났을 때 뒤가 드래펄트이면 매지컬플레임을 쓰고 교체하고, 뒤가 마기라스이면 그냥 교체한 뒤 스텔스록이나 탁쳐서떨구기를 쓰면 됩니다.</li>
+    <li>스텔스록에 앙코르가 걸려도 상대 에써르는 이쪽 에써르에 유효타가 없고 사이코필드를 흘려보낼 수 있어 오히려 이득입니다.</li>
+    <li>에써르+거북왕 파티의 약점은 속도입니다. 가장 빠른 방법은 기합의띠 스텔스록 요원 다음에 거북왕을 내 껍질깨기를 쓰는 것인데, 그래도 첫 턴 에써르 등장부터 4턴이 걸립니다.</li>
+    <li>그 결과 대부분 다음 중 하나가 남습니다. 사이코필드가 끝난 상대 에써르, 껍질깨기를 아직 쓰지 못한 거북왕, 또는 껍질깨기를 썼지만 와이드포스에 깎인 거북왕입니다. 여기에 메가갑주무사의 유턴이나 만나자마자를 눌러 이기는 전개로 끌고 가는 것이 목적입니다.</li>
+    <li>메가루카리오Z도 매우 부담스럽습니다. 메가스코빌런과 메가갑주무사는 스텔스록을 밟으면 대면에서 지기 때문에, 이럴 때도 에써르가 큰 도움이 됐습니다.</li>
+    <li>트릭은 쓸 일이 한 번도 없었습니다. 그래서 트릭 자리는 스카프를 유지해도 앙코르나 치유소원으로 바꿔도 괜찮을 수 있습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 드래펄트 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.887</span><h3>드래펄트</h3>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>틈새포착</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">165</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">126</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">95</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">95</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">194</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용성군</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>화염방사</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>기습</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>C·S</dt><dd>특공과 스피드에 풀 배분했습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>메가갑주무사의 유턴 다음에 나와 상대를 무너뜨리는 자리입니다. 메가라이츄, 메가찌르호크, 한카리아스, 아머까오, 하마돈, 메가보만다, 타부자고, 메가메타그로스에 강하고, 틈새포착 덕분에 벽 파티와 바톤터치 파티에도 강합니다.</li>
+    <li>특공 특화로 한 이유는 특수형 드래펄트의 화력이 낮고, 메가팬텀과 메가마폭시는 마기라스나 메가갑주무사로 상대할 수 있기 때문입니다.</li>
+    <li>특공 특화로 하면 스피드에서 지는 주요 상대는 메가이어롭과 메가라이츄 등입니다. 다만 대전해 본 바로는 이 둘의 최속 개체가 지금은 적어서, 스피드를 올리는 이득이 작다고 느꼈습니다.</li>
+    <li>드래펄트는 메가라이츄의 공격에 대체로 쓰러지지 않고, 반격 용성군으로 크게 깎을 수 있습니다. 지금은 HP에 배분한 메가라이츄도 있어 쓰러뜨릴 수 있는지는 알 수 없지만, 못 쓰러뜨려도 기습 범위에는 넣을 수 있습니다.</li>
+    <li>메가이어롭은 특공 특화면 용성군으로 대체로 쓰러뜨립니다. 최속 메가이어롭이라도 무릎차기는 대체로 버텨서, 최속 트리플악셀 개체 외에는 지지 않습니다. 애초에 메가 자리로 상대할 수 있어 크게 의식할 필요는 없다고 느꼈습니다.</li>
+    <li>리자몽, 번치코, 에이스번, 히트로토무, 갸라도스처럼 이 파티가 부담스러워하는 포켓몬에 강한 압박을 줍니다.</li>
+    <li>틈새포착 덕분에 유행하는 팬텀+스코빌런, 펜드라 바톤터치, 벽 파티에 강한 편입니다.</li>
+    <li>메가갑주무사의 만나자마자+기습으로 대쓰여너를 처리할 수 있어 스카프 대쓰여너에도 강하게 운영할 수 있습니다.</li>
+    <li>아머까오를 쓰러뜨릴 수는 있지만, HP·특방 위주 개체의 HP가 일정 이상 남으면 날개쉬기로 버티며 생명의구슬 반동을 누적시킵니다. 아머까오는 기본적으로 메가스코빌런이나 타부자고로 상대하길 권합니다.</li>
+  </ul></div>
+</article>
+
+<h2>기본 운영</h2>
+<div class="selections">
+  <div class="sel"><div class="lineup">메가스코빌런 + 마기라스 + 타부자고 또는 드래펄트</div><p>기본 선출입니다. 메가스코빌런을 안전하게 메가진화하는 것에서 시작합니다.</p></div>
+  <div class="sel"><div class="lineup">메가갑주무사 + 마기라스 + 타부자고</div><p>메가픽시, 받이 루프 파티 상대의 선출입니다.</p></div>
+</div>
+
+<h3>메가스코빌런을 선봉으로 낼 상대</h3>
+<p>다음 상대의 선봉이 예상되면 메가스코빌런을 적극적으로 냅니다.</p>
+<ul>
+  <li>메가가 아니라고 읽은 한카리아스, 브리두라스, 메가Y로 읽은 리자몽</li>
+  <li>불꽃 복합 타입이 아닌 물리 어태커</li>
+  <li>풀·불꽃 기술로 약점을 찌를 수 있는 상대(하마돈, 누리레느 등)</li>
+  <li>랭크업 기술을 넣는 경우가 적은 특수 어태커(삼삼드래, 메가망나뇽 등)</li>
+</ul>
+<div class="tbl-wrap" style="margin:6px 0 12px">
+<table>
+  <thead><tr><th>선봉 상대</th><th>첫 행동</th></tr></thead>
+  <tbody>
+    <tr><td>특수 어태커</td><td>방어</td></tr>
+    <tr><td>랭크업 기술이 있는 물리 어태커</td><td>질투의불꽃</td></tr>
+    <tr><td>그 밖의 물리 어태커</td><td>기가드레인 또는 씨뿌리기</td></tr>
+    <tr><td>마스카나(예외)</td><td>기합의띠·독압정형일 수 있어 질투의불꽃으로 띠를 깎습니다</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>마기라스 운용</h3>
+<p>대전 중 마기라스가 특수 어태커에 교체로 들어가 유리한 대면이 되면 여유가 생깁니다. 이때 스텔스록과 탁쳐서떨구기 중 하나를 고릅니다.</p>
+<div class="tbl-wrap" style="margin:6px 0 12px">
+<table>
+  <thead><tr><th>스텔스록을 쓸 때</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td>상대 뒤 포켓몬에 탁쳐서떨구기를 써도 별 이득이 없을 때</td><td>메가스코빌런을 선출했을 때의 대짱이, 아머까오 등</td></tr>
+    <tr><td>스텔스록 피해가 큰 의미가 있을 때</td><td>상대 메가가 메가보만다, 메가한카리아스Z, 메가마폭시, 메가리자몽Y일 때, 불카모스 등</td></tr>
+    <tr><td>불꽃 물리 어태커가 있을 때</td><td>파라블레이즈, 히스이 윈디, 에이스번 등</td></tr>
+    <tr><td>날씨를 바꾸는 포켓몬이 있을 때</td><td>알로라 나인테일, 바닐리치, 코터스, 패리퍼 등</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="tbl-wrap" style="margin:6px 0 12px">
+<table>
+  <thead><tr><th>탁쳐서떨구기를 쓸 때</th><th>예시</th></tr></thead>
+  <tbody>
+    <tr><td>교체로 들어온 포켓몬에 마기라스가 쓰러지고, 랭크업 발판이 되면 메가스코빌런도 크게 깎일 때</td><td>따라큐, 킬가르도 등</td></tr>
+    <tr><td>메가갑주무사를 선출했고 상대가 울퉁불퉁멧을 든 것이 드러났을 때</td><td>아머까오, 갸라도스, 하마돈 등</td></tr>
+    <tr><td>메가갑주무사를 선출했고 상대를 만나자마자 범위에 넣고 싶을 때</td><td>한카리아스, 잠만보 등</td></tr>
+  </tbody>
+</table>
+</div>
+<p>수 읽기는 필요할 때만 하고, 기본적으로 눈앞의 상대에 통하는 기술을 계속 쓰면 됩니다.</p>
+
+<h3>메가스코빌런이 불리한 메가가 예상될 때</h3>
+<ul>
+  <li>메가스코빌런의 선봉 메가진화는 가장 읽히기 쉽습니다. 메가보만다, 메가리자몽X, 번치코(메가 여부 무관), 드닐레이브, 파라블레이즈 등에게 랭크업 발판이 되면 첫 턴에 경기가 끝납니다. 이때는 마기라스나 갑주무사를 선봉으로 냅니다.</li>
+  <li><b>마기라스</b>는 메가보만다와 메가리자몽X의 랭크업 발판이 되지 않습니다. 상대 입장에서는 화력, 스피드 관계, 메가 여부를 몰라 교체하는 일이 많습니다. 누리레느 등과 만나도 마기라스는 대면에서 이길 힘이 있으니, 불리한 상대가 물 타입 특수 어태커 정도라면 마기라스부터 내는 편이 안정적입니다.</li>
+  <li><b>갑주무사</b>는 메가진화를 하지 않으면 드릴라이너로 불꽃 타입을 크게 깎을 수 있습니다. HP가 절반 이하로 떨어져 위기회피가 발동해도 드래펄트를 피해 없이 내보낼 수 있어 랭크업 발판이 되는 일이 적습니다.</li>
+  <li>갑주무사는 드닐레이브와 플라엣테에 상성이 아주 좋고 브리두라스도 크게 깎습니다. 상대가 교체해 와도 아머까오의 유턴보다 늦게 유턴할 수 있고, 하마돈의 하품에도 늦게 유턴할 수 있습니다.</li>
+</ul>
+
+<h2>특수한 운영이 필요한 포켓몬</h2>
+<p>기본적으로는 메가스코빌런으로 화상을 입히거나 메가갑주무사로 대면 위주로 움직이지만, 특수한 운영을 요구하는 상대가 있습니다. 작성자가 소개한 예외적인 공략법입니다.</p>
+
+<h3>메가픽시</h3>
+<p>특수한 운영이 필요한 메가의 대표입니다. 코스믹파워나 명상으로 전멸을 노리는 얄미운 상대입니다. 빠르모트 파티 외의 픽시는 기본적으로 뒤에서 나오므로, 이쪽에 교체할 여유가 있다는 전제로 설명합니다.</p>
+<ul>
+  <li>클레스퍼트라가 시작해 명상 바톤터치로 넘겨주면 픽시를 절대 이길 수 없으니 메가갑주무사를 반드시 선출합니다.</li>
+  <li>기본 선출은 메가갑주무사+마기라스+타부자고입니다.</li>
+  <li>만나자마자를 쓰고, 방어로 막히면 유턴을 쓰며, 기합의띠형이면 마기라스의 모래바람으로 쓰러뜨립니다.</li>
+  <li>핵심은 어떤 랭크업 기술을 쓰느냐에 따른 대응입니다.</li>
+</ul>
+<div class="steps">
+  <div class="step">
+    <h3>코스믹파워일 때</h3>
+    <p>기본 기술은 코스믹파워, 달빛, 화염방사 또는 매지컬플레임, 어시스트파워입니다. 타부자고로 교체해 나쁜음모를 쌓습니다. 이쪽이 더 빠르므로 상대가 한 번 쌓은 상태에서 교체해도 나쁜음모→골드러시→골드러시로 늦지 않습니다. 골드러시가 빗나가면, 문포스가 없는 경우가 많으니 마기라스로 무승부를 노립니다.</p>
+  </div>
+  <div class="step">
+    <h3>명상일 때</h3>
+    <p>이때는 타부자고를 뒤에 내서 이길 수 있을지 조금 불안합니다. 화력이 오른 상대의 화염방사 앞에서 나쁜음모를 쌓을지, 달빛 앞에서 골드러시를 쓸지 읽어야 하고, 상대 메가픽시가 타부자고보다 빠를 수도 있기 때문입니다.</p>
+    <p>그래서 메가갑주무사를 씁니다. 특공 무배분 메가픽시가 특공 1랭크 오른 상태의 문포스는 마기라스에 대체로 50% 전후의 피해를 줍니다. 그래서 암석봉인 2번이면 특공·특방이 1랭크 오른 깎인 메가픽시와, 암석봉인 3번이면 스피드가 3랭크 내려간 메가픽시와 대면합니다.</p>
+    <ul>
+      <li>최저 스피드 메가갑주무사는 스피드 무배분 메가픽시를 암석봉인 2번이면 앞지르지만, 스피드에 배분한 경우도 고려해야 합니다.</li>
+      <li>스피드 2랭크 하락·특공과 특방 1랭크 상승이면 쓰러진 뒤 타부자고를 냅니다.</li>
+      <li>스피드 3랭크 하락이면 쓰러진 뒤 메가갑주무사를 냅니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h3>빠르모트 파티</h3>
+<p>요즘 유행하는 파티입니다. 메가 포켓몬으로 휘저은 뒤 빠르모트가 재기의기도(再起の祈り)를 쓰고, 대쓰여너가 위력 200 성묘를 쓰는 단순한 구성입니다. 문제는 위력 200 성묘가 HP 가득한 메가스코빌런을 뚫고, 화상 상태에서도 HP 가득한 타부자고를 뚫는다는 점입니다. 드래펄트라면 먼저 공격할 수 있지만 스카프형인지에 달린 운 싸움이 됩니다. 마기라스를 남기면 좋겠지만 이미 깎였거나 웨이브태클에 지는 상태인 경우가 많습니다.</p>
+<div class="tbl-wrap" style="margin:6px 0 12px">
+<table>
+  <thead><tr><th>상대 메가</th><th>대응</th></tr></thead>
+  <tbody>
+    <tr><td>메가우츠보트</td><td>가장 쉽습니다. 타부자고에 유효한 기술이 기습뿐이라 타부자고로 완봉할 수 있습니다. 부활해도 HP가 40 정도 남아 있으면 HP회복으로 여유 있게 이깁니다. 이쪽 메가와 HP 가득한 포켓몬이 뒤에 남으니 여유롭게 처리합니다.</td></tr>
+    <tr><td>메가다크펫</td><td>메가스코빌런, 메가갑주무사, 마기라스 모두 이깁니다. 더스트슈트로도 메가스코빌런을 쓰러뜨리지 못하고 마기라스에는 앙코르조차 걸 수 없어, 스텔스록을 깐 뒤 길동무를 피해 처리할 수 있습니다. 부활해도 질 일은 거의 없습니다. 손실이 거의 없어 뒤의 대쓰여너 처리도 문제없습니다.</td></tr>
+    <tr><td>메가픽시</td><td>가장 힘듭니다. 스텔스록이 깔리고 마기라스가 깎인 채 시작하거나, 다른 포켓몬을 전부 포기하고 타부자고를 선봉으로 내야 합니다. 뒤가 메가스코빌런이면 대쓰여너에 뚫려 끝납니다.</td></tr>
+  </tbody>
+</table>
+</div>
+<ul>
+  <li><b>뒤가 대쓰여너일 때</b>: 앞서 말한 메가갑주무사의 만나자마자+드래펄트의 기습으로 처리하는 길이 있습니다. 요즘 대쓰여너는 고속이동보다 대타를 주로 쓰고, 대타를 쓴 시점에 드래펄트의 섀도볼로 처리할 수 있습니다.</li>
+  <li>더 빠른 길은 에써르를 내는 것입니다. 에써르는 대쓰여너보다 빠르고 성묘가 통하지 않아, 스텔스록·모래바람 피해·만나자마자·상대의 웨이브태클 반동으로 깎으면 이길 수 있습니다.</li>
+  <li>이 구성은 메가의 힘이 약하고 빠르모트가 한 턴을 소비하므로 수적 우위를 잡기 쉽습니다. 두 마리로 대쓰여너를 쓰러뜨리는 경우가 꽤 많습니다.</li>
+  <li><b>뒤가 대도각참일 때</b>: 메가갑주무사의 만나자마자나 드릴라이너로 깎은 뒤 에써르의 매지컬플레임으로 쓰러뜨리거나, 메가스코빌런으로 깎은 뒤 에써르가 매지컬플레임을 쓰면 됩니다. 앞서 말했듯 이 파티의 메가는 힘이 매우 약해 부활해도 할 일이 없는 경우가 대부분입니다.</li>
+  <li><b>주의</b>: 메가픽시 등으로 시작한 경우 빠르모트의 기합의띠가 깎이지 않은 채 볼부비부비를 맞을 수 있습니다. 드래펄트나 에써르가 마비되면 경기가 끝나니 반드시 주의해야 합니다.</li>
+</ul>
+
+<h2>부담스러운 상대</h2>
+<p>작성자는 유행하는 파티에는 대체로 강한 움직임이 있다고 보지만, 아무래도 힘든 포켓몬이 있습니다. 아래 상대가 나오면 우선 일대일 교환을 생각합니다.</p>
+<ul>
+  <li><b>메가가디안</b>: 너무 힘듭니다. 갑주무사의 만나자마자와 드래펄트의 섀도볼을 모두 버팁니다. 타부자고도 매지컬플레임을 맞으면 골드러시를 버티고, 메가스코빌런은 사이코노이즈로 봉쇄됩니다. 대책은 메가진화 없는 갑주무사로 만나자마자를 쓰고 매지컬플레임을 받은 뒤 드래펄트로 교체하거나, 갑주무사를 메가진화해 페어리 기술을 받는 것입니다. 또는 메가스코빌런으로 화상+질투의불꽃을 넣은 뒤 마기라스로 깎거나 드래펄트로 교체해 쓰러뜨립니다. 어느 쪽이든 안정적인 처리 루트는 없습니다.</li>
+  <li><b>히스이 윈디</b>: 정말 위험합니다. 메가스코빌런도 메가갑주무사도 지고, 메가진화 안 한 갑주무사가 양날박치기를 맞는 순간 경기가 무너집니다. 마기라스는 인파이트에 지고, 드래펄트를 내도 양날박치기가 빗나가지 않으면 경기가 끝납니다.</li>
+  <li><b>잠만보</b>: 받이 루프의 왕입니다. 받이 루프 상대로는 주로 타부자고로 싸우는데, 더시마사리를 타부자고로 상대하는 이상 항상 풍선이 터진 채 시작합니다. 생명의구슬 드래펄트는 곤란하고, 메가 포켓몬에 트릭이 막히면 큰일인 데다 에스퍼 기술도 잘 통하지 않아 에써르도 내기 어렵습니다. 그래서 메가갑주무사+마기라스+타부자고 같은 선출이 되는데, 이러면 땅가르기를 누구도 대비하지 못합니다. 메가갑주무사가 땅가르기를 맞으면 기본적으로 무승부나 패배가 되니 작성자 표현대로 신에게 빌 수밖에 없습니다.</li>
+  <li><b>히스이 미끄래곤</b>: 메가갑주무사는 화상을 입고, 메가스코빌런은 상대는 할 수 있어도 이기기 어렵습니다. 초식이면 이쪽 메가로는 절대 이길 수 없고, 타부자고·드래펄트·에써르는 맞대결에서 지는 데다 스텔스록 피해도 적습니다.
+    <ul>
+      <li>마기라스라면 헤비봄버와 러스터캐논을 대략 확정 3타로 억제하고, 탁쳐서떨구기로 회복 수단을 없앨 수 있습니다. 다만 대개 마기라스를 받을 수 있는 하마돈 등의 사이클 요원과 함께 나와 그대로 통하는 일은 적습니다.</li>
+      <li>스피드에 배분하지 않은 경우가 많아 마기라스가 먼저 잠자기를 쓸 수 있으니, 사이클로 어느 정도 무리할 수는 있습니다.</li>
+      <li>이번 시즌에 본 적은 없지만 바디프레스를 넣었다면 거의 집니다. 유행과 형태를 가려봐야 하는 포켓몬입니다.</li>
+      <li>종족값 인상과 달리 HP·특공이나 HP·특방 배분이 주류이고 방어에 준 경우는 적습니다. 메가갑주무사의 만나자마자가 약 37% 들어가니 다른 포켓몬으로 함께 깎으면 됩니다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-7에서 최고 레이트 2359, 최종 챔피언 클래스, 최종 <b>85위</b>를 달성했습니다. pokedb 기준 최종 레이트는 <b>2359.019</b>입니다. 트레이너 이름은 ささぶこ입니다.</li>
+  <li>처음으로 최종 두 자리 순위와 챔피언 클래스를 달성했고, 손에 잡히는 감각이 있어 글이 꽤 길어졌다고 했습니다.</li>
+  <li>끝까지 읽어 준 사람들에게 거듭 감사를 전하며, 자신의 파티가 조금이라도 도움이 되길 바란다고 적었습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>완전 연소 (完全燃焼)</dt><dd>원문 제목 표현으로, 이번 시즌에 모든 것을 쏟아부었다는 뜻</dd>
+  <dt>최종 두 자리 (最終2桁)</dt><dd>최종 순위 10~99위</dd>
+  <dt>대면 파티 (対面構築)</dt><dd>교체보다 맞대결 위주로 싸우는 파티</dd>
+  <dt>受け出し / 後投げ</dt><dd>상대 공격을 받으며 교체로 들어가기</dd>
+  <dt>起点 (기점)</dt><dd>랭크업 발판</dd>
+  <dt>最速 / 準速 / 最遅</dt><dd>스피드 상승 성격+풀 배분 / 무보정 성격+풀 배분 / 스피드 하락 성격+무배분</dd>
+  <dt>極振り</dt><dd>해당 능력치에 풀 배분</dd>
+  <dt>圏内</dt><dd>그 공격으로 쓰러뜨릴 수 있는 HP 범위</dd>
+  <dt>上振れ</dt><dd>운이 좋게 풀리는 전개</dd>
+  <dt>イエカメ</dt><dd>에써르+거북왕 구성</dd>
+  <dt>パモイダイ</dt><dd>빠르모트+대쓰여너 구성</dd>
+  <dt>受けループ / 受け構築</dt><dd>받이 포켓몬을 돌려 가며 버티는 파티</dd>
+  <dt>バトン構築 / 積み構築 / 壁</dt><dd>바톤터치 파티 / 랭크업 파티 / 벽 파티</dd>
+  <dt>ガブZ / メガルカリオZ</dt><dd>메가한카리아스Z / 메가루카리오Z. 원문 표기를 그대로 옮겼습니다.</dd>
+  <dt>リザX / メガY</dt><dd>메가리자몽X / 메가리자몽Y</dd>
+  <dt>ドラパ / バンギ / サフゴ</dt><dd>드래펄트 / 마기라스 / 타부자고</dd>
+  <dt>ステロ / ドラテ / ゴルラ / シャドボ</dt><dd>스텔스록 / 드래곤테일 / 골드러시 / 섀도볼</dd>
+  <dt>マジフレ / ウェーブタックル / もろは</dt><dd>매지컬플레임 / 웨이브태클 / 양날박치기</dd>
+  <dt>ゴツメ / 球 / 風船</dt><dd>울퉁불퉁멧 / 생명의구슬 / 풍선</dd>
+  <dt>素とんぼ返り / 素引き</dt><dd>메가진화 없이 유턴 / 기술 없이 그냥 교체</dd>
+  <dt>死に出し</dt><dd>쓰러진 뒤 다음 포켓몬을 내보내기</dd>
+  <dt>ラス1対面</dt><dd>서로 마지막 한 마리끼리의 대면</dd>
+  <dt>無償降臨</dt><dd>피해 없이 등장</dd>
+  <dt>1-1交換</dt><dd>일대일 교환</dd>
+  <dt>재기의기도 (再起の祈り), 하바네로분출 (とびだすハバネロ)</dt><dd>한국어판 명칭 확인 필요</dd>
+  <dt>최속 151족 (最速151族)</dt><dd>원문 표기. 실수치 150과 맞지 않아 뜻 확인 필요</dd>
+</dl>
+
+<footer>원문: <a href="https://pokesol.app/u/sasabuko_0125/articles/84c1779d0ea7835f">pokesol.app 「[最終85位]完全燃焼メガスコヴィラン軸[2359]」</a>. 실수치·포인트·기술·도구는 원문의 개체 카드 값이고, 메가 전 실수치는 계산값입니다. 순위·레이트·시즌은 pokedb 기준입니다.</footer>
+</div>
+</body>
+</html>

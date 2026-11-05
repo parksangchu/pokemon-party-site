@@ -34,5 +34,125 @@
   "status": "ok",
   "file": "parties/tagerau-M7-party.html",
   "at": "2026-11-04T17:10:10"
+ },
+ "https://sakku-poke.hatenablog.com/entry/2026/11/04/233627": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/sakku-M7-party.html",
+  "at": "2026-11-05T11:05:56"
+ },
+ "http://blog.livedoor.jp/sibakentomodachi/archives/1084584339.html": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/chabomatsu-M7-party.html",
+  "at": "2026-11-05T11:11:25"
+ },
+ "https://blog.naver.com/haepi1-/224464810262": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/haepi1-M7-party.html",
+  "at": "2026-11-05T11:14:49"
+ },
+ "https://note.com/odayakadeareyo2/n/n86ad117e95c9": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/aratama-M7-party.html",
+  "at": "2026-11-05T11:18:45"
+ },
+ "https://etariou.hatenablog.com/entry/2026/11/04/155626": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/etariou-M7-party.html",
+  "at": "2026-11-05T11:22:49"
+ },
+ "https://pokesol.app/u/siyu_poke/articles/319758a37e07377f": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/siyu-M7-party.html",
+  "at": "2026-11-05T11:27:01"
+ },
+ "https://kanata-k.hatenadiary.com/entry/2026/11/04/175208": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/kanata-M7-party.html",
+  "at": "2026-11-05T11:30:42"
+ },
+ "https://pokesol.app/u/sasabuko_0125/articles/84c1779d0ea7835f": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/sasabuko-M7-party.html",
+  "at": "2026-11-05T11:35:45"
+ },
+ "https://ngopoke.hatenablog.com/entry/2026/11/04/213641": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/ngopoke-M7-party.html",
+  "at": "2026-11-05T11:36:45"
+ },
+ "https://pokesol.app/u/yatoru_poke/articles/ee10b725fe253750": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/yatoru-M7-party.html",
+  "at": "2026-11-05T11:40:19"
+ },
+ "https://nyoche.hatenablog.com/entry/2026/11/05/002332": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/nyoche-M7-party.html",
+  "at": "2026-11-05T11:43:31"
+ },
+ "https://pokesol.app/u/dragonite_dance/articles/748b95fbb93ff299": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/dragonite-dance-M7-party.html",
+  "at": "2026-11-05T11:47:18"
+ },
+ "https://pokesol.app/u/hatagami_koga/articles/0e247847fd183359": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/hatagami-koga-M7-party.html",
+  "at": "2026-11-05T11:51:06"
+ },
+ "https://pokesol.app/u/hydra_poke/articles/930182b1590502d8": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/hydra-poke-M7-party.html",
+  "at": "2026-11-05T11:54:39"
+ },
+ "https://m4hkmqy0esbsqvb.hatenablog.com/entry/2026/11/01/070715": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/ashireinu-M7-party.html",
+  "at": "2026-11-05T11:58:46"
+ },
+ "https://ydpoke.hatenablog.com/entry/2026/11/04/131801": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/ydpoke-M7-party.html",
+  "at": "2026-11-05T12:02:49"
+ },
+ "https://pokesol.app/u/poke_t2/articles/7b6ce6e7f5e62556": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/poke-t2-M7-party.html",
+  "at": "2026-11-05T12:06:31"
+ },
+ "https://pokesol.app/u/c_trl_lab/articles/c5be52f206a3716e": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/c-trl-lab-M7-party.html",
+  "at": "2026-11-05T12:11:21"
+ },
+ "https://note.com/tom_corle1/n/n6bb7a8a889ba": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/tom-corle1-M7-party.html",
+  "at": "2026-11-05T12:15:16"
+ },
+ "https://banatarou.hatenadiary.org/entry/2026/11/04/220124": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/banatarou-M7-party.html",
+  "at": "2026-11-05T12:18:19"
  }
 }
