@@ -96,7 +96,8 @@ def inject(root):
         # 개체 카드 제목: <div class="mon-head"> 안의 첫 <h2>/<h3>
         s = re.sub(r'(<div class="mon-head">.*?<h[23][^>]*>)([^<]+)',
                    lambda m: m.group(1) + img(m.group(2).split("@")[0].strip()) + m.group(2), s, flags=re.S)
-        s = s.replace("</head>", ICON_CSS + "\n</head>", 1)
+        # </head>를 생략한 문서도 있으므로 <body> 앞에 넣는다.
+        s = re.sub(r"(</head>\s*)?<body", lambda m: ICON_CSS + "\n" + m.group(0), s, count=1)
         with open(path, "w", encoding="utf-8") as f:
             f.write(s)
         changed += 1
