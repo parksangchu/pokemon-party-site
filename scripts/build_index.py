@@ -10,6 +10,9 @@ import re
 import sys
 from urllib.parse import urlparse
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from pokemon_icons import icon_url  # noqa: E402
+
 
 def first(pattern, s, default=""):
     m = re.search(pattern, s, re.S)
@@ -32,7 +35,7 @@ def parse(path):
     s = open(path, encoding="utf-8").read()
     rank = chip("최종 순위", s)
     season = first(r'<div class="chip">시즌[^<]*<b>(M-\d+)', s)
-    team = re.findall(r"<tr><td>\d</td><td><b>(.*?)</b>", s)
+    team = re.findall(r"<tr><td>\d</td><td>(?:<img[^>]*>)?<b>(.*?)</b>", s)
     return {
         "file": "parties/" + os.path.basename(path),
         "title": first(r"<h1>(.*?)</h1>", s, os.path.basename(path)),
@@ -73,7 +76,7 @@ h1{font-size:clamp(20px,3vw,26px);margin:0 0 4px}
 .active-mon b{background:var(--accent-soft);border-radius:6px;padding:2px 8px}
 .active-mon button{font:inherit;border:0;background:none;color:var(--muted);cursor:pointer}
 table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-th{font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
+th{white-space:nowrap;font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}
 td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
 tr:last-child td{border-bottom:0}
 tbody tr{cursor:pointer}
@@ -84,7 +87,8 @@ tbody tr:hover{background:var(--hover)}
 .who a{color:inherit;text-decoration:none;font-weight:600}
 .who span{display:block;color:var(--muted);font-size:12px}
 .team{display:flex;flex-wrap:wrap;gap:3px}
-.team button{font:inherit;font-size:12px;border:0;background:var(--accent-soft);color:var(--ink);border-radius:5px;padding:1px 6px;cursor:pointer}
+.team button{font:inherit;font-size:12px;border:0;background:var(--accent-soft);color:var(--ink);border-radius:5px;padding:1px 6px 1px 2px;cursor:pointer;display:inline-flex;align-items:center;gap:1px}
+.team img{width:30px;height:30px;margin:-6px -2px -6px -4px;image-rendering:pixelated}
 .team button:hover{outline:1px solid var(--accent)}
 .src{color:var(--muted);font-size:12px;white-space:nowrap}
 .new{font-size:11px;color:#fff;background:#e0567a;border-radius:4px;padding:0 5px;margin-left:4px;font-weight:600}
@@ -136,7 +140,7 @@ function apply(){
 document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));season=b.dataset.season;apply()});
 tbody.addEventListener('click',e=>{const b=e.target.closest('.team button');
- if(b){e.stopPropagation();pick=b.textContent;apply();return}
+ if(b){e.stopPropagation();pick=b.dataset.mon;apply();return}
  if(e.target.closest('a'))return;const r=e.target.closest('tr');if(r)location.href=r.dataset.href});
 mon.querySelector('button').addEventListener('click',()=>{pick='';apply()});
 q.addEventListener('input',apply);sort.addEventListener('change',apply);apply();
@@ -144,6 +148,12 @@ q.addEventListener('input',apply);sort.addEventListener('change',apply);apply();
 </body>
 </html>
 """
+
+
+def mon_chip(name):
+    url = icon_url(name)
+    img = f'<img src="{html.escape(url)}" alt="" loading="lazy">' if url else ""
+    return f'<button type="button" data-mon="{html.escape(name)}">{img}{html.escape(name)}</button>'
 
 
 def added_times(root):
@@ -188,7 +198,7 @@ def main():
             f'<td class="season">{e(x["season"])}</td>'
             f'<td class="who"><a href="{e(x["file"])}">{e(who)}</a>{"<em class=new>NEW</em>" if is_new else ""}'
             f'{f"<span>{e(sub)}</span>" if sub else ""}</td>'
-            f'<td class="team-cell"><div class="team">{"".join(f"<button type=button>{e(t)}</button>" for t in x["team"])}</div></td>'
+            f'<td class="team-cell"><div class="team">{"".join(mon_chip(t) for t in x["team"])}</div></td>'
             f'<td class="src">{e(host)}</td></tr>')
     page = (PAGE.replace("__COUNT__", str(len(items)))
             .replace("__TABS__", "".join(tabs))

@@ -89,6 +89,7 @@ while IFS= read -r CAND; do
 done
 wait
 
+log "icons: $(python3 -I scripts/pokemon_icons.py inject "$ROOT")"
 python3 -I scripts/build_index.py "$ROOT" >/dev/null
 if (( PUSH )) && [[ -n "$(git status --porcelain)" ]]; then
   git add -A
