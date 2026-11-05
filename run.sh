@@ -1,13 +1,14 @@
 #!/bin/zsh
 # pokedb의 새 구축 글을 pokemon-party-ko 스킬로 정리하고 사이트를 갱신·push한다.
-# launchd(com.local.pokemon-party-site)가 매일 실행한다. 수동 실행: ./run.sh [--no-push]  (--no-push는 commit도 하지 않음)
+# launchd(com.local.pokemon-party-site)가 1시간마다 실행한다. 수동 실행: ./run.sh [--no-push]  (--no-push는 commit도 하지 않음)
 set -u
 ROOT="${0:A:h}"
 cd "$ROOT" || exit 1
 SKILL_DIR="$HOME/.claude/skills/pokemon-party-ko"
-MAX_PER_RUN=${MAX_PER_RUN:-20}
+MAX_PER_RUN=${MAX_PER_RUN:-10}
 MIN_SEASON=${MIN_SEASON:-5}  # M-5 이후 시즌을 모두 동기화한다. SEASONS를 주면 그 시즌만 본다.
-MAX_RANK=${MAX_RANK:-200}
+MAX_RANK=${MAX_RANK:-200}  # 지난 시즌 기준
+CURRENT_MIN_RATE=${CURRENT_MIN_RATE:-2000}  # 진행 중인 시즌 기준(순위 대신 레이트)
 PUSH=1; [[ "${1:-}" == "--no-push" ]] && PUSH=0
 # ~/.zshenv가 회사 GITHUB_TOKEN을 넣으므로 이 레포 push에는 쓰지 않는다(SSH 배포 키 사용).
 unset GITHUB_TOKEN GH_TOKEN
@@ -28,9 +29,18 @@ json.dump(d, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 EOF
 }
 
-log "start (max $MAX_PER_RUN, rank <= $MAX_RANK)"
+# 이전 실행이 아직 끝나지 않았으면 겹쳐 돌지 않는다.
+LOCK="$ROOT/state/run.lock"
+if ! mkdir "$LOCK" 2>/dev/null; then
+  if kill -0 "$(cat "$LOCK/pid" 2>/dev/null)" 2>/dev/null; then log "skip: previous run is still running"; exit 0; fi
+  rm -rf "$LOCK"; mkdir "$LOCK" || exit 1
+fi
+print $$ > "$LOCK/pid"
+trap 'rm -rf "$LOCK"' EXIT
+
+log "start (max $MAX_PER_RUN, past rank <= $MAX_RANK, current rate >= $CURRENT_MIN_RATE)"
 SEASON_ARGS=(--min-season "$MIN_SEASON"); [[ -n "${SEASONS:-}" ]] && SEASON_ARGS=(--seasons "$SEASONS")
-CANDS=$(python3 -I scripts/fetch_candidates.py state/done.json --max-rank "$MAX_RANK" "${SEASON_ARGS[@]}") || { log "candidate fetch failed"; exit 1; }
+CANDS=$(python3 -I scripts/fetch_candidates.py state/done.json --max-rank "$MAX_RANK" --current-min-rate "$CURRENT_MIN_RATE" "${SEASON_ARGS[@]}") || { log "candidate fetch failed"; exit 1; }
 COUNT=$(print -r -- "$CANDS" | python3 -I -c 'import json,sys; print(len(json.load(sys.stdin)))')
 log "candidates: $COUNT"
 

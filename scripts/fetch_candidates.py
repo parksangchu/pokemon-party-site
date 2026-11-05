@@ -1,6 +1,7 @@
 """pokedb 트레이너 목록에서 아직 처리하지 않은 구축 글 후보를 뽑는다.
 
-사용: python3 -I fetch_candidates.py <state/done.json> [--max-rank 200] [--seasons 7,8 | --min-season 5]
+사용: python3 -I fetch_candidates.py <state/done.json> [--max-rank 200] [--seasons 7,8 | --min-season 5] [--current-min-rate 2000]
+--current-min-rate를 주면 가장 최근 시즌(진행 중)은 순위 대신 레이트 기준으로 고른다.
 --seasons를 생략하면 --min-season 이후 모든 시즌을, 둘 다 생략하면 최근 시즌 2개(진행 중 + 직전)를 본다.
 본문을 받을 수 없는 링크(X, YouTube, 네이버 카페)는 후보에서 뺀다.
 출력: 후보 JSON 배열(stdout). 순위가 높은 글부터.
@@ -37,13 +38,13 @@ def text(fragment):
     return html.unescape(re.sub(r"<[^>]+>", "", fragment)).strip()
 
 
-def parse_cards(page):
+def parse_cards(page, with_article=True):
     for card in page.split('<article class="trainer-card">')[1:]:
         rank = re.search(r'data-rank="(\d+)"', card)
         art = re.search(
             r'trainer-card-team__article">\s*<a href="([^"]+)"[^>]*>.*?<span>(.*?)</span>\s*</a>',
             card, re.S)
-        if not rank or not art:
+        if not rank or (with_article and not art):
             continue
         rate = re.search(r'rating-integer">(\d+)</span><span class="rating-decimal">([.\d]*)', card)
         yield {
@@ -51,8 +52,8 @@ def parse_cards(page):
             "rate": (rate.group(1) + rate.group(2)) if rate else "",
             "trainer": text(re.search(r'trainer-card-name">(.*?)</div>', card, re.S).group(1)),
             "team": [text(x) for x in re.findall(r'trainer-card-team__pokemon-name">(.*?)</div>', card, re.S)],
-            "url": html.unescape(art.group(1)),
-            "title": text(art.group(2)),
+            "url": html.unescape(art.group(1)) if art else "",
+            "title": text(art.group(2)) if art else "",
         }
 
 
@@ -62,6 +63,7 @@ def main():
     ap.add_argument("--max-rank", type=int, default=200)
     ap.add_argument("--seasons", default="")
     ap.add_argument("--min-season", type=int, default=0)
+    ap.add_argument("--current-min-rate", type=float, default=0)
     a = ap.parse_args()
 
     try:
@@ -71,7 +73,11 @@ def main():
 
     seasons = [int(x) for x in a.seasons.split(",") if x] or latest_seasons(min_season=a.min_season)
     out, seen = [], set()
+    current = max(seasons) if a.current_min_rate else None
     for season in seasons:
+        # 진행 중인 시즌은 순위가 계속 바뀌므로 레이트가 기준 이상인 사람의 글을 본다.
+        ok = (lambda c: float(c["rate"] or 0) >= a.current_min_rate) if season == current else \
+             (lambda c: c["rank"] <= a.max_rank)
         page_no = 1
         while True:
             final = []
@@ -80,17 +86,17 @@ def main():
             if "fallback=1" in final[0]:
                 break
             cards = list(parse_cards(page))
-            ranks = [int(r) for r in re.findall(r'data-rank="(\d+)"', page)]
             for c in cards:
-                if c["rank"] > a.max_rank or c["url"] in seen or SKIP_HOSTS.match(c["url"]):
+                if not ok(c) or c["url"] in seen or SKIP_HOSTS.match(c["url"]):
                     continue
                 seen.add(c["url"])
                 entry = done.get(c["url"])
                 if entry and (entry.get("status") == "ok" or entry.get("tries", 0) >= 3):
                     continue
                 out.append({"season": season, **c})
-            # 100명씩 나뉜 페이지. 마지막 순위가 기준을 넘거나 다음 페이지가 없으면 멈춘다.
-            if not ranks or max(ranks) > a.max_rank or f"page={page_no + 1}" not in page:
+            # 100명씩 순위순으로 나뉜 페이지. 마지막 사람이 기준 밖이거나 다음 페이지가 없으면 멈춘다.
+            last = list(parse_cards(page, with_article=False))[-1:]
+            if not last or not ok(last[0]) or f"page={page_no + 1}" not in page:
                 break
             page_no += 1
             time.sleep(1)
