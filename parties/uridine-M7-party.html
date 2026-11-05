@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리진 M-7 최종 159위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-electric:#e0b21a;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>우리진의 시즌 M-7 최종 159위 파티</h1>
+  <p class="lede">일본 유저 우리진(ウリジン, X @kitasunglasses)의 파티 소개 글 「트릭룸 아래 위력 200 생명의구슬 성묘」를 한국어판 용어 기준으로 정리했습니다. 빠르모트와 조합해 위력 200이 된 대쓰여너의 성묘를 가장 강한 상태로 휘두르는 것이 콘셉트이며, 실제로는 메가입치트 트릭룸 선출을 더 많이 썼습니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>159위</b></div>
+    <div class="chip">최종 레이트<b>2318.078</b></div>
+    <div class="chip">시즌 / 룰<b>M-7 / 싱글</b></div>
+    <div class="chip">기간<b>2026.10.07 ~ 11.04</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다. 6마리 모두 합계 66인 것을 확인했습니다. 한국어판 정식 명칭은 확인하지 못해 "포인트"로 적었습니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><b>메가입치트</b> ♂</td><td>위협 → 천하장사</td><td>입치트나이트</td><td>고집</td><td>치근거리기 / 불꽃엄니 / 기습 / 칼춤</td></tr>
+    <tr><td>2</td><td><b>대쓰여너</b> ♂</td><td>적응력</td><td>생명의구슬</td><td>고집</td><td>웨이브태클 / 성묘 / 대타 / 아쿠아제트</td></tr>
+    <tr><td>3</td><td><b>다부니</b> ♂</td><td>재생력</td><td>로플열매</td><td>대담</td><td>화염방사 / 앙코르 / 치유소원 / 트릭룸</td></tr>
+    <tr><td>4</td><td><b>빠르모트</b> ♂</td><td>철주먹</td><td>기합의띠</td><td>명랑</td><td>전광쌍격 / 인파이트 / 냉동펀치 / 재기의기도</td></tr>
+    <tr><td>5</td><td><b>메가팬텀</b> ♂</td><td>저주받은바디 → 그림자밟기</td><td>팬텀나이트</td><td>겁쟁이</td><td>섀도볼 / 멸망의노래 / 길동무 / 방어</td></tr>
+    <tr><td>6</td><td><b>따라큐</b> ♀</td><td>탈</td><td>광각렌즈</td><td>고집</td><td>치근거리기 / 야습 / 트릭룸 / 저주</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정과 사용법</h2>
+<div class="steps">
+  <div class="step">
+    <h3>콘셉트: 최고 화력, 최적 조건의 성묘</h3>
+    <p>빠르모트와 조합하면 위력 200이 되는 대쓰여너의 성묘를 가장 높은 화력과 가장 좋은 조건에서 휘두르려고 만든 파티입니다.</p>
+    <p>콘셉트대로 풀리는 순서는 다음과 같습니다.</p>
+    <ul>
+      <li>상대에게 따라큐나 고릴타가 없는 것을 확인하고 대쓰여너, 빠르모트, 다부니 순서로 선출합니다.</li>
+      <li>선봉 대쓰여너로 쓰러질 때까지 싸웁니다.</li>
+      <li>뒤이어 나온 빠르모트의 재기의기도로 대쓰여너를 되살립니다.</li>
+      <li>빠르모트가 쓰러지면 다부니를 내보내 트릭룸을 쓴 뒤 치유소원을 씁니다.</li>
+      <li>화력과 체력이 모두 만전인 가장 강한 대쓰여너가 완성됩니다.</li>
+    </ul>
+    <p>정리자 보충(원문에는 없음): 성묘는 쓰러진 아군 수에 따라 위력이 오르는 기술입니다. 위 순서에서는 대쓰여너, 빠르모트, 다부니가 한 번씩 쓰러져 위력이 200이 됩니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 대쓰여너 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.902</span><h3>대쓰여너 (수컷)</h3><span class="badge">콘셉트</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>적응력</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">195</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">179</span><span class="bar"><i style="width:96.9%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">101</span><span class="bar"><i style="width:50%"></i></span><span class="p">16</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">114</span><span class="bar"><i style="width:59.4%"></i></span><span class="p">19</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">98</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>웨이브태클<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>성묘<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>대타<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A</dt><dd>31포인트로 충분합니다. HP에 2포인트를 준 한카리아스를 웨이브태클로 확정으로 쓰러뜨리고, 위력 200 성묘의 삼삼드래 처치 확률도 32포인트일 때와 달라지지 않습니다.</dd>
+    <dt>D</dt><dd>19포인트로 선봉 성능을 높였습니다. 특공에 32포인트를 준 메가리자몽Y의 솔라빔을 87.5% 확률로 버티고 반격합니다.</dd>
+    <dt>B</dt><dd>남은 포인트를 모두 넣었습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>파티의 콘셉트입니다. 위력 200에 도달한 성묘의 제압력이 엄청나서, HP에 32포인트를 준 브리두라스 정도는 당연하다는 듯 한 방에 쓰러뜨립니다.</li>
+    <li>약하다고 알려졌던 삼삼드래조차 HP에 2포인트를 준 개체라면 68.7%의 높은 확률로 쓰러뜨릴 수 있습니다.</li>
+    <li>메가리자몽Y와 서로 쓰러지더라도 뒤에 빠르모트가 대기하고 있으니 안심할 수 있습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 메가입치트 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.303</span><h3>메가입치트 (수컷)</h3><span class="badge">트릭룸 에이스</span>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>입치트나이트</b></span><span>특성 <b>위협 → 천하장사</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">157</span><span class="v">157</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">150</span><span class="v up">172</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">106</span><span class="v">146</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">67</span><span class="v down">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">76</span><span class="v">116</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">70</span><span class="v">70</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>치근거리기<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>불꽃엄니<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>기습<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>HA</dt><dd>HP와 공격 위주로 줬고, 나머지는 특별한 의도 없이 정했습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>사실은 대쓰여너보다 출전이 많았던 트릭룸 에이스입니다. 상대가 자주 선출하는 따라큐, 고릴타, 메가갑주무사를 처리해 주었습니다.</li>
+    <li>트릭룸 담당으로 다부니를 붙이면, 하마돈의 하품을 맞으면서도 칼춤 후 치근거리기로 억지로 쓰러뜨리는 운영을 낮은 위험으로 할 수 있습니다.</li>
+    <li>다만 상대 하마돈이 HP·방어 특화라면 처치 확률이 18.7%로 낮으니 주의해야 합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 다부니 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.531</span><h3>다부니 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-normal)">노말</span></span>
+    <div class="meta"><span>도구 <b>로플열매</b></span><span>특성 <b>재생력</b></span><span>성격 <b>대담</b> (방어↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">209</span><span class="bar"><i style="width:96.9%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">72</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">148</span><span class="bar"><i style="width:90.6%"></i></span><span class="p">29</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">80</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">112</span><span class="bar"><i style="width:18.75%"></i></span><span class="p">6</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">70</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>화염방사<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>앙코르<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>치유소원<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>트릭룸<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>HB</dt><dd>기본은 HP와 방어 위주입니다.</dd>
+    <dt>D</dt><dd>특공 2단계 상승한 메가루카리오Z의 파동탄을 확정으로 버티려고 6포인트만 줬습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>사용률이 낮다는 점이 강점인 트릭룸 담당입니다. 트릭룸에 이어 치유소원을 써서, 에이스 포켓몬을 안전하게 내보내고 상태 이상까지 회복시키는 역할을 맡습니다.</li>
+    <li>따라큐를 상대로도 강합니다. 상대는 대개 칼춤부터 쓰기 때문에, 트릭룸 후 앙코르로 칼춤에 묶어 계속 몰아넣을 수 있습니다. 이것도 사용률이 낮아 상대가 대비하지 않는 덕분입니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 따라큐 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.778</span><h3>따라큐 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>광각렌즈</b></span><span>특성 <b>탈</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">162</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">155</span><span class="bar"><i style="width:96.9%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">103</span><span class="bar"><i style="width:9.4%"></i></span><span class="p">3</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">125</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">116</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>치근거리기<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>트릭룸<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>저주<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>HA</dt><dd>HP와 공격 위주입니다.</dd>
+    <dt>B</dt><dd>공격 1단계 상승한 메가갸라도스의 폭포오르기를 확정으로 버티려고 3포인트만 줬습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>두 번째 트릭룸 담당입니다. 바톤터치 같은 전개 파티에 강하고, 다부니로는 아무래도 부족한 화력을 보완하는 자리이기도 했습니다.</li>
+    <li>치근거리기의 명중률이 너무 불안해서 광각렌즈를 들렸지만, 타입 강화 도구를 들려도 좋았을 것 같다고 합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 빠르모트 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.923</span><h3>빠르모트 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-electric)">전기</span><span class="type" style="background:var(--t-fight)">격투</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>철주먹</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">147</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">81</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">80</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">172</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>전광쌍격<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>인파이트<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>냉동펀치<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>재기의기도<span class="pp">PP 1</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>AS</dt><dd>공격과 스피드에 풀 배분했습니다.</dd>
+    <dt>H</dt><dd>남은 2포인트를 넣었습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>이 파티에서 유일하게 포켓몬을 되살리는 자리입니다. 그러면서도 기술 범위가 넓어 대면 성능이 높고, 어태커로도 강했습니다.</li>
+    <li>상대가 자주 선출하는 브리두라스에 강하게 나서려고 인파이트를 넣었지만, 마하펀치로도 그럭저럭 활약할 수 있을 것이라고 합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 메가팬텀 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.94</span><h3>메가팬텀 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span><span class="type" style="background:var(--t-poison)">독</span></span>
+    <div class="meta"><span>도구 <b>팬텀나이트</b></span><span>특성 <b>저주받은바디 → 그림자밟기</b></span><span>성격 <b>겁쟁이</b> (스피드↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">153</span><span class="v">153</span><span class="bar"><i style="width:56.25%"></i></span><span class="p">18</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">76</span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">80</span><span class="v">100</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">166</span><span class="v">206</span><span class="bar"><i style="width:50%"></i></span><span class="p">16</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">95</span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">178</span><span class="v up">200</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>멸망의노래<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>길동무<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>방어<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>전체</dt><dd>친구가 추천한 배분을 그대로 쓴 것으로, 특별한 의도는 없다고 합니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>받이 파티 전용 포켓몬입니다.</li>
+    <li>변덕쟁이 스코빌런과, 파티 전체가 부담스러워하는 메가이상해꽃을 안정적으로 잡을 수 있습니다. 선출률은 높지 않았지만 전체 승률에 꽤 기여했습니다.</li>
+  </ul></div>
+</article>
+
+<h2>기본 선출</h2>
+<p>콘셉트 선출은 따라큐, 고릴타, 메가갑주무사 등에 약해서, 의도대로 낼 수 있었던 판은 많아야 20% 정도였습니다. 그래서 시즌 전체에서 선출률이 높았던 순서대로 적습니다.</p>
+<div class="selections">
+  <div class="sel"><div class="lineup">① 입치트 + 대쓰여너 + 따라큐 또는 다부니</div><p>선봉 메가입치트로 날뛰고 남은 상대를 트릭룸 아래 대쓰여너로 처리합니다. 트릭룸 담당을 다부니로 하면 치유소원으로 입치트를 다시 쓸 수도 있습니다.</p></div>
+  <div class="sel"><div class="lineup">② 대쓰여너 또는 입치트 + 빠르모트 + 다부니</div><p>앞에서 설명한 콘셉트 선출입니다. 입치트가 잘 통하는 상대라면 입치트를 밀어붙입니다.</p></div>
+  <div class="sel"><div class="lineup">③ 팬텀 + 빠르모트 + 대쓰여너</div><p>빠르모트의 재기의기도로 팬텀을 되살려 멸망의노래와 길동무로 두 마리를 쓰러뜨립니다. 받이 위주 파티는 대체로 무너뜨릴 수 있습니다.</p></div>
+</div>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-7 싱글배틀, 2026.10.07 ~ 11.04 10:59. 챔피언 클래스 <b>159위</b>, 최종 레이트 <b>2318.078</b>입니다.</li>
+  <li>트레이너 이름 "ウリジン", 팀 ID <code>B0QF6AJEX4</code>입니다.</li>
+  <li>콘셉트 자체는 힘으로 밀어붙이는 방식이지만, 고를 수 있는 선택지가 많은 파티로 완성됐다고 평가합니다.</li>
+  <li>일 때문에 토요일에 일찍 마무리해서, 원래는 더 높은 순위를 노릴 잠재력이 있었다고 봅니다.</li>
+  <li>이 글을 읽은 사람이 M-8에서 최고 위력 성묘를 꼭 휘둘러 보기를 바란다며 글을 맺습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>トリル</dt><dd>트릭룸</dd>
+  <dt>トリルエース</dt><dd>트릭룸 아래에서 활약하는 에이스</dd>
+  <dt>H32振り, H2振り</dt><dd>HP에 32포인트, 2포인트를 준 배분</dd>
+  <dt>HB特化</dt><dd>HP와 방어에 집중한 배분</dd>
+  <dt>高乱数 / 低乱数</dt><dd>쓰러뜨릴 확률이 높음 / 낮음</dd>
+  <dt>確定耐え</dt><dd>데미지 난수와 관계없이 반드시 버팀</dd>
+  <dt>ワンパン</dt><dd>한 방에 쓰러뜨림</dd>
+  <dt>被選出率</dt><dd>상대가 그 포켓몬을 선출하는 비율. 문맥상 상대 쪽 선출을 가리키는 것으로 옮겼습니다.</dd>
+  <dt>初手性能 / 対面性能</dt><dd>선봉으로 나왔을 때의 성능 / 대면 성능</dd>
+  <dt>ハメる</dt><dd>상대가 아무것도 못 하게 몰아넣음</dd>
+  <dt>受け構築</dt><dd>받이 위주 파티</dd>
+  <dt>展開構築</dt><dd>바톤터치 등으로 판을 깔아 에이스를 통과시키는 파티</dd>
+  <dt>刺さっている</dt><dd>상대 파티에 잘 통함</dd>
+  <dt>脳筋</dt><dd>힘으로 밀어붙이는 방식</dd>
+  <dt>メガルカリオZ</dt><dd>원문 표기를 그대로 옮겼습니다.</dd>
+  <dt>でんこうそうげき (확인 필요)</dt><dd>빠르모트의 전기 기술. "전광쌍격"으로 적었으며 한국어판 표기를 확인하지 못했습니다.</dd>
+  <dt>さいきのいのり (확인 필요)</dt><dd>"재기의기도"로 적었으며 한국어판 표기를 확인하지 못했습니다.</dd>
+  <dt>ヨプのみ (확인 필요)</dt><dd>격투 기술 데미지를 줄이는 열매. "로플열매"로 적었으며 한국어판 표기를 확인하지 못했습니다.</dd>
+  <dt>スコヴィラン (확인 필요)</dt><dd>"스코빌런"으로 적었으며 한국어판 표기를 확인하지 못했습니다.</dd>
+</dl>
+
+<footer>원문: <a href="https://uridine.hatenablog.com/entry/2026/11/04/131239">uridine.hatenablog.com (2026-11-04, 【M-7 シングル 最終159位】トリル下威力200命の珠おはかまいり)</a>. 순위·레이트는 원문 결과 화면과 pokedb 값이 일치합니다. 실수치·포인트·PP는 원문 스크린샷과 대조했고, 본문의 배분 설명과 차이는 없었습니다.</footer>
+</div>
+</body>
+</html>

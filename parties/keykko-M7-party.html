@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Key M-7 199위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324; --t-grass:#4fa83d; --t-flying:#6f9fe0; --t-electric:#e0b21a;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>Key의 시즌 M-7 최종 199위 파티</h1>
+  <p class="lede">일본 유저 Key(트레이너 이름 砂の民, 블로그 「砂老人の語り場」)의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 마기라스·몰드류·메가스코빌런을 축으로 하고, 두 번째 모래 에이스 묘지기를 더한 모래 파티로 최종 챔피언 클래스를 달성했습니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>199위</b></div>
+    <div class="chip">최종 레이트<b>2313.032</b></div>
+    <div class="chip">시즌 / 룰<b>M-7 / 싱글</b></div>
+    <div class="chip">기간<b>2026.10.07 ~ 11.04</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66이며 이 파티는 6마리 모두 합계 66입니다. 아래 막대와 오른쪽 숫자가 포인트이고, 가운데 숫자가 실수치입니다. 원문이 "x"로 비워 둔 능력치(공격 또는 특공)와 메가 전 실수치는 포인트에서 계산한 값입니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><b>마기라스</b> ♂</td><td>모래날림</td><td>보송보송바위</td><td>신중</td><td>암석봉인 / 탁쳐서떨구기 / 스텔스록 / 도발</td></tr>
+    <tr><td>2</td><td><b>몰드류</b> ♂</td><td>모래헤치기</td><td>생명의구슬</td><td>고집</td><td>지진 / 아이언헤드 / 스톤샤워 / 칼춤</td></tr>
+    <tr><td>3</td><td><b>메가스코빌런</b> ♀</td><td>불면 → 하바네로분출</td><td>스코빌런나이트</td><td>조심</td><td>화염방사 / 기가드레인 / 리프스톰 / 방어</td></tr>
+    <tr><td>4</td><td><b>메가망나뇽</b> ♂</td><td>멀티스케일</td><td>망나뇽나이트</td><td>조심</td><td>용의파동 / 화염방사 / 10만볼트 / 신속</td></tr>
+    <tr><td>5</td><td><b>아머까오</b> ♀</td><td>미러아머</td><td>울퉁불퉁멧</td><td>장난꾸러기</td><td>아이언헤드 / 도발 / 철벽 / 날개쉬기</td></tr>
+    <tr><td>6</td><td><b>묘지기</b> ♀</td><td>모래헤치기</td><td>저주부적</td><td>고집</td><td>성묘 / 야습 / 치근거리기 / 멀리짖기</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step"><h3>출발점: 하마돈+몰드류의 한계</h3><p>시즌 초반에는 하마돈+몰드류에 일반 메가한카리아스를 썼지만, 화력·내구·스피드가 조금씩 모자라 한계를 느꼈습니다.</p></div>
+  <div class="step"><h3>① 마기라스·몰드류·스코빌런</h3><p>예전에 쓰던 이 조합이 지금 환경에서도 통하는지 시험해 봤고, 써 본 느낌이 좋아 이번 시즌의 축으로 정했습니다.</p></div>
+  <div class="step"><h3>② 묘지기</h3><p>아머까오나 진공파 루카리오처럼 몰드류가 통하지 않는 상대가 있을 때 낼 수 있는 두 번째 모래 에이스입니다.</p></div>
+  <div class="step"><h3>③ 메가망나뇽</h3><p>파라블레이즈나 번치코처럼 스코빌런과 마기라스 양쪽에 계속 부담이 되는 상대가 있을 때 내는 메가진화입니다.</p></div>
+  <div class="step"><h3>④ 마지막 자리: 도발 아머까오</h3><p>여기까지는 시즌 중반에 정해졌지만 마지막 한 자리가 좀처럼 정해지지 않았습니다. 고민 끝에 도발 아머까오가 모래 에이스가 통하지 않는 받이 위주 파티에 강하다는 점을 깨달아 파티를 완성했습니다.</p></div>
+</div>
+
+<h2>개체 소개</h2>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.248</span><h3>마기라스 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-rock)">바위</span><span class="type" style="background:var(--t-dark)">악</span></span>
+    <div class="meta"><span>도구 <b>보송보송바위</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>신중</b> (특방↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats"><div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div><div class="stat"><span class="k">HP</span><span></span><span class="v">207</span><span class="bar"><i style="width:100.0%"></i></span><span class="p">32</span></div><div class="stat"><span class="k">공격</span><span></span><span class="v">154</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">방어</span><span></span><span class="v">130</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">특공</span><span></span><span class="v down">103</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">특방</span><span></span><span class="v up">145</span><span class="bar"><i style="width:37.5%"></i></span><span class="p">12</span></div><div class="stat"><span class="k">스피드</span><span></span><span class="v">103</span><span class="bar"><i style="width:68.75%"></i></span><span class="p">22</span></div></div>
+    <div class="moves"><div class="move"><span class="type" style="background:var(--t-rock)">바위</span>암석봉인</div><div class="move"><span class="type" style="background:var(--t-dark)">악</span>탁쳐서떨구기</div><div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록</div><div class="move"><span class="type" style="background:var(--t-dark)">악</span>도발</div></div>
+  </div>
+  <div class="aim"><dl><dt>H</dt><dd>풀 배분입니다. 방어는 고집 한카리아스의 지진을 확정으로 버티는 수준입니다.</dd><dt>S</dt><dd>준속 대도각참을 앞지릅니다. 암석봉인을 한 번 맞히면 준속 한카리아스도 앞지를 수 있습니다.</dd><dt>D</dt><dd>남은 포인트로 최대한 높였습니다. 겁쟁이 메가라이츄의 기합구슬을 87.5% 확률로 버티는 수준입니다.</dd></dl></div>
+  <div class="desc"><ul><li>작성자가 "내 기준 최고의 조정"이라고 부르는 마기라스입니다.</li><li>스피드 배분의 목적은 누리레느가 먼저 앙코르를 거는 것을 막고, 준속 대도각참보다 먼저 도발하는 것이었습니다. 부수 효과로 스피드 무배분 고릴타와 밀로틱보다 먼저 움직일 수 있었던 점도 좋았습니다.</li><li>랭크업 발판이 되는 것을 피하는 암석봉인, 일단 쓰면 강한 탁쳐서떨구기, 교체전을 유리하게 끌고 가는 스텔스록, 변화 기술을 막는 도발까지 네 기술로 작성자 기준에서는 완성된 구성입니다.</li><li>냉동빔이 필요한 장면도 있었지만 넣을 자리가 없었습니다.</li></ul></div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.530</span><h3>몰드류 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>모래헤치기</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats"><div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div><div class="stat"><span class="k">HP</span><span></span><span class="v">185</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">공격</span><span></span><span class="v up">205</span><span class="bar"><i style="width:100.0%"></i></span><span class="p">32</span></div><div class="stat"><span class="k">방어</span><span></span><span class="v">89</span><span class="bar"><i style="width:28.12%"></i></span><span class="p">9</span></div><div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">특방</span><span></span><span class="v">85</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">스피드</span><span></span><span class="v">133</span><span class="bar"><i style="width:78.12%"></i></span><span class="p">25</span></div></div>
+    <div class="moves"><div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div><div class="move"><span class="type" style="background:var(--t-steel)">강철</span>아이언헤드</div><div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스톤샤워</div><div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤</div></div>
+  </div>
+  <div class="aim"><dl><dt>A</dt><dd>공격 특화입니다.</dd><dt>S</dt><dd>모래바람이 없어도 준속 스피드 종족값 80 포켓몬을 앞지릅니다. 모래바람 아래 수치에 대한 원문 표기는 "준속 마스카나+4"입니다. 모래바람 아래 스피드 266은 준속 마스카나(175)의 1.5배인 262보다 4 높아, 스피드 1.5배 상태의 마스카나를 뜻하는 것으로 보이지만 원문에 명시되어 있지는 않습니다.</dd><dt>B</dt><dd>남은 포인트입니다.</dd></dl></div>
+  <div class="desc"><ul><li>이 파티의 주포이자 첫 번째 모래 에이스입니다.</li><li>묘지기를 넣으면서 선출률은 크게 줄었지만, 낼 때는 제대로 활약했습니다.</li><li>껍질깨기를 쓰는 메가거북왕이 겁쟁이 성격으로 앞질러 오는 것은 그만했으면 좋겠다는 푸념도 남겼습니다.</li></ul></div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.952</span><h3>메가스코빌런 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-grass)">풀</span><span class="type" style="background:var(--t-fire)">불꽃</span></span>
+    <div class="meta"><span>도구 <b>스코빌런나이트</b></span><span>특성 <b>불면 → 하바네로분출</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats"><div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div><div class="stat"><span class="k">HP</span><span class="v dim">171</span><span class="v">171</span><span class="bar"><i style="width:96.88%"></i></span><span class="p">31</span></div><div class="stat"><span class="k">공격</span><span class="v dim">115</span><span class="v down">142</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">방어</span><span class="v dim">97</span><span class="v">117</span><span class="bar"><i style="width:37.5%"></i></span><span class="p">12</span></div><div class="stat"><span class="k">특공</span><span class="v dim">165</span><span class="v up">198</span><span class="bar"><i style="width:68.75%"></i></span><span class="p">22</span></div><div class="stat"><span class="k">특방</span><span class="v dim">86</span><span class="v">106</span><span class="bar"><i style="width:3.12%"></i></span><span class="p">1</span></div><div class="stat"><span class="k">스피드</span><span class="v dim">95</span><span class="v">95</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div></div>
+    <div class="moves"><div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>화염방사</div><div class="move"><span class="type" style="background:var(--t-grass)">풀</span>기가드레인</div><div class="move"><span class="type" style="background:var(--t-grass)">풀</span>리프스톰</div><div class="move"><span class="type" style="background:var(--t-normal)">노말</span>방어</div></div>
+  </div>
+  <div class="aim"><dl><dt>HB</dt><dd>고집 생명의구슬 따라큐의 칼춤 후 섀도크루를 확정으로 버팁니다. 고집 대쓰여너의 웨이브태클을 버티고, 명랑 메가루카리오의 인파이트를 68.8% 확률로 버팁니다.</dd><dt>C</dt><dd>기가드레인과 리프스톰을 연달아 맞히면 HP에 배분한 한카리아스를 쓰러뜨리는 정도입니다.</dd><dt>D</dt><dd>브리두라스의 용성군 데미지를 의식해 남은 포인트를 줬습니다.</dd></dl></div>
+  <div class="desc"><ul><li>드닐레이브와 보만다가 등장해 힘들 것으로 예상했지만, 실제로 써 보니 의외로 통했습니다.</li><li>리샘열매·칼춤 한카리아스가 줄고 자뭉열매 한카리아스가 많았기 때문에, 기가드레인과 리프스톰으로 먼저 쓰러뜨릴 수 있다는 압박이 강했습니다.</li><li>대면한 따라큐와 킬가르도가 전부 칼춤을 썼기 때문에 질투의불꽃도 탐났지만, "10% 확률로 화상 입히면 되지"라는 마음으로 화염방사를 계속 썼습니다.</li><li>방어는 메가진화한 뒤 교체하고 싶을 때 필요합니다.</li></ul></div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.149</span><h3>메가망나뇽 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>망나뇽나이트</b></span><span>특성 <b>멀티스케일</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats"><div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div><div class="stat"><span class="k">HP</span><span class="v dim">167</span><span class="v">167</span><span class="bar"><i style="width:3.12%"></i></span><span class="p">1</span></div><div class="stat"><span class="k">공격</span><span class="v dim">138</span><span class="v down">129</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">방어</span><span class="v dim">118</span><span class="v">138</span><span class="bar"><i style="width:9.38%"></i></span><span class="p">3</span></div><div class="stat"><span class="k">특공</span><span class="v dim">165</span><span class="v up">214</span><span class="bar"><i style="width:93.75%"></i></span><span class="p">30</span></div><div class="stat"><span class="k">특방</span><span class="v dim">120</span><span class="v">145</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">스피드</span><span class="v dim">132</span><span class="v">152</span><span class="bar"><i style="width:100.0%"></i></span><span class="p">32</span></div></div>
+    <div class="moves"><div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용의파동</div><div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>화염방사</div><div class="move"><span class="type" style="background:var(--t-electric)">전기</span>10만볼트</div><div class="move"><span class="type" style="background:var(--t-normal)">노말</span>신속</div></div>
+  </div>
+  <div class="aim"><dl><dt>H</dt><dd>HP를 홀수로 맞췄습니다.</dd><dt>B</dt><dd>고집 한카리아스의 스케일샷 데미지가 달라지는 선까지 줬습니다.</dd><dt>C</dt><dd>11의 배수로 맞췄습니다. 메가 전 특공이 165입니다.</dd><dt>S</dt><dd>풀 배분 무보정으로 최속 키라플로르를 앞지릅니다.</dd></dl></div>
+  <div class="desc"><ul><li>특별히 할 말은 없지만, 선봉으로 내서 눈앞의 상대에게 통하는 기술을 치는 것만으로 제 몫을 해내는 "신 같은 포켓몬"이라고 평가합니다.</li><li>이 네 기술이 대면 성능이 높고 공격 범위도 넓습니다.</li><li>에어슬래시를 뺐기 때문에 이상해꽃이 전부 교체하지 않고 맞서 오는 것이 불쾌했던 정도입니다.</li></ul></div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.823</span><h3>아머까오 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-flying)">비행</span><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>울퉁불퉁멧</b></span><span>특성 <b>미러아머</b></span><span>성격 <b>장난꾸러기</b> (방어↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats"><div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div><div class="stat"><span class="k">HP</span><span></span><span class="v">205</span><span class="bar"><i style="width:100.0%"></i></span><span class="p">32</span></div><div class="stat"><span class="k">공격</span><span></span><span class="v">107</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">방어</span><span></span><span class="v up">154</span><span class="bar"><i style="width:46.88%"></i></span><span class="p">15</span></div><div class="stat"><span class="k">특공</span><span></span><span class="v down">65</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">특방</span><span></span><span class="v">118</span><span class="bar"><i style="width:40.62%"></i></span><span class="p">13</span></div><div class="stat"><span class="k">스피드</span><span></span><span class="v">93</span><span class="bar"><i style="width:18.75%"></i></span><span class="p">6</span></div></div>
+    <div class="moves"><div class="move"><span class="type" style="background:var(--t-steel)">강철</span>아이언헤드</div><div class="move"><span class="type" style="background:var(--t-dark)">악</span>도발</div><div class="move"><span class="type" style="background:var(--t-steel)">강철</span>철벽</div><div class="move"><span class="type" style="background:var(--t-flying)">비행</span>날개쉬기</div></div>
+  </div>
+  <div class="aim"><dl><dt>H</dt><dd>풀 배분입니다.</dd><dt>B</dt><dd>명랑 메가이어롭의 무릎차기를 88.7% 확률로 2번 버팁니다.</dd><dt>D</dt><dd>플라엣테를 의식해 최대한 높였습니다.</dd><dt>S</dt><dd>준속 메가갑주무사를 앞지릅니다.</dd></dl></div>
+  <div class="desc"><ul><li>플라엣테를 의식한 아이언헤드, 변화 기술을 막는 도발, 랭크업에 맞서는 철벽, 회복 기술인 날개쉬기로 구성했습니다.</li><li>유턴을 넣었던 시기도 있지만 최종적으로 이 구성에 정착했습니다.</li><li>텟카구야와 마찬가지로 강철·비행 타입은 모래 파티와 상성이 좋다고 합니다.</li></ul></div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.972</span><h3>묘지기 (ハカドッグ, 암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>저주부적</b></span><span>특성 <b>모래헤치기</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats"><div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div><div class="stat"><span class="k">HP</span><span></span><span class="v">149</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div><div class="stat"><span class="k">공격</span><span></span><span class="v up">168</span><span class="bar"><i style="width:100.0%"></i></span><span class="p">32</span></div><div class="stat"><span class="k">방어</span><span></span><span class="v">124</span><span class="bar"><i style="width:12.5%"></i></span><span class="p">4</span></div><div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">특방</span><span></span><span class="v">117</span><span class="bar"><i style="width:0.0%"></i></span><span class="p">0</span></div><div class="stat"><span class="k">스피드</span><span></span><span class="v">116</span><span class="bar"><i style="width:87.5%"></i></span><span class="p">28</span></div></div>
+    <div class="moves"><div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>성묘</div><div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습</div><div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>치근거리기</div><div class="move"><span class="type" style="background:var(--t-normal)">노말</span>멀리짖기</div></div>
+  </div>
+  <div class="aim"><dl><dt>A</dt><dd>공격 특화입니다.</dd><dt>B</dt><dd>고집 생명의구슬 따라큐의 섀도크루를 81.3% 확률로 버티고, 메가번치코의 플레어드라이브는 최고 난수만 빼고 버팁니다.</dd><dt>S</dt><dd>모래바람 아래에서 준속 스카프 한카리아스를 앞지릅니다.</dd></dl></div>
+  <div class="desc"><ul><li>몰드류의 뒤를 받치는 에이스로 넣었는데, 결국 주력 에이스가 된 포켓몬입니다.</li><li>가장 강한 기술인 성묘, 선공기 야습, 악타입에 쓰는 치근거리기, 랭크업 기술 멀리짖기로 구성이 완성됩니다.</li><li>시즌 중반에는 믿기 어려울 만큼 잘 통했지만, 대쓰여너가 늘어난 영향인지 악타입이 많아지면서 점차 통하기 어려워졌다는 인상입니다.</li><li>멀리짖기의 공격 1랭크 상승은 아쉬우니 3랭크로 해 달라는 농담도 남겼습니다.</li></ul></div>
+</article>
+
+<h2>기본 선출</h2>
+<div class="selections">
+  <div class="sel"><div class="lineup">스코빌런 또는 망나뇽 + 마기라스 + 몰드류 또는 묘지기</div><p>기본 선출입니다. 선봉에 메가진화 포켓몬을 두고 뒤의 모래 에이스를 통과시킵니다. 묘지기가 잘 통하면 묘지기를 우선해서 냈습니다.</p></div>
+  <div class="sel"><div class="lineup">마기라스 + 몰드류 + 묘지기</div><p>상대 파티에 받이가 없어서 모래바람을 깔고 모래 에이스로 때리기만 해도 이길 것 같을 때 내는 선출입니다. 선출이 고민될 때 억지로 내기도 했습니다.</p></div>
+  <div class="sel"><div class="lineup">아머까오 + 2마리</div><p>상대에 받이가 많거나 플라엣테가 있거나, 그 밖에 아머까오가 잘 통할 때 냈습니다. 우츠보트에도 강하게 나갈 수 있습니다. 마기라스·몰드류·아머까오, 메가+마기라스·아머까오뿐 아니라 메가+아머까오+몰드류 또는 묘지기처럼 마기라스를 빼는 선출까지 유연하게 썼습니다.</p></div>
+</div>
+
+<h2>부담스러운 상대</h2>
+<ul>
+  <li><b>보만다</b>: 하마돈과 함께 나오는 경우가 많고 스코빌런도 낼 수 없어 상당히 불리한 교체전을 강요당했습니다. 용의춤을 쓰면 묘지기로도 앞지르지 못하고 위협도 부담스럽습니다. 시즌 막판에 늘어났는데 거의 이기지 못했다는 인상입니다.</li>
+  <li><b>빠르모트·대도각참·대쓰여너 구성</b>: 묘지기도 몰드류도 통과시키기 어려운 상대입니다. 그래서 아머까오의 철벽으로 버텼습니다. 번치코나 루카리오를 내면 그대로 졌습니다.</li>
+</ul>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-7 싱글배틀, 2026.10.07 ~ 11.04 10:59. 트레이너 이름 砂の民으로 챔피언 클래스 <b>199위</b>, 최종 레이트 <b>2313.032</b>입니다. 다른 계정인 트레이너 이름 Key는 마지막에 레이트가 크게 떨어졌습니다.</li>
+  <li>최종일 심야에 두 계정 모두 레이트 2300을 넘기는 데까지는 좋았습니다.</li>
+  <li>이후 크게 달릴 계획이었지만 시작부터 5연패하고 그대로 레이트가 계속 떨어졌습니다.</li>
+  <li>남은 한 계정으로 돌격할 용기는 당연히 나지 않아 챔피언 클래스를 지키고 멈췄습니다. 아쉬움은 남지만 다음 시즌도 열심히 하고 싶다고 했습니다.</li>
+  <li>질문은 <a href="https://x.com/Key74073921">X(@Key74073921)</a>로 받습니다. YouTube 채널도 운영한다고 합니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>묘지기 (ハカドッグ)</dt><dd>확인 필요. 한국어판 명칭을 기존 문서·용어집에서 확인하지 못했습니다.</dd>
+  <dt>하바네로분출 (とびだすハバネロ)</dt><dd>확인 필요. 메가스코빌런의 특성입니다.</dd>
+  <dt>반도리 스코빌런 (バンドリスコヴィラン)</dt><dd>마기라스·몰드류·스코빌런 조합</dd>
+  <dt>묘견 (墓犬)</dt><dd>묘지기의 별명</dd>
+  <dt>카바도리 (カバドリ)</dt><dd>하마돈+몰드류 조합</dd>
+  <dt>일반 메가한카리아스 (通常メガガブ)</dt><dd>메가한카리아스Z가 아닌 메가한카리아스로 추정</dd>
+  <dt>파모도도게이다이 (パモドドゲイダイ)</dt><dd>빠르모트·대도각참·대쓰여너 구성</dd>
+  <dt>아머까오@2 (アーマーガア＠２)</dt><dd>아머까오에 나머지 2마리는 상황에 따라 고르는 선출</dd>
+  <dt>최종 폭사 (最終爆死)</dt><dd>시즌 막판에 레이트가 크게 떨어짐</dd>
+  <dt>2롬, 1롬 특공 (2ロム, 1ロム特攻)</dt><dd>계정 두 개, 한 계정으로 레이트를 걸고 돌격함</dd>
+  <dt>대난무 (大乱舞)</dt><dd>문맥상 대전을 많이 돌려 레이트를 크게 올리려는 것</dd>
+  <dt>최고 난수 빼고 버팀 (最高乱数切り耐え)</dt><dd>가장 높은 데미지 난수를 뺀 나머지를 버팀</dd>
+  <dt>11n</dt><dd>능력치를 11의 배수로 맞추는 조정</dd>
+  <dt>최속 / 준속</dt><dd>스피드 상승 성격 + S 풀 배분 / 무보정 성격 + S 풀 배분</dd>
+</dl>
+
+<footer>원문: <a href="https://keykko.hatenablog.com/entry/2026/11/05/004931">keykko.hatenablog.com 「【シーズンM-7最終199位レート2313】バンドリスコヴィランwith墓犬」 (2026-11-05)</a>. 순위·레이트·기간·성별·도구는 원문 결과 화면과 pokedb 값이 일치합니다. 실수치·포인트·성격·기술은 원문 본문 기준이며, 원문 수치는 모두 포인트 계산과 일치합니다. 스코빌런·망나뇽의 원문 실수치는 메가 후 값입니다. 원문에 개체 화면이 없어 PP는 적지 않았습니다.</footer>
+</div>
+</body>
+</html>
