@@ -129,6 +129,7 @@ footer a{color:inherit}
 const rows=[...document.querySelectorAll('#rows tr')],tbody=document.getElementById('rows');
 const q=document.getElementById('q'),sort=document.getElementById('sort'),mon=document.getElementById('mon');
 let season=document.querySelector('#tabs .on')?.dataset.season||'',pick='';
+function allSeasons(){season='';document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',!x.dataset.season))}
 function apply(){
  const t=q.value.trim().toLowerCase();let n=0;
  const key={rank:r=>[-+r.dataset.season.replace(/\\D/g,''),+r.dataset.rank],new:r=>[-+r.dataset.added],rate:r=>[-+r.dataset.rate]}[sort.value];
@@ -140,10 +141,10 @@ function apply(){
 document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
  document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));season=b.dataset.season;apply()});
 tbody.addEventListener('click',e=>{const b=e.target.closest('.team button');
- if(b){e.stopPropagation();pick=b.dataset.mon;apply();return}
+ if(b){e.stopPropagation();pick=b.dataset.mon;allSeasons();apply();return}
  if(e.target.closest('a'))return;const r=e.target.closest('tr');if(r)location.href=r.dataset.href});
 mon.querySelector('button').addEventListener('click',()=>{pick='';apply()});
-q.addEventListener('input',apply);sort.addEventListener('change',apply);apply();
+q.addEventListener('input',()=>{if(q.value.trim())allSeasons();apply()});sort.addEventListener('change',apply);apply();
 </script>
 </body>
 </html>
