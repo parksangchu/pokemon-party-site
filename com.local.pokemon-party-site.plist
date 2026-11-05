@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.local.pokemon-party-site</string>
+
+  <!-- 설치: ln -sf ~/pokemon-party-site/com.local.pokemon-party-site.plist ~/Library/LaunchAgents/ && launchctl load ~/Library/LaunchAgents/com.local.pokemon-party-site.plist -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-c</string>
+    <string>PATH="$HOME/.local/bin:/opt/homebrew/bin:$PATH" ./run.sh</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/socraai/pokemon-party-site</string>
+
+  <!-- 매일 08:00 KST. 잠자다 깨면 놓친 잡을 1회 실행 -->
+  <key>StartCalendarInterval</key>
+  <dict><key>Hour</key><integer>8</integer><key>Minute</key><integer>0</integer></dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/socraai/pokemon-party-site/logs/run.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/socraai/pokemon-party-site/logs/run.log</string>
+</dict>
+</plist>

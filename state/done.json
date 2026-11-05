@@ -1,0 +1,38 @@
+{
+ "https://chihaya-poke.hatenablog.com/entry/2026/10/07/183600": {
+  "status": "ok",
+  "tries": 0,
+  "file": "parties/chihaya-M6-party.html",
+  "at": "2026-11-04T17:03:50"
+ },
+ "https://ebapoke.hatenablog.com/entry/2026/10/08/223301": {
+  "status": "ok",
+  "tries": 0,
+  "file": "parties/hiyopen-M6-party.html",
+  "at": "2026-11-04T17:03:50"
+ },
+ "https://muu-poke.hatenablog.com/entry/2026/10/08/204225": {
+  "status": "ok",
+  "tries": 0,
+  "file": "parties/muu-M6-party.html",
+  "at": "2026-11-04T17:03:50"
+ },
+ "https://note.com/abclil/n/n68915c0c22e4": {
+  "status": "ok",
+  "tries": 0,
+  "file": "parties/abclil-M6-party.html",
+  "at": "2026-11-04T17:03:50"
+ },
+ "https://wld.hatenablog.com/entry/2026/10/07/194629": {
+  "status": "ok",
+  "tries": 0,
+  "file": "parties/wld-M6-party.html",
+  "at": "2026-11-04T17:03:50"
+ },
+ "https://tagerau.hatenablog.com/entry/2026/11/04/151643": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/tagerau-M7-party.html",
+  "at": "2026-11-04T17:10:10"
+ }
+}
