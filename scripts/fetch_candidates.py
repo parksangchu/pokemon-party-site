@@ -121,7 +121,8 @@ def main():
 
     seasons = [int(x) for x in a.seasons.split(",") if x] or latest_seasons(min_season=a.min_season)
     out, seen = [], set()
-    current = max(seasons) if a.current_min_rate else None
+    # 진행 중인 시즌 = 사이트에 있는 가장 최근 시즌. --seasons로 지난 시즌만 줬으면 해당 없음.
+    current = latest_seasons(n=1)[0] if a.current_min_rate else None
     for season in seasons:
         # 진행 중인 시즌은 순위가 계속 바뀌므로 레이트가 기준 이상인 사람의 글을 본다.
         ok = (lambda c: float(c["rate"] or 0) >= a.current_min_rate) if season == current else \
