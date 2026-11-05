@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>파모 M-6 162위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324; --t-electric:#e0b21a; --t-flying:#6f9fe0; --t-grass:#4fa83d;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+ol{margin:0 0 10px;padding-left:22px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>파모의 시즌 M-6 최종 162위 파티</h1>
+  <p class="lede">일본 유저 파모(ぱも, pawmimi)의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 원제는 "픽시·빠르모트·대쓰여너 파티"입니다. 작성자는 애착 포켓몬 빠르모트와 함께 최종 두 자리 순위를 목표로 합니다. 전 시즌에 해금된 빠르모트를 가장 강하게 쓰는 방법을 찾아 왔고, 목표에는 못 미쳤지만 최종 챔피언급 162위를 기록했습니다. 빠르모트의 강함을 더 많은 사람에게 알리고 싶어 쓴 글입니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>162위</b></div>
+    <div class="chip">최종 레이트<b>2381.530</b></div>
+    <div class="chip">시즌 / 룰<b>M-6 / 싱글</b></div>
+    <div class="chip">기간<b>2026.09.09 ~ 10.07</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><b>메가픽시</b> ♀</td><td>천진 → 매직미러</td><td>픽시나이트</td><td>조심</td><td>문포스 / 화염방사 / 스텔스록 / 앙코르</td></tr>
+    <tr><td>2</td><td><b>빠르모트</b> ♂</td><td>축전</td><td>기합의띠</td><td>명랑</td><td>재기의기도 / 볼부비부비 / 마하펀치 / 앙코르</td></tr>
+    <tr><td>3</td><td><b>대쓰여너</b> ♂</td><td>적응력</td><td>저주의부적</td><td>고집</td><td>웨이브태클 / 성묘 / 아쿠아제트 / 고속이동</td></tr>
+    <tr><td>4</td><td><b>히스이 대검귀</b> ♂</td><td>예리함</td><td>구애스카프</td><td>명랑</td><td>셸블레이드 / 비검천중파 / 성스러운칼 / 퀵턴</td></tr>
+    <tr><td>5</td><td><b>망나뇽</b> ♀</td><td>멀티스케일</td><td>울퉁불퉁멧</td><td>고집</td><td>신속 / 드래곤테일 / 지진 / 날개쉬기</td></tr>
+    <tr><td>6</td><td><b>메가루카리오Z</b> ♂</td><td>정신력 → 파동의방호</td><td>루카리오나이트Z</td><td>겁쟁이</td><td>진공파 / 러스터캐논 / 악의파동 / 나쁜음모</td></tr>
+  </tbody>
+</table>
+</div>
+<p style="margin-top:10px">파티 콘셉트는 하나입니다. <b>애착 포켓몬 빠르모트를 가장 강하게 쓰는 것</b>입니다.</p>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>① 빠르모트 + 대쓰여너</h3>
+    <p>빠르모트를 가장 강하게 쓰는 것을 목표로, 빠르모트부터 파티를 짜기 시작했습니다. 새 규칙에서는 환경이 쉽게 자리 잡지 않으므로 높은 제압력을 밀어붙이는 쪽이 강하다고 봤습니다. 그래서 위력 200의 성묘를 쓸 수 있어 빠르모트와 궁합이 좋은 대쓰여너를 넣었습니다. 환경 중심이 될 것으로 본 메가○○Z 포켓몬들을 이길 수 있도록 고속이동형으로 정했습니다.</p>
+  </div>
+  <div class="step">
+    <h3>② 메가픽시</h3>
+    <p>빠르모트 + 대쓰여너 + 1마리 선출을 만들기 위해, 다음 조건을 갖춘 포켓몬을 찾았습니다.</p>
+    <ol>
+      <li>메가진화 포켓몬이면서 선봉으로 내기 쉬움</li>
+      <li>빠르모트 축 파티가 부담스러워하기 쉬운 한카리아스와 하마돈에 강함</li>
+      <li>빠르모트의 기합의띠를 지키기 위해 상대의 설치 기술을 억제할 수 있음</li>
+      <li>대쓰여너를 통과시키기 위해 스텔스록을 깔 수 있음</li>
+      <li>되살아난 뒤 악타입 포켓몬을 필드에 남기지 않거나, 상대를 악 기술 이외의 기술에 구애 상태로 묶어 대쓰여너가 고속이동을 쓸 발판을 만들 수 있음</li>
+    </ol>
+    <p>이 조건을 전부 충족하는 유일한 포켓몬으로, 스텔스록·앙코르형 메가픽시를 넣었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>③ 메가루카리오Z: 숨은 선출의 세 번째</h3>
+    <p>픽시·빠르모트·대쓰여너 축을 중심으로 나머지를 생각했습니다. 이 선출이 매우 강하므로 약점 보완에 특화한 포켓몬이 아니라, 숨은 선출로 따로 싸울 수 있는 구성을 준비하기로 했습니다.</p>
+    <p>대쓰여너를 통과시킬 수 없는 파티에 대한 답으로, 선출 세 번째 자리에 놓이기 쉬운 따라큐, 마스카나, 고릴타, 킬가르도, 대도각참 등에 매우 강한 메가루카리오Z를 세 번째에 두는 구성을 목표로 했습니다.</p>
+  </div>
+  <div class="step">
+    <h3>④ 울퉁불퉁멧 망나뇽</h3>
+    <p>메가루카리오Z를 세 번째에 두기 위해, 숨은 선출은 대면 파티나 전개 파티 중 하나로 생각했습니다. 그중 시즌 중반쯤부터 유행하던 울퉁불퉁멧 망나뇽과 메가루카리오Z 조합이 매우 강하게 느껴져 울퉁불퉁멧 망나뇽을 넣었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>⑤ 구애스카프 히스이 대검귀</h3>
+    <p>1마리 + 망나뇽 + 메가루카리오Z 선출을 만들기 위해, 다음 조건을 갖춘 포켓몬을 찾았습니다.</p>
+    <ol>
+      <li>메가가 아닌 포켓몬이면서, 기합의띠 없이도 선봉으로 내기 쉬움</li>
+      <li>망나뇽의 드래곤테일로 상대를 흔들 수 있도록 설치 기술을 깔 수 있음</li>
+      <li>메가픽시가 끌어들이는 선봉 포켓몬(브리두라스, 타부자고, 에이스번, 킬라플로르, 메가메타그로스, 메가팬텀 등)에 강함</li>
+      <li>파티 전체가 부담스러워하는 포켓몬(에써르, 클레스퍼트라, 메가다크펫 + 빠르모트, 불카모스, 파라블레이즈 등)에 강함</li>
+    </ol>
+    <p>이 조건에 가장 잘 맞는 포켓몬으로 구애스카프 히스이 대검귀를 넣어 6마리를 완성했습니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가픽시 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.36</span><h3>메가픽시 (암컷)</h3><span class="badge">기본 선출 1번째</span>
+    <span class="types"><span class="type" style="background:var(--t-fairy)">페어리</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>픽시나이트</b></span><span>특성 <b>천진 → 매직미러</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">201</span><span class="v">201</span><span class="bar"><i style="width:96.9%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">81</span><span class="v down">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">93</span><span class="v">113</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">145</span><span class="v up">189</span><span class="bar"><i style="width:53.1%"></i></span><span class="p">17</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">110</span><span class="v">130</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">98</span><span class="v">108</span><span class="bar"><i style="width:56.3%"></i></span><span class="p">18</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>문포스</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>화염방사</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>앙코르</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H-D</dt><dd>특공 상승 보정 + 풀 배분 메가루카리오Z의 러스터캐논을 확정으로 버팁니다.</dd>
+    <dt>C</dt><dd>상승 보정. 특방에 2포인트를 준 메가루카리오Z를 화염방사로 81.25% 확률로 쓰러뜨립니다.</dd>
+    <dt>S</dt><dd>스피드에 2포인트를 준 브리두라스보다 1 빠릅니다.</dd>
+    <dt>기술</dt><dd>문포스: 자속 고화력기로, 포인트를 주지 않은 한카리아스나 HP 풀 배분 보만다 등을 한 방에 쓰러뜨립니다.<br>화염방사: 메가루카리오Z와의 대면 승리를 노리고, 아머까오, 타부자고, 메가메타그로스 등을 압박하며, 갑주무사에게 유리하게 움직입니다.<br>스텔스록: 대쓰여너를 통과시키기 위한 기술입니다.<br>앙코르: 랭크업 발판을 회피하거나, 빠르모트가 마비시킨 상대에게 걸어 되살아난 뒤 대쓰여너의 고속이동 발판을 만듭니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>기본 선출의 첫 번째 포켓몬입니다.</li>
+    <li>상대는 빠르모트가 일을 못 하게 하려고 한카리아스나 하마돈처럼 스텔스록을 깔 수 있는 포켓몬을 선봉으로 내는 경우가 많았습니다. 덕분에 많은 대전을 유리하게 풀어 갈 수 있었습니다.</li>
+    <li>파티에 스텔스록을 깔 수 있는 다른 포켓몬이 없어서, 상대가 예상하지 못한 스텔스록으로 상대 파티를 절반가량 무너뜨리기도 했습니다. 스피드와 화력에 포인트를 나눠 준 덕분에 예상 밖의 압박도 가능했습니다.</li>
+    <li>빠르모트의 볼부비부비와 조합하면 되살아난 뒤 최속 구애스카프 대쓰여너까지 앞지를 수 있습니다. 그 상태로 다시 상대를 무너뜨리거나, 앙코르로 대쓰여너의 고속이동 발판을 만드는 운영이 매우 강합니다.</li>
+    <li>메가픽시의 역할은 상대에게 설치 기술을 허용하지 않고 일방적으로 스텔스록을 깔고, 되살아난 뒤 대쓰여너가 고속이동을 쓰기 쉬운 장면을 만드는 것입니다. 거의 모든 대전에서 이 역할을 해냈습니다.</li>
+    <li>처음에는 되살아난 뒤 악타입 포켓몬을 필드에 남기지 않거나 악 기술 이외의 기술에 구애 상태로 묶어 발판을 만드는 것만 생각했습니다. 그런데 하품을 쓰는 발판 요원도 필드에 남기지 않고 넘기거나, 앙코르로 상대 행동을 제한하며 대쓰여너로 넘길 수도 있어 처음 예상을 웃도는 활약을 했습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 빠르모트 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.923</span><h3>빠르모트 (수컷)</h3><span class="badge">기본 선출 2번째</span>
+    <span class="types"><span class="type" style="background:var(--t-electric)">전기</span><span class="type" style="background:var(--t-fight)">격투</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>축전</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">147</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">81</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">80</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">172</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>재기의기도</div>
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>볼부비부비</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>마하펀치</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>앙코르</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A-S</dt><dd>기합의띠를 들게 하고, 화력보다 많은 포켓몬보다 먼저 움직이는 것을 중시해 명랑 공격·스피드 배분으로 했습니다.</dd>
+    <dt>도구</dt><dd>메가픽시의 매직미러 덕분에 설치 기술이 깔리지 않으므로, 기합의띠로 확실한 행동 보장을 얻으면서 폭넓게 보조할 수 있습니다.</dd>
+    <dt>기술</dt><dd>재기의기도: 메가픽시를 되살립니다.<br>볼부비부비: 되살린 메가픽시가 먼저 움직이게 하거나, 대쓰여너가 고속이동 없이 통과하게 하거나, 구애스카프 포켓몬을 무력화하거나, 앙코르와 조합해 용의춤 같은 랭크업 발판을 확실히 회피합니다.<br>마하펀치: 유행하던 기합의띠 드닐레이브처럼 메가픽시가 다 깎지 못한 포켓몬을 피해 없이 쓰러뜨리거나, 쓰러지기 직전 상대의 띠를 깎습니다.<br>앙코르: 랭크업 발판을 회피하거나, 대쓰여너가 위력 150 성묘를 통과시키기 위한 고속이동 발판을 만들거나, 메가픽시를 거쳐 대쓰여너까지 앙코르를 이어 줍니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>기본 선출의 두 번째이자 애착 포켓몬입니다.</li>
+    <li>선봉 메가픽시가 쓰러진 뒤 상대를 마비시키고, 메가픽시를 되살리고, 대쓰여너 성묘의 위력을 올리는 것이 역할입니다. 매직미러 덕분에 설치 기술이 깔리지 않아 거의 모든 대전에서 역할을 해냈습니다.</li>
+    <li>볼부비부비를 쓰는 타이밍에 상대가 한카리아스나 하마돈으로 교체하는 경우도 많았지만, 그때는 되살린 메가픽시가 유리하게 움직일 수 있습니다. 볼부비부비는 한카리아스에게 무효여서 띠가 깎이지 않는 점도 좋았습니다.</li>
+    <li>환경에는 고화력 공격 기술 3개 + 재기의기도 구성의 빠르모트가 많았습니다. 그래서 볼부비부비나 앙코르로 상대의 예상을 벗어난 압박을 할 수 있었습니다. 상대가 전광쌍격이나 인파이트를 예상해, 형태를 보여 주기도 전에 항복을 받은 대전도 많았습니다.</li>
+    <li>스텔스록 + 고속이동 + 위력 150 성묘만으로 막을 방법이 없는 파티도 많았습니다. 그래서 메가픽시를 되살리지 않고 볼부비부비나 앙코르로 대쓰여너의 고속이동 발판만 만들어 통과시킨 대전도 많았습니다.</li>
+    <li>특성은 축전을 골랐습니다. 철주먹 보정을 받는 기술은 마하펀치뿐이어서 살린 대전이 별로 없었고, 메가픽시와 대쓰여너에게 그대로 통하는 전기 기술을 끊을 수 있는 점을 높이 샀습니다. 일정 수 있던 비 파티 대책도 되고, 브리두라스의 일렉트로빔 랭크업 발판을 막으면서 고속이동 대쓰여너를 통과시키는 운영으로도 이어졌습니다.</li>
+    <li>전기 기술이나 발판 만들기 기술에 앙코르를 걸어 교체를 강요하고, 볼부비부비를 연타해 뒤의 포켓몬까지 압박하는 운영도 상당히 강했습니다.</li>
+    <li>이 압도적인 보조 능력은 빠르모트만의 것이고, 빠르모트를 가장 강하게 쓸 수 있었다고 생각합니다. 외모도 성능도 정말 좋아하는 최고의 애착 포켓몬이라고 평가합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 대쓰여너 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.902</span><h3>대쓰여너 (수컷)</h3><span class="badge">기본 선출 3번째</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>저주의부적</b></span><span>특성 <b>적응력</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">195</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">180</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">90</span><span class="bar"><i style="width:15.6%"></i></span><span class="p">5</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">95</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">127</span><span class="bar"><i style="width:90.6%"></i></span><span class="p">29</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>웨이브태클</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>성묘</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트</div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>고속이동</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A</dt><dd>전멸을 노리기 위해 상승 보정 + 풀 배분으로 했습니다.</dd>
+    <dt>B</dt><dd>남은 포인트입니다.</dd>
+    <dt>S</dt><dd>고속이동 후 최속 구애스카프 한카리아스보다 1 빠릅니다.</dd>
+    <dt>도구</dt><dd>저주의부적: 단점 없이 성묘의 위력을 올립니다.</dd>
+    <dt>기술</dt><dd>웨이브태클: 자속 고화력기로, 노말타입(원문 "無タイプ", 성묘가 통하지 않는 타입으로 보아 추정)이나 악타입을 압박합니다.<br>성묘: 자속에 위력 150 또는 200으로 모든 것을 뚫습니다.<br>아쿠아제트: 체력이 아주 조금 남은 포켓몬을 처리하거나, 스텔스록과 합쳐 불타입 포켓몬을 한 방에 쓰러뜨립니다.<br>고속이동: 거의 모든 포켓몬보다 먼저 움직여 전멸을 노립니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <ul>
+      <li>기본 선출의 세 번째이자 전멸 담당입니다.</li>
+      <li>자속 + 적응력 보정 + 성격 보정 + 저주의부적 + 위력 200 성묘의 화력이 터무니없습니다. 스텔스록 + 위력 200 성묘의 결과는 다음과 같습니다.</li>
+    </ul>
+    <div class="tbl-wrap" style="margin:6px 0 12px">
+    <table>
+      <thead><tr><th>상대</th><th>쓰러뜨릴 확률</th></tr></thead>
+      <tbody>
+        <tr><td>HP·방어 특화 브리두라스</td><td>31.25%</td></tr>
+        <tr><td>HP·방어 특화 하마돈</td><td>12.50%</td></tr>
+        <tr><td>HP·방어 특화 아머까오</td><td>확정</td></tr>
+        <tr><td>HP에 2포인트를 준 삼삼드래</td><td>93.75%</td></tr>
+        <tr><td>HP 풀 배분, 등배 타입으로 테라스탈한 딩루</td><td>50%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <ul>
+      <li>이 압도적인 제압력으로 수많은 파티를 무너뜨렸습니다.</li>
+      <li>환경의 빠르모트 + 대쓰여너 조합에서 대쓰여너는 대부분 구애스카프를 듭니다. 그래서 고속이동을 쓰기 전에 항복을 받거나, 고속이동 턴에 상대가 화력 낮은 선공기를 눌러 주는 경우가 자주 있었습니다. 그 덕분에 질 대전을 이기거나 운 요소를 줄일 수 있었습니다.</li>
+      <li>이런 수 싸움도 의식해, 고속이동 턴에는 일부러 시간을 끌어 항복을 기대하기도 했습니다. 숨은 선출에서는 구애스카프가 되도록 드러나지 않게 파티를 짰습니다.</li>
+      <li>아쿠아제트 자리를 대타로 바꾸는 것도 생각했습니다. 하지만 메가픽시를 되살리면 하품을 쓰는 발판 요원을 필드에 남기지 않거나 기능을 멈춰 대쓰여너로 넘길 수 있으므로, 이 시너지를 살리려고 아쿠아제트를 넣었습니다.</li>
+      <li>이 포켓몬의 전멸 성능은 그야말로 괴물이었다고 평가합니다.</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 4. 히스이 대검귀 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.503</span><h3>히스이 대검귀 (수컷)</h3><span class="badge">숨은 선출 1번째</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-dark)">악</span></span>
+    <div class="meta"><span>도구 <b>구애스카프</b></span><span>특성 <b>예리함</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">167</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">160</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">100</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">85</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">150</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>셸블레이드</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>비검천중파</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>성스러운칼</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>퀵턴</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A-S</dt><dd>메가○○Z 포켓몬들보다 먼저 움직일 스피드를 확보하면서 화력도 떨어뜨리지 않으려고 명랑 공격·스피드 배분으로 했습니다.</dd>
+    <dt>도구</dt><dd>기합의띠는 이미 빠르모트가 쓰고 있어, 압정을 많이 깔고 기습 성능을 높이기 위해 구애스카프를 들게 했습니다.</dd>
+    <dt>기술</dt><dd>셸블레이드: 자속 고화력기로, 메가픽시를 의식해 나오는 불타입과 빠르모트를 의식해 나오는 스텔스록 땅타입을 압박합니다.<br>비검천중파: 자속 고화력기로, 메가픽시를 의식해 나오는 타부자고, 메가팬텀, 메가메타그로스와 파티 전체에 부담스러운 에써르, 클레스퍼트라를 압박하면서, 망나뇽의 드래곤테일로 흔들 압정을 깝니다.<br>성스러운칼: 메가픽시와 빠르모트를 의식해 나오는 브리두라스를 예리함 보정으로 압박합니다.<br>퀵턴: 불리한 대면에서 상대를 깎으면서 울퉁불퉁멧 망나뇽으로 넘깁니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>숨은 선출의 첫 번째 포켓몬입니다.</li>
+    <li>메가픽시나 빠르모트를 의식해 나오는 포켓몬에 강합니다. 특히 메가픽시를 꺼리는 사람이 많은지, 메가픽시를 의식한 선출을 상대로 선봉 대면에서 유리한 경우가 많아 대전을 유리하게 끌고 갔습니다.</li>
+    <li>기합의띠가 남아 있지 않아 어쩔 수 없이 구애스카프로 썼지만, 압정을 많이 깔거나 기습으로 상대 포켓몬 하나를 피해 없이 쓰러뜨린 대전도 많았습니다.</li>
+    <li>파티에서 가장 마지막에 넣은 포켓몬이지만, 결과적으로 넣기를 잘했다고 평가합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 망나뇽 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.149</span><h3>망나뇽 (암컷)</h3><span class="badge">숨은 선출 2번째</span>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>울퉁불퉁멧</b></span><span>특성 <b>멀티스케일</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">197</span><span class="bar"><i style="width:96.9%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">198</span><span class="bar"><i style="width:81.25%"></i></span><span class="p">26</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">120</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">109</span><span class="bar"><i style="width:28.1%"></i></span><span class="p">9</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>신속</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>드래곤테일</div>
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-flying)">비행</span>날개쉬기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>조정</dt><dd>ぼのぼに님이 영상에서 소개한 배분을 따랐습니다.</dd>
+    <dt>H</dt><dd>HP를 최대한 올리되 끝자리를 맞췄습니다(원문 "極振り、端数", 실제 31포인트).</dd>
+    <dt>A</dt><dd>상승 보정. 공격 실수치를 11의 배수(198)로 맞췄습니다.</dd>
+    <dt>S</dt><dd>남은 포인트입니다.</dd>
+    <dt>도구</dt><dd>울퉁불퉁멧: 메가루카리오Z로 전멸시키기 위한 고정 피해를 벌어 줍니다.</dd>
+    <dt>기술</dt><dd>신속: 다 깎지 못한 포켓몬을 피해 없이 쓰러뜨리거나, 쓰러지기 직전 상대의 띠를 깎거나, 메가루카리오Z의 확정 범위에 넣습니다.<br>드래곤테일: 압정과 자속 고화력으로 상대를 흔듭니다.<br>지진: 상대의 메가루카리오Z나 메가팬텀 등 많은 포켓몬을 잡을 수 있는 범위 기술입니다.<br>날개쉬기: HP를 관리하면서 울퉁불퉁멧에 닿는 횟수를 늘립니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>숨은 선출의 두 번째 포켓몬입니다.</li>
+    <li>히스이 대검귀가 깐 압정과 드래곤테일을 조합해 상대를 메가루카리오Z의 확정 범위에 넣는 것이 역할입니다.</li>
+    <li>성격 보정을 받은 드래곤테일의 위력이 생각보다 높아, 압정·울퉁불퉁멧과 합쳐 많은 대전에서 상대 파티를 흔드는 데 기여했습니다.</li>
+    <li>히스이 대검귀의 퀵턴으로 울퉁불퉁멧 망나뇽에 넘기는 운영도 강했고, 약간 유행하던 상대의 선봉 생명의구슬 빠르모트에 강하게 나설 수 있는 점도 좋았습니다.</li>
+    <li>당시 유행하던 조합에서는 히스이 대검귀 자리가 기합의띠 킬라플로르였기 때문에, 메가진화나 다른 형태를 경계하게 만들 수 있었을지도 모른다고 합니다.</li>
+    <li>이번 작품에서도 망나뇽의 강함은 틀림없다고 평가합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 메가루카리오Z -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.448</span><h3>메가루카리오Z (수컷)</h3><span class="badge">숨은 선출 3번째</span>
+    <span class="types"><span class="type" style="background:var(--t-fight)">격투</span><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>루카리오나이트Z</b></span><span>특성 <b>정신력 → 파동의방호</b></span><span>성격 <b>겁쟁이</b> (스피드↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">147</span><span class="v">147</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">117</span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">90</span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">167</span><span class="v">216</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">90</span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">156</span><span class="v up">223</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>진공파</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>러스터캐논</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>악의파동</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>나쁜음모</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>C-S</dt><dd>상대의 구애스카프 대쓰여너와 메가○○Z 포켓몬들에 유리하게 서면서 화력도 떨어뜨리지 않으려고 겁쟁이 특공·스피드 배분으로 했습니다.</dd>
+    <dt>기술</dt><dd>진공파: 파동탄을 쓸 기회가 별로 없었고, 압정 + 최속 진공파로 상대 메가루카리오Z를 쓰러뜨릴 수 있어 골랐습니다.<br>러스터캐논: 자속 고화력기입니다.<br>악의파동: 압정 + 악의파동으로 상대 대쓰여너를 쓰러뜨리거나, 풀죽음으로 운이 좋게 풀리기를 노리면서 많은 포켓몬을 잡을 수 있는 범위 기술입니다.<br>나쁜음모: 대쓰여너가 끌어들이는 포켓몬을 랭크업 발판으로 삼거나 전멸 성능을 높입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>숨은 선출의 세 번째 포켓몬입니다.</li>
+    <li>대쓰여너를 의식해 세 번째에 놓인 포켓몬에 강하고, 특성도 강하게 쓸 수 있었습니다.</li>
+    <li>두 번째 망나뇽이 따라큐에게 뚫리는 경우가 많았지만, 그 따라큐를 발판으로 전멸을 노릴 수 있었습니다.</li>
+    <li>이쪽 대쓰여너를 구애스카프 대쓰여너로 대책하는 상대도 일정 수 있어, 고정 피해 + 악의파동으로 쓰러뜨릴 수 있는 점도 좋았습니다. 상대 메가루카리오Z도 고정 피해 + 최속 진공파로 쓰러뜨리고, 메가한카리아스Z에도 같은 스피드 이상의 승부를 걸 수 있는 등 유리하게 움직일 상대가 많았습니다.</li>
+    <li>다만 화력이 모자라다고 느낀 대전이 많아 다루기 어려운 포켓몬이라고 합니다. 최종일에 악의파동으로 한 번도 풀죽이지 못해 울었다고도 적었습니다.</li>
+  </ul></div>
+</article>
+
+<h2>기본 선출과 운영</h2>
+<p>선출 패턴은 두 가지입니다.</p>
+<div class="selections">
+  <div class="sel"><div class="lineup">메가픽시 + 빠르모트 + 대쓰여너</div><p>기본 선출입니다.</p></div>
+  <div class="sel"><div class="lineup">히스이 대검귀 + 망나뇽 + 메가루카리오Z</div><p>숨은 선출입니다. 대쓰여너에 강한 따라큐, 마스카나, 고릴타, 킬가르도, 대도각참 등이 있을 때 되도록 이쪽을 냅니다.</p></div>
+</div>
+<h3>기본 운영</h3>
+<p>숨은 선출은 최종일 당일에 짠 것이라 숙련도가 낮고 힘도 그리 세지 않습니다. 그래서 되도록 기본 선출을 밀어붙이는 데 집중했습니다. 숨은 선출은 각자 입맛에 맞게 바꿔 쓰는 편이 쓰기 편할 것이라고 합니다.</p>
+<ol>
+  <li>메가픽시로 스텔스록을 깔고, 가능하면 상대에게 압박을 넣어 뒤 포켓몬이 움직이기 쉬운 판을 만듭니다. 기본적으로 스텔스록부터 쓰는 것이 정답입니다.</li>
+  <li>메가픽시가 쓰러진 뒤 빠르모트의 볼부비부비로 상대를 마비시키고 메가픽시 부활을 노립니다. 이미 충분히 무너뜨렸거나 위력 150 성묘로 통과할 수 있으면, 메가픽시를 되살리지 않습니다. 대쓰여너가 받을 수 있는 공격 기술에 앙코르를 걸고 퇴장해 고속이동 발판을 만듭니다.</li>
+  <li>되살아난 메가픽시로 상대를 압박하거나, 대쓰여너가 받을 수 있는 공격 기술에 앙코르를 걸고 퇴장해 고속이동 발판을 만듭니다.</li>
+</ol>
+<p>이렇게 메가픽시와 빠르모트로 상대를 압박하면서, 마지막에 고속이동을 쌓은 대쓰여너가 통과하도록 보조합니다.</p>
+<h3>또 하나의 플랜</h3>
+<p>상대에 메가갑주무사나 대쓰여너가 불리한 악타입이 있는 파티에 기본 선출을 통과시키는 플랜입니다. 되살린 메가픽시를 마지막에 남겨 둡니다. 먼저 스텔스록 + 위력 150 성묘를 통과시키고, 대쓰여너를 막으러 나오는 스토퍼를 마지막 메가픽시로 처리합니다. 따라큐는 어렵지만, 숨은 선출을 별로 내고 싶지 않아서 통할 만한 대전에서는 이 플랜에 의지했습니다.</p>
+
+<h2>부담스러운 상대</h2>
+<ul>
+  <li>누리레느 + 대쓰여너를 통과시킬 수 없는 포켓몬이 있는 파티: 꽤 힘들지만 그래도 기본 선출 쪽의 승률이 높아 보인다고 합니다.</li>
+  <li>대쓰여너에 다소 느슨한 선출을 당했을 때 숨은 선출로 통과시키는 전개가 힘듭니다.</li>
+  <li>그 밖에 따라큐 + 대쓰여너 등의 트릭룸 파티, 메타몽 등.</li>
+</ul>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-6 싱글배틀, 2026.09.09 ~ 10.07 10:59. 챔피언급 <b>162위</b>, 최종 레이트 <b>2381.530</b>입니다.</li>
+  <li>트레이너 이름 "ぱもっと", 팀 이름 "パモはイダイ", 팀 ID <code>MV3S733SLV</code>입니다. 원문에는 코디네이트 팀(コーディネートチーム)이 있다고 적혀 있고, 최종일 대전 모음 영상도 링크되어 있습니다.</li>
+  <li>이번 달은 시간이 부족해 잠을 줄이고 틈새 시간을 쓰며 임했는데, 빠르모트가 해금된 시즌에 어떻게든 결과를 남겨 안도했다고 합니다.</li>
+  <li>포켓몬을 시작한 지 1년이 넘었고, 빠르모트를 가장 강하게 쓰면서도 명중 불안이 없고 운 요소가 적고 대전 회전도 빠른, 지금까지 가장 강한 축을 잡을 수 있었다고 평가합니다. 다만 숨은 선출의 힘은 분명히 낮아 개선할 여지가 크다고 합니다.</li>
+  <li>앞으로도 빠르모트와 최종 두 자리 순위를 목표로 하겠다고 했습니다. 질문은 X DM으로 받습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>구축 (構築)</dt><dd>파티</dd>
+  <dt>ピクシパモイダイ</dt><dd>픽시 + 빠르모트 + 대쓰여너 조합</dd>
+  <dt>パモはイダイ</dt><dd>팀 이름. "빠르모트는 위대하다(偉大)"와 대쓰여너(イダイトウ)를 건 말장난으로 추정</dd>
+  <dt>裏選出 / 表軸</dt><dd>숨은 선출 / 기본 선출 축</dd>
+  <dt>メガZ組</dt><dd>메가○○Z 포켓몬들</dd>
+  <dt>@1</dt><dd>나머지 1마리는 상황에 따라 고름</dd>
+  <dt>全抜き</dt><dd>혼자 상대를 전멸시킴</dd>
+  <dt>起点 / 起点作成</dt><dd>랭크업 발판 / 발판 만들기</dd>
+  <dt>崩し / ストッパー</dt><dd>압박(받이 뚫기) / 스토퍼</dd>
+  <dt>一貫を切る</dt><dd>파티 전체에 통하던 타입의 기술을 막음</dd>
+  <dt>圏内</dt><dd>그 공격으로 쓰러뜨릴 수 있는 체력 범위</dd>
+  <dt>定数ダメージ</dt><dd>스텔스록·압정·울퉁불퉁멧 등의 고정 피해</dd>
+  <dt>高打点3W</dt><dd>고화력 공격 기술 3개 구성</dd>
+  <dt>ミリ残り</dt><dd>HP가 아주 조금 남음</dd>
+  <dt>上振れ</dt><dd>운이 좋게 잘 풀림</dd>
+  <dt>出し勝ち</dt><dd>선봉 대면 유리</dd>
+  <dt>11n</dt><dd>실수치를 11의 배수로 맞추는 조정</dd>
+  <dt>재기의기도 (さいきのいのり)</dt><dd>확인 필요. 기존 용어집 표기를 따름</dd>
+  <dt>비검천중파 (ひけん・ちえなみ)</dt><dd>확인 필요. 기존 용어집 표기를 따름</dd>
+  <dt>파동의방호 (はどうのぼうご)</dt><dd>확인 필요. 기존 용어집 표기를 따름</dd>
+  <dt>픽시나이트 (ピクシナイト)</dt><dd>확인 필요. 기존 용어집 표기를 따름</dd>
+  <dt>전광쌍격 (電光双撃)</dt><dd>확인 필요. 기존 용어집 표기를 따름</dd>
+  <dt>일렉트로빔 (エレクトロビーム)</dt><dd>확인 필요. 기존 용어집 표기를 따름</dd>
+  <dt>コーディネートチーム</dt><dd>확인 필요. 뜻 미확인</dd>
+</dl>
+
+<footer>원문: <a href="https://pawmimi.hatenadiary.com/entry/ChampionsM-6">pawmimi.hatenadiary.com (2026-10-07)</a>. 실수치·포인트·성격·기술은 원문 스크린샷과 대조했습니다. 원문에 PP가 없어 표기하지 않았습니다. 빠르모트의 성별은 팀 화면의 수컷을 따랐으며, 결과 화면에는 암컷으로 나옵니다.</footer>
+</div>
+</body>
+</html>

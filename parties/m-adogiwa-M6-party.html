@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Madogiwa M-6 81위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-electric:#e0b21a; --t-grass:#4fa83d; --t-flying:#6f9fe0;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>Madogiwa의 시즌 M-6 최종 81위 파티: 역습의 꿈트렁·보만다</h1>
+  <p class="lede">일본 유저 Madogiwa(m_adogiwa)의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 메가보만다와 풍선 타부자고를 축으로, 꿈트렁의 꼬리자르기로 랭크업 기회를 만드는 구성입니다. 작성자는 챔피언스에서 두 번째로 최종 두 자리 순위를 달성했으며, 환경의 예상을 비트는 요소가 많은 개성 있는 파티라고 소개합니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>81위</b></div>
+    <div class="chip">최종 레이트<b>2432.592</b></div>
+    <div class="chip">시즌 / 레귤레이션<b>M-6 / M-C</b></div>
+    <div class="chip">기간<b>2026.09.09 ~ 10.07</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png" alt="" loading="lazy"><b>메가보만다</b> ♀</td><td>위협 → 스카이스킨</td><td>보만다나이트</td><td>명랑</td><td>이판사판태클 / 역린 / 지진 / 용의춤</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1000.png" alt="" loading="lazy"><b>타부자고</b></td><td>황금몸</td><td>풍선</td><td>조심</td><td>골드러시 / 섀도볼 / 파워젬 / 나쁜음모</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/968.png" alt="" loading="lazy"><b>꿈트렁</b> ♀</td><td>흙먹기</td><td>자뭉열매</td><td>대담</td><td>바디프레스 / 철벽 / 꼬리자르기 / 잠자기</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy"><b>누리레느</b> ♀</td><td>급류</td><td>기합의띠</td><td>조심</td><td>물거품아리아 / 문포스 / 아쿠아제트 / 명상</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy"><b>하마돈</b> ♂</td><td>모래날림</td><td>먹다남은음식</td><td>장난꾸러기</td><td>지진 / 얼음엄니 / 하품 / 게으름피우기</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10305.png" alt="" loading="lazy"><b>메가라이츄Y</b> ♀</td><td>피뢰침 → 노가드</td><td>라이츄나이트Y</td><td>겁쟁이</td><td>전자포 / 기합구슬 / 풀묶기 / 나쁜음모</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>① 메가보만다</h3>
+    <p>작성자는 현재 M-C 환경에서 메가보만다가 메가진화 중에서도 단연 강하다고 결론 내리고 가장 먼저 넣었습니다. 구성이 완성된 뒤 여러 형태를 시험한 끝에, 미러전에 강하면서 랭크업 요소가 있고 드래곤 기술이 잘 통하는 상황을 만들었을 때 제압력이 높다는 이유로 역린을 든 물리형을 골랐습니다.</p>
+  </div>
+  <div class="step">
+    <h3>② 풍선 타부자고</h3>
+    <p>메가보만다는 환경에 많은 물리 받이인 하마돈과 브리두라스를 대면에서 무너뜨리기 어렵습니다. 이 둘에게 교체로 들어가도 유리한 상황을 만들 수 있고, 내성 면에서도 보만다를 잘 보완하는 풍선 타부자고를 다음으로 넣었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>③ 꿈트렁</h3>
+    <p>보만다·타부자고만으로는 한카리아스, 마스카나, 드닐레이브 같은 메가가 아닌 포켓몬들이 부담스러웠고, 전개에 따라 메타그로스에게 무너지기도 했습니다. 그래서 시즌 M-1 마지막 날을 함께 싸운 "최강의 포켓몬" 꿈트렁에 주목했습니다. 맡을 상대에게 교체로 들어가 꼬리자르기를 써서 보만다·타부자고의 랭크업 기회를 만들 수 있다는 점, 철벽+잠자기로 마지막 마무리까지 맡을 수 있다는 점을 높이 사 세 번째로 넣었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>④ 띠·명상 누리레느</h3>
+    <p>여기까지는 선봉으로 두기 좋은 포켓몬이 없었고, 메가한카리아스Z처럼 보만다로 유리하게 싸울 수 없는 불꽃 기술 보유자도 힘들었습니다. 이를 함께 얼버무릴 수 있는 누리레느를 넣었습니다. 선봉 기용을 전제로 형태를 고르다 보니 이 환경은 애초에 선봉 누리레느가 강해서 미러전이 자주 일어난다는 것을 깨달았습니다. 미러전에서 먼저 명상을 쌓으면 이득을 볼 수 있으므로, 이것과 한 번은 확실히 행동할 수 있는 장점을 양립하는 띠·명상형으로 정했습니다.</p>
+  </div>
+  <div class="step">
+    <h3>⑤ 먹다남은음식 하마돈</h3>
+    <p>꿈트렁은 낼 수 있는 상대 파티를 가리기 때문에, 꿈트렁을 선출하기 어려울 때 쿠션으로 낼 포켓몬을 찾았습니다. 여기까지의 구성으로는 메가망나뇽과 메가이어롭이 부담스러웠고, 꿈트렁보다 메가한카리아스Z 대비가 잘 된다는 점을 높이 사 먹다남은음식 하마돈을 넣었습니다. 메가망나뇽과 한카리아스를 의식해, 대면에서 큰 피해를 줄 수 있는 얼음엄니를 든 형태로 만들었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>⑥ 메가라이츄Y</h3>
+    <p>다섯 마리와 나머지 한 자리로 랭크배틀을 돌려 보니, 보만다를 내기 어려운 메가팬텀과 보만다를 의식한 배분이 많은 메가리자몽Y가 부담스러웠습니다. 이 둘을 볼 수 있으면서, 넣어 둔 쿠션들이 약한 누리레느에게도 맞설 수 있는 포켓몬을 찾았습니다. 이들 모두를 대면에서 이길 수 있고 꿈트렁과 상성이 좋기로 알려진 메가라이츄Y의 사용감이 좋아서 그대로 넣었고, 파티가 완성됐습니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가보만다 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.373</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png" alt="" loading="lazy">메가보만다 (암컷)</h3><span class="badge">선출률 3위</span>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>보만다나이트</b></span><span>특성 <b>위협 → 스카이스킨</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">171</span><span class="v">171</span><span class="bar"><i style="width:3.125%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">187</span><span class="v">197</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">101</span><span class="v">151</span><span class="bar"><i style="width:3.125%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">117</span><span class="v down">126</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">100</span><span class="v">110</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">167</span><span class="v up">189</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>이판사판태클</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>역린</div>
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용의춤</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>AS</dt><dd>공격과 스피드에 풀 배분한 최속입니다.</dd>
+    <dt>HB</dt><dd>남은 포인트를 HP와 방어에 1씩 줬습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>일러스트는 かいぷー의 작품입니다.</li>
+    <li>최강의 포켓몬이라고 생각했는데, 어째선지 상대 선출 화면에는 그리 많이 보이지 않았습니다.</li>
+    <li>미러전에서 상대가 먼저 용성군을 쳐 왔을 때는 "역린은 명중 100이니 이쪽이 유리한 동속 승부였고, 진 건 운 탓이다😡"라고 못난 주장을 할 수 있다고 농담합니다.</li>
+    <li>특히 대쓰여너를 상대할 때 상대가 이판사판태클의 반동까지 계산에 넣고 쓰러뜨리려는 경우가 많았습니다. 반동 없이 화력이 높은 역린이 잘 통하는 장면이 많았습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 타부자고 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.1000</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1000.png" alt="" loading="lazy">타부자고</h3><span class="badge">선출률 4위</span>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>풍선</b></span><span>특성 <b>황금몸</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">167</span><span class="bar"><i style="width:15.625%"></i></span><span class="p">5</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">72</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">203</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">111</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">133</span><span class="bar"><i style="width:90.625%"></i></span><span class="p">29</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>골드러시</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>파워젬</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>나쁜음모</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H</dt><dd>공격 무배분 하마돈의 얼음엄니+지진을 원문 표기 15/17 확률로 버티고, 특공 176 타부자고의 섀도볼을 8분의 7 확률로 버팁니다.</dd>
+    <dt>C</dt><dd>특공 특화입니다. HP 185 메가리자몽Y를 파워젬으로 16분의 13 확률로 한 방에 쓰러뜨립니다.</dd>
+    <dt>S</dt><dd>스피드 종족값 80의 준속(무보정 풀 배분)을 앞지르는 수치입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>일러스트는 かまなべ의 작품입니다.</li>
+    <li>하마돈 상대로는 최강의 포켓몬입니다. 꿈트렁의 꼬리자르기로 피해 없이 등장하면 최강이 되어, 일부 파티에는 강력한 압박 수단으로 작동했습니다.</li>
+    <li>파워젬을 넣어 리자몽Y 축 파티에도 선출할 수 있게 됐습니다. 스피드를 준속 80족 앞지르기로 맞춘 덕분에, 맘모꾸리+리자몽Y 구성을 상대할 때 맘모꾸리와의 대면에서 파워젬이 안정적인 선택이 됐습니다.</li>
+    <li>노린 상대는 아니지만 불카모스나 어흥염에게 활약한 적도 있습니다.</li>
+    <li>반면 풍선까지 포함한 내성이 꿈트렁과 겹칩니다. 둘 중 한 마리만 내고 싶은 판에서는 땅타입에 대한 영구적인 내성을 높이 사 꿈트렁을 고르는 경우가 많아, 축으로 삼은 것치고 선출 횟수는 그리 많지 않았습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 꿈트렁 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.968</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/968.png" alt="" loading="lazy">꿈트렁 (암컷)</h3><span class="badge">선출률 2위</span>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>자뭉열매</b></span><span>특성 <b>흙먹기</b></span><span>성격 <b>대담</b> (방어↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">176</span><span class="bar"><i style="width:96.875%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">94</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">198</span><span class="bar"><i style="width:46.875%"></i></span><span class="p">15</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">80</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">102</span><span class="bar"><i style="width:53.125%"></i></span><span class="p">17</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">88</span><span class="bar"><i style="width:9.375%"></i></span><span class="p">3</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>바디프레스</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>철벽</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>꼬리자르기</div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>잠자기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>HB</dt><dd>HP 실수치를 4의 배수, 방어 실수치를 11의 배수로 맞췄습니다.</dd>
+    <dt>D</dt><dd>남은 포인트입니다. 특공 특화 누리레느의 물거품아리아나 특공 222 메가팬텀의 섀도볼을 맞아도 자뭉열매 회복을 포함해 꼬리자르기를 확정으로 쓸 수 있습니다. 원문의 실수치는 92(17)이지만, 17포인트면 계산상 102이고 합계 66에도 맞아 102로 적었습니다.</dd>
+    <dt>S</dt><dd>스피드 종족값 67의 무배분(아머까오)을 앞지르는 수치입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>일러스트는 しゃち의 작품입니다.</li>
+    <li>작성자는 "潜鋼のヌシ"(『스칼렛·바이올렛』의 "주인" 꿈트렁 호칭으로 보임)라고 부릅니다. 챔피언스의 기념할 만한 첫 시즌에 꿈트렁을 믿었다가 최종 순위가 폭락하는 어리석은 짓을 했는데, 질리지도 않고 또 써 보니 꽤 성공했다고 합니다.</li>
+    <li>마스카나, 드닐레이브, 메타그로스 등이 선출 화면에 있으면 거의 확정으로 선출하고, 라이츄를 낼 때도 땅 대비로 함께 선출합니다. "또 내가 꿈트렁을 내야 해?"라고 몇 번이나 생각했지만, 놀랄 만큼 숙련도가 높았던 덕분에 많은 판에서 활약했습니다.</li>
+    <li>기술 구성은 남기 쉬운 두 자리에 철벽+잠자기를 넣어, 꼬리를 자른 뒤에도 물리 상대의 마무리 수단이 되도록 했습니다.</li>
+    <li>스텔스록을 깔 틈이 있으면 꼬리를 자르는 편이 강한 포켓몬이라, 첫 시즌부터 "이 구성 말고는 있을 수 없다"는 철벽+잠자기 과격파였습니다. 다만 예상보다 따라큐에게 공격 수단이 필요한 장면이 많았습니다. 그래도 철벽+잠자기로 건진 판이 그 10배쯤 되므로, 결국 과격파로 남았습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 누리레느 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.730</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy">누리레느 (암컷)</h3><span class="badge">선출률 1위</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>급류</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">157</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">84</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">94</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">195</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">136</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">112</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>물거품아리아</div>
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>문포스</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트</div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>명상</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>CS</dt><dd>조심 성격으로 특공과 스피드에 풀 배분했습니다.</dd>
+    <dt>H</dt><dd>남은 포인트입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>일러스트는 やぐるま의 작품입니다.</li>
+    <li>작성자는 레귤레이션 M-C 최강의 포켓몬이라고 평가합니다. 선출에서 명백하게 밀리는 경우가 적고, 밀려도 큰 피해를 넣을 수 있어 강력합니다. 누리레느가 없으면 이길 수 없는 상대도 많았습니다.</li>
+    <li>선봉 대면을 이기기 쉬운 띠형이면서도, 명상 덕분에 준속 미러전이나 특공이 떨어졌을 때를 빼면 미러전도 이길 수 있습니다. 느린 브리두라스에게도 문포스+명상 후 문포스로 이기는 장면이 있어 넣기를 잘했다고 합니다.</li>
+    <li>자주 보이지는 않지만 더 쓰여도 좋은 형태라고 느꼈으며, 다음 시즌부터는 누리레느를 축으로 파티를 짜 봐도 좋겠다고 생각합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 하마돈 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.450</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy">하마돈 (수컷)</h3><span class="badge">선출률 6위</span>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>먹다남은음식</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>장난꾸러기</b> (방어↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">215</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">132</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">166</span><span class="bar"><i style="width:40.625%"></i></span><span class="p">13</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">79</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">113</span><span class="bar"><i style="width:65.625%"></i></span><span class="p">21</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>얼음엄니</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>게으름피우기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>HB</dt><dd>공격 188 메가이어롭의 트리플악셀 난수가 크게 달라지는 선입니다. 공격 197 메가보만다의 이판사판태클 2회를 먹다남은음식 회복을 포함해 거의 버팁니다.</dd>
+    <dt>D</dt><dd>특공 특화 메가망나뇽의 용의파동 2회를 확정으로 버티고, 화염방사+용성군을 60% 확률로 버팁니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>일러스트는 もうかちゃも의 작품입니다.</li>
+    <li>보완용 쿠션 자리입니다. 물리 쿠션으로는 꿈트렁을 우선하는 경우가 많았지만, 꿈트렁이 약한 격투타입인 이어롭, 빠르모트, 포푸니크 등에 강해 역할이 분명했습니다. 넣은 의미가 충분했다고 평가합니다.</li>
+    <li>얼음엄니 덕분에 한카리아스나 파티 전체가 부담스러워하는 메가망나뇽에도 강하게 나설 수 있어, 아쉬운 부분을 잘 채워 주는 포켓몬이었습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 메가라이츄Y -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.26</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10305.png" alt="" loading="lazy">메가라이츄Y (암컷)</h3><span class="badge">선출률 5위</span>
+    <span class="types"><span class="type" style="background:var(--t-electric)">전기</span></span>
+    <div class="meta"><span>도구 <b>라이츄나이트Y</b></span><span>특성 <b>피뢰침 → 노가드</b></span><span>성격 <b>겁쟁이</b> (스피드↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">167</span><span class="v">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">99</span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">75</span><span class="v">75</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">110</span><span class="v">180</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">102</span><span class="v">102</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">178</span><span class="v up">200</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>전자포</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>기합구슬</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>풀묶기</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>나쁜음모</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>HD</dt><dd>특공 222 메가팬텀의 오물웨이브+스텔스록+모래 피해를 16분의 15 확률로 버티고, 특공 특화 메가루카리오Z의 2랭크 상승 악의파동을 확정으로 버팁니다.</dd>
+    <dt>S</dt><dd>미러전과 메가팬텀을 의식한 최속입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>일러스트는 あきつ의 작품입니다.</li>
+    <li>작성자는 "상대와 맞물리면 무섭게 이기는 포켓몬, 이 파티 최대의 오점이자 숨은 공로자"라고 부릅니다. 눈앞 상황을 무시한 기술 선택이나 유인 교체를 건 횟수는 헤아릴 수 없다고 합니다.</li>
+    <li>선봉 리자몽과 대면하면 꿈트렁으로 교체하는 것이 안정적입니다(리자몽X만은 봐 달라고 덧붙입니다).</li>
+    <li>솔직히 전혀 쓰고 싶지 않았지만, 팬텀과 리자몽Y를 동시에 볼 수 있는 메가 자리를 찾다 도달한 결론이라 채용 자체가 틀렸다고는 생각하지 않습니다.</li>
+    <li>기술 구성이 맞는지는 모르겠지만, 적어도 배분이 효과를 본 장면은 많아서 그 부분은 옳았다고 느낍니다.</li>
+  </ul></div>
+</article>
+
+<h2>기본 선출</h2>
+<div class="selections">
+  <div class="sel"><div class="lineup">기본형: 누리레느 → 보만다 + 1마리</div><p>가장 많이 쓴 선출입니다. 누리레느로 최대한 이득을 보고 뒤에서 힘을 냅니다. 나머지 1마리는 잘 통하는 포켓몬을 내지만, 꿈트렁을 낼 수밖에 없는 경우가 아주 많습니다.</p></div>
+  <div class="sel"><div class="lineup">팬텀, 리자몽Y, 리자몽+플라엣테 상대: 라이츄 → 꿈트렁 + 누리레느 또는 타부자고</div><p>선봉 메가를 라이츄로 대비하고, 꼬리자르기를 거쳐 뒤의 어태커로 공격한 뒤 라이츄가 마무리합니다. 선봉 플라엣테와 대면하면 전자포를 쏘고, 라이츄를 버릴 각오로 뒤에서 힘을 냅니다.</p></div>
+  <div class="sel"><div class="lineup">플라엣테 상대: 타부자고 → 보만다 + 1마리</div><p>되도록 이 선출을 하고 싶지만, 구성에 따라 선봉 누리레느를 강요받는 일도 많습니다. 선봉 타부자고와 플라엣테의 대면을 만들면 이득이 꽤 큽니다.</p></div>
+  <div class="sel"><div class="lineup">메가니움 상대: 보만다 → 꿈트렁 + 타부자고</div><p>대부분의 판에서 메가니움이 선봉으로 나오므로, 선봉 대면을 이길 보만다를 앞에 둡니다. 이기면 꿈트렁으로 유인 교체해 꼬리를 자르고 타부자고가 힘을 냅니다. 누리레느를 내면 상대가 くさわけ(草分け)로 쉽게 스피드를 올리므로 되도록 내지 않습니다.</p></div>
+  <div class="sel"><div class="lineup">다크펫·빠르모트·대쓰여너(우츠보트) 상대: 타부자고 → 하마돈 + 보만다</div><p>빠르모트에는 하마돈이, 대쓰여너에는 보만다가 강해서 HP를 관리하며 타부자고와 하마돈으로 꼼꼼하게 풀어 가면 대체로 이깁니다. 선봉 우츠보트와 대면하면 골드러시를 쏘고 하마돈으로 교체합니다.</p></div>
+</div>
+<p style="margin-top:12px">이 밖에도 생각하는 것이 많습니다. 예를 들어 선출 화면에서 메가한카리아스Z의 가능성을 느끼면 누리레느를 뒤에 두는 경우가 많은데, 이런 판단은 말로 옮기기 어려워 생략한다고 합니다.</p>
+
+<h2>부담스러운 상대</h2>
+<ul>
+  <li><b>개굴닌자</b>: 파티 차원에서 대응을 포기한 수준입니다. 라이츄로 이기게 해 주거나 선봉에서 상대가 대충 버려 줄 때도 꽤 있어 가끔 이겼지만, 상대가 꼼꼼하면 기본적으로 진다고 봅니다.</li>
+  <li><b>메가눈여아</b>: 정말 무리입니다. 개굴닌자도 마찬가지로, 꿈트렁으로도 타부자고로도 대응할 수 없는 얼음 기술 보유자는 힘듭니다. 최종 두 자리를 건 대전에서 만나 절규했고, 졌습니다.</li>
+</ul>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-6 싱글배틀, 2026.09.09 ~ 10.07 10:59. 챔피언 클래스 <b>81위</b>, 최종 레이트 <b>2432.592</b>입니다. 이 값이 최고 레이트이기도 합니다.</li>
+  <li>트레이너 이름 "空奏列車"(Orangestar의 곡 「空奏列車」에서 따옴), 팀 ID <code>6GCD1K7FBJ</code>입니다.</li>
+  <li>최종일 시점에 계정 두 개가 레이트 2370 정도라 더 이길 예정이었지만, 마지막 날은 뜻대로 이기지 못해 아슬아슬하게 최종 두 자리에 머물렀습니다.</li>
+  <li>최근에는 최종 챔피언 클래스조차 놓친 시즌도 많아서, 어느 정도 만족스러운 결과를 얻어 다행이라고 합니다. 꿈트렁으로 첫 시즌의 설욕을 한 것도 기뻤다고 합니다.</li>
+  <li>작성자가 운영 스태프로 참가하는 오프라인 대회 두 개를 소개합니다(모두 글 작성 시점 기준 정원 여유 있음).
+    <ul>
+      <li><b>Focus Rush</b>: 2026.10.17(토), 칼츠 가와사키(カルッツかわさき, 가와사키시). 싱글배틀, 64명. 전원 예선 통과 후 더블 일리미네이션 본선이라, 대전을 많이 하고 싶은 사람에게 알맞다고 합니다.</li>
+      <li><b>라이게키(雷撃) #8</b>: 2026.11.07(토), 도쿄도립 산업무역센터 하마마쓰초관. 싱글배틀 최대 규모, 432명. BO1 스위스 드로+BO3 토너먼트이며, 이번에는 하루 일정이라 비교적 참가하기 쉽다고 합니다.</li>
+    </ul>
+  </li>
+  <li>감사 인사: 이로치 보만다를 준 紅狐, 이로치 꿈트렁을 준 HAL, 일러스트를 그려 준 분들. 연락처는 X(@mado_poke)입니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>꿈트렁·보만다 (ミミズマンダ)</dt><dd>원문 파티 이름 "逆襲ミミズマンダ"의 줄임말입니다.</dd>
+  <dt>흙먹기 (どしょく)</dt><dd>땅 기술을 맞으면 HP를 회복하는 특성입니다. 한국어 명칭 확인 필요.</dd>
+  <dt>꼬리자르기 (しっぽきり)</dt><dd>HP 절반을 써서 대타를 남기고 교체하는 기술입니다. 한국어 명칭 확인 필요.</dd>
+  <dt>くさわけ (草分け, 확인 필요)</dt><dd>풀타입 물리 공격 기술로, 쓰면 스피드가 오릅니다. 한국어 명칭을 확인하지 못해 원문 표기를 유지했습니다.</dd>
+  <dt>潜鋼のヌシ (확인 필요)</dt><dd>『스칼렛·바이올렛』에 나오는 "주인" 꿈트렁의 호칭으로 보입니다. 한국어 공식 명칭은 확인하지 못했습니다.</dd>
+  <dt>メガZ 계열</dt><dd>메가한카리아스Z, 메가루카리오Z는 원문 표기를 그대로 옮겼습니다.</dd>
+  <dt>최속 / 준속 (最速 / 準速)</dt><dd>스피드 상승 성격 + S 풀 배분 / 무보정 성격 + S 풀 배분</dd>
+  <dt>○족 (○族)</dt><dd>스피드 종족값이 ○인 포켓몬</dd>
+  <dt>교체로 내보내기 (後投げ)</dt><dd>교체로 내보내기</dd>
+  <dt>쿠션 (クッション)</dt><dd>상대 공격을 받아 주며 흐름을 넘기는 받이 포켓몬</dd>
+  <dt>최종 두 자리 (最終2桁)</dt><dd>최종 순위 10~99위</dd>
+  <dt>잘 통하는 포켓몬 (刺さっている)</dt><dd>상대 파티가 잘 받지 못하는 포켓몬</dd>
+  <dt>@1</dt><dd>나머지 1마리는 상황에 따라 고름</dd>
+  <dt>2ロム</dt><dd>계정 두 개</dd>
+  <dt>리자엣테 (リザエッテ)</dt><dd>리자몽+플라엣테 구성</dd>
+  <dt>ジュペパモイダイ</dt><dd>다크펫·빠르모트·대쓰여너 구성</dd>
+  <dt>대응 포기 (切る)</dt><dd>해당 상대나 포켓몬을 사실상 포기함</dd>
+</dl>
+
+<footer>원문: <a href="https://m-adogiwa.hatenablog.com/entry/2026/10/12/221632">m-adogiwa.hatenablog.com (2026-10-12)</a>. 특성·도구·기술·성별은 원문 스크린샷과 대조했습니다. 원문에 스테이터스 화면이 없어 실수치·포인트는 본문 값을 썼고, 메가 전 실수치는 계산값입니다. PP는 원문에 없어 뺐습니다.</footer>
+</div>
+</body>
+</html>
