@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dr.Latancy M-5 5위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-grass:#4fa83d; --t-electric:#e0b21a; --t-flying:#6f9fe0;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>Dr.Latancy의 시즌 M-5 최종 5위 파티 「대공마술(大空魔術)」</h1>
+  <p class="lede">일본 유저 Claris_bradbury의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 배바닐라를 중심에 두고, 배바닐라가 약한 상대를 맡는 한카리아스·메가리자몽Y·메가아쿠스타를 묶은 대면 파티입니다. 작성자는 메가리자몽Y를 "대공 마술사"라고 부릅니다. 눈 아래에서 얼음 웨더볼을 쳐서 상대 한카리아스를 쓰러뜨리는 운영이 글 첫머리부터 강조됩니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>5위</b></div>
+    <div class="chip">최종 레이트<b>2587.713</b></div>
+    <div class="chip">시즌 / 룰<b>M-5 / 싱글</b></div>
+    <div class="chip">기간<b>2026.08.05 ~ 09.09</b></div>
+    <div class="chip">트레이너 이름<b>Dr.Latancy</b></div>
+    <div class="chip">팀 이름<b>PARA-DOX</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다. 여섯 마리 모두 합계 66을 확인했습니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/584.png" alt="" loading="lazy"><b>배바닐라</b> ♀</td><td>눈퍼뜨리기</td><td>녹지않는얼음</td><td>조심</td><td>눈보라 / 프리즈드라이 / 도발 / 얼음뭉치</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/445.png" alt="" loading="lazy"><b>한카리아스</b> ♀</td><td>까칠한피부</td><td>구애스카프</td><td>고집</td><td>지진 / 역린 / 스톤에지 / 스텔스록</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10035.png" alt="" loading="lazy"><b>메가리자몽Y</b> ♂</td><td>맹화 → 가뭄</td><td>리자몽나이트Y</td><td>조심</td><td>웨더볼 / 에어슬래시 / 니트로차지 / 솔라빔</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10280.png" alt="" loading="lazy"><b>메가아쿠스타</b></td><td>자연회복 → 천하장사</td><td>아쿠스타나이트</td><td>고집</td><td>아쿠아브레이크 / 사념의박치기 / 퀵턴 / 아쿠아제트</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy"><b>하마돈</b> ♂</td><td>모래날림</td><td>먹다남은음식</td><td>장난꾸러기</td><td>지진 / 게으름피우기 / 하품 / 방어</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/700.png" alt="" loading="lazy"><b>님피아</b> ♂</td><td>페어리스킨</td><td>생명의구슬</td><td>조심</td><td>하이퍼보이스 / 섀도볼 / 파괴광선 / 전광석화</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>콘셉트</h2>
+<ul>
+  <li>상대 받이를 무너뜨리는 성능이 뛰어난 대면 파티로, 매 판 비슷한 운영을 반복해 이기는 것을 목표로 합니다.</li>
+  <li>글 첫머리에 작성자는 "이걸 합니다"라는 말과 함께, 눈 아래에서 리자몽·배바닐라가 상대 한카리아스의 영정 사진을 띄운 합성 이미지를 올렸습니다.</li>
+  <li>채용 순서는 배바닐라 → 한카리아스 → 리자몽 → 아쿠스타 → 하마돈 → 님피아입니다.</li>
+  <li>일러스트는 転寝みるく 님의 것을 썼다고 밝혔습니다.</li>
+</ul>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>① 배바닐라 @ 녹지않는얼음</h3>
+    <p>배바닐라를 쓰고 싶다는 데서 출발했습니다. 높이 평가한 점은 세 가지입니다.</p>
+    <ul>
+      <li>공격 성능이 매우 뛰어나 상대가 교체로 받기 어렵고, 수적 우위를 잡는 힘이 강합니다.</li>
+      <li>도발로 받이를 무너뜨릴 수단을 자연스럽게 확보할 수 있습니다.</li>
+      <li>환경 최상위인 한카리아스, 누리레느, 마스카나, 하마돈, 따라큐, 아머까오, 망나뇽에 매우 강해 선출을 정리하기 쉽습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>② 한카리아스 @ 구애스카프</h3>
+    <ul>
+      <li>배바닐라가 약한 강철·불꽃·바위타입에 강하고, 배바닐라가 만든 수적 우위와 궁합이 좋은 스카프 한카리아스를 짝으로 넣었습니다.</li>
+      <li>배바닐라는 환경의 페어리타입과 비행타입에 강해서, 스카프 한카리아스의 공격 기술이 그대로 통하기 쉬워집니다.</li>
+      <li>스카프를 든 채 스텔스록을 깔아 불꽃 메가진화 포켓몬을 상대로 배바닐라를 통과시켜 이기는 루트도 있어 궁합이 매우 좋습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>③ 리자몽 @ 리자몽나이트Y</h3>
+    <ul>
+      <li>배바닐라가 약한 강철타입에게 교체로 내보내면 전개가 좋고, 서로 약한 상대를 메워 줍니다. 리자몽이 약한 한카리아스에는 배바닐라가 압도적으로 강하고, 배바닐라가 약한 타부자고·킬가르도·핫삼·메타그로스에는 리자몽이 강한 편입니다.</li>
+      <li>선봉 배바닐라가 내린 눈을 이용해 얼음 웨더볼로 상대 한카리아스나 망나뇽을 날려 버리는 운영이 자연스럽게 됩니다. 메가리자몽Y의 최대 천적은 한카리아스지만, 이 파티는 배바닐라가 필드에 있으면 상대가 한카리아스를 내지 않고, 리자몽을 보고 나오는 한카리아스는 웨더볼로 처리할 수 있어 한카리아스가 곤란하지 않습니다.</li>
+      <li>X와 Y를 모두 썼지만, 순간 화력과 기술 범위를 높이 사서 최종적으로 Y를 썼습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>④ 아쿠스타 @ 아쿠스타나이트</h3>
+    <ul>
+      <li>배바닐라·리자몽이 약한 킬라플로르, 플라엣테, 마폭시, 리자몽, 라우드본, 마기라스, 잠만보 등에 강한 메가진화 포켓몬으로 넣었습니다.</li>
+      <li>아쿠스타를 교체로 받아 낼 포켓몬이 없어, 대면으로 처리하려는 파티는 "선봉 아쿠스타에 강한 포켓몬"부터 내야 합니다. 그런 포켓몬에는 배바닐라를 먼저 내서 이기는 경우가 많아 배바닐라와 궁합이 좋습니다.</li>
+      <li>아쿠스타를 보고 교체해 온 브리두라스나 HP·방어 위주 아머까오에게 퀵턴으로 배바닐라를 내보내 눈보라로 처리하는 루트도 있습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>⑤ 하마돈 @ 먹다남은음식</h3>
+    <ul>
+      <li>위 네 마리로는 배바닐라가 깎인 뒤의 스카프 한카리아스와 삼삼드래가 매우 부담스럽습니다.</li>
+      <li>따라큐나 대도각참처럼 마지막 한 마리로 남아 랭크를 쌓아 밀어붙이는 포켓몬도 힘듭니다.</li>
+      <li>이를 해결하려고 "먹다남은음식+방어" 하마돈을 넣었습니다. 배바닐라를 비롯해 수적 우위를 잡는 성능이 높은 포켓몬이 많아 하품을 강하게 쓸 수 있습니다.</li>
+      <li>대면 파티의 숙명으로, 상성이 불리한 파티를 이기려면 큰 위험을 져야 합니다. 하마돈이 있으면 그 위험을 줄일 수 있습니다. 이길 수 없다고 판단했을 때 "방어+게으름피우기"로 무승부까지 끌고 가는 전략도 파티의 빈틈을 메우는 매우 강력한 요소입니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>⑥ 님피아 @ 생명의구슬</h3>
+    <p>여기까지의 다섯 마리로 승률이 안정되지 않는 상대는 다음과 같습니다.</p>
+    <ol>
+      <li>블래키 + 팬텀</li>
+      <li>블래키 + 마폭시</li>
+      <li>삼삼드래 + 누리레느 + 메타그로스</li>
+      <li>메가망나뇽 축 교체전 파티</li>
+      <li>대도각참, 엘풍</li>
+      <li>브리두라스 + 리자몽·배바닐라에 강한 조합</li>
+    </ol>
+    <p>사실 전개에 따라 이길 때도 적지 않아 억지로 완벽하게 대응할 필요는 없습니다. 하지만 이들에 강하면서 대면 성능이 높고 범용성이 뛰어난 포켓몬을 넣을 수 있으면, 선출이 맞물려 생기는 승패 편차를 줄일 수 있다고 봤습니다.</p>
+    <p>원래는 블래키를 무겁게 보고 마휘핑을 넣었습니다. 하지만 화력이 부족해 PP가 모자라 다 이기지 못하거나, 멸망의노래 팬텀에 손쓸 방법이 없는 등 전법이 제한된 포켓몬 특유의 고민이 끊이지 않았습니다. 그래서 고른 것이 <b>특공·스피드 풀 배분 생명의구슬 파괴광선 님피아</b>입니다. 이유는 상대별로 다음과 같습니다.</p>
+    <ul>
+      <li><b>①·② 블래키 교체전</b>: 블래키와 님피아가 대면했을 때 특공 특화 구슬 섀도볼을 치면, 메가진화 전 팬텀은 HP에 배분했어도 날아갑니다. 메가진화 후라도 전광석화를 더해 쓰러뜨릴 수 있습니다. 블래키+팬텀·마폭시에 어느 정도 싸울 수 있습니다.</li>
+      <li><b>③ 삼삼드래+메타그로스</b>: 메타그로스가 교체해 올 때 섀도볼을 맞히면 배분에 따라 70~90%가량 깎을 수 있습니다. 여기에 까칠한피부 한카리아스를 교체로 내면 님피아나 배바닐라를 통과시켜 이길 수 있을 듯합니다.</li>
+      <li><b>④ 망나뇽+킬가르도</b>: 님피아는 망나뇽에 매우 강합니다. 그런데 "하품+희망사항"의 화력 약한 님피아로는 킬가르도를 넘지 못합니다. 구슬 섀도볼이라면 킬가르도는 두 방에 쓰러집니다. 스피드도 올려 두었기 때문에 상대 킬가르도는 예상치 못하게 나오자마자 쓰러지게 됩니다.</li>
+      <li><b>⑤ 먹다남은음식 엘풍, 대도각참</b>: 타입과 기술 성질이 관건입니다. 이 파티는 대타+씨뿌리기 엘풍을 넘기 어렵지만, 대타를 관통하는 하이퍼보이스로 무리 없이 무너뜨릴 수 있습니다. 또한 페어리타입이라 기습을 반감으로 받고, 상대에게 보이지 않는 스피드 배분이 있어서 칼춤을 쌓은 대도각참을 먼저 파괴광선으로 지워 버릴 수도 있습니다. 작성자는 파괴광선에 쓰러지는 대도각참의 영정 사진을 합성한 이미지를 함께 올렸습니다.</li>
+      <li><b>⑥ 브리두라스</b>: 파괴광선이 다시 진가를 발휘합니다. 아쿠스타를 낼 수밖에 없는 브리두라스 파티에 퀵턴으로 배바닐라를 내는 운영은 되도록 피하고 싶습니다. 특방 위주 브리두라스의 미러코트나 특공 특화 러스터캐논이 너무 위험하기 때문입니다. 게다가 아쿠스타를 내놓았다는 것은 리자몽이나 마폭시가 있을 수 있다는 뜻이라, 상대가 배바닐라의 공격을 여유 있게 받아 낼 수 있습니다. 파괴광선이면 이 문제가 해결됩니다. <b>퀵턴 + 구슬 파괴광선으로 HP·특방 특화 브리두라스를 확정으로 쓰러뜨립니다.</b> 상대가 마폭시로 교체하고 싶어 할 전개라면 구슬 섀도볼로 교체전을 부숴 버릴 수도 있습니다.</li>
+    </ul>
+    <p>이것이 여섯 번째로 구슬 님피아를 넣은 이유입니다. 작성자는 "【흑막】 큐베의 정체는 구슬 님피아!?"라는 합성 이미지로 이 대목을 마무리했습니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 배바닐라 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.584</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/584.png" alt="" loading="lazy">배바닐라 (암컷)</h3><span class="badge">선출률 1위</span>
+    <span class="types"><span class="type" style="background:var(--t-ice)">얼음</span></span>
+    <div class="meta"><span>도구 <b>녹지않는얼음</b></span><span>특성 <b>눈퍼뜨리기</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">171</span><span class="bar"><i style="width:78.1%"></i></span><span class="p">25</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">103</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">106</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">170</span><span class="bar"><i style="width:78.1%"></i></span><span class="p">25</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">114</span><span class="bar"><i style="width:46.9%"></i></span><span class="p">15</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>눈보라<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>프리즈드라이<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>도발<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>얼음뭉치<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>준속 스피드 종족값 60 포켓몬을 앞지르는 상대를 다시 앞지르는 수치입니다.</dd>
+    <dt>C</dt><dd>가능한 한 높였습니다.</dd>
+    <dt>B</dt><dd>눈퍼뜨리기로 내리는 눈의 방어 보정을 효율적으로 받도록 짝수로 맞췄습니다.</dd>
+    <dt>H</dt><dd>공격 특화 한카리아스의 지진 2번을 확정으로 버팁니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>이 파티의 대에이스입니다. 선봉으로 내서 부담을 주는 운영도, 뒤에서 나와 게임을 마무리하는 운영도 강합니다. 메가찌르호크의 효과가 굉장한 인파이트 정도로는 쓰러지지 않고, 되받아치는 눈보라와 얼음뭉치로 대면에서 이겨 버립니다.</li>
+    <li>압도적인 물리 내구, 꽤 높은 특수 내구, 느린 포켓몬과 차이를 벌리는 스피드, 얼음타입 선공기, 4배 약점이 없다는 점, 환경 상위에 두루 잘 통한다는 점까지 모든 요소가 대면 포켓몬으로서 최고로 맞물립니다.</li>
+    <li>기술은 주력 공격기 3개와 도발입니다. 절대영도를 넣은 적도 있지만, 콘셉트에 어긋나는 선택이라 최종적으로 도발로 썼습니다.</li>
+    <li>눈은 리자몽과의 시너지가 뛰어납니다. 얼음 웨더볼로 쉽게 이기는 것은 물론, 서로의 날씨 턴을 관리한다는 면에서도 강력했습니다.</li>
+    <li>빠른 누리레느가 매우 많아서 스피드를 준속 60족의 앞지르기의 앞지르기까지 올렸습니다. 이 조정이 살아난다고 느낀 장면이 많았습니다.</li>
+    <li>이 파티는 전부 이 포켓몬과의 시너지를 전제로 짰습니다. 그래서 선출률이 압도적으로 높고, 시즌 내내 단 한 번도 파티에서 뺀 적이 없습니다. 작성자는 "최고의 포켓몬"이라고 합니다.</li>
+    <li>"코튼 캔디를 좋아한다"는 한마디를, "좋아하는 아이스크림 맛은 분명"이라는 문구와 back number 표기가 있는 앨범 재킷풍 이미지와 함께 덧붙였습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 한카리아스 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.445</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/445.png" alt="" loading="lazy">한카리아스 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>구애스카프</b></span><span>특성 <b>까칠한피부</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">183</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">200</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">116</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">106</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">154</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>역린<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스톤에지<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A</dt><dd>여러 상대를 먼저 공격해 묶어 두려는 특화입니다.</dd>
+    <dt>S</dt><dd>준속 스카프 삼삼드래 앞지르기는 필수이고, 고집 메가리자몽X 등을 의식하면 153은 필요합니다. 거기까지 올린 김에, 같은 스피드 대결을 의식해 남은 1포인트까지 주어 풀 배분했습니다.</dd>
+    <dt>BD</dt><dd>남은 포인트입니다. HP에 주면 HP가 8의 배수+1이 되므로 방어와 특방에 나눴습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>배바닐라의 짝입니다. 배바닐라·리자몽·아쿠스타가 얻어 낸 수적 우위를 살려 빠르고 강한 화력으로 쓸어 담습니다.</li>
+    <li>앞서 말한 대로 페어리와 비행타입에 배바닐라가 강해서 한카리아스의 쓸어 담기가 성립하기 쉬웠습니다.</li>
+    <li>구애스카프이므로 주력기 지진·역린은 고정입니다. 배바닐라를 불꽃 메가진화 포켓몬에게 통과시키려면 스텔스록도 고정입니다. 남은 한 자리를 고르는 일이 관건입니다. 스카프 한카리아스는 기술 두 개가 정해지는 대신 나머지 두 개를 파티에 맞춰 바꿀 수 있는 점이 매력입니다. 일반 한카리아스라면 넣기 어려운 견제 기술을 범용성을 잃지 않고 숨겨 둘 수 있어서, 스카프 한카리아스이기 때문에 기술 선택이 매우 중요합니다.</li>
+    <li>불꽃엄니·번개엄니는 뺐습니다. 불꽃엄니는 HP가 가득 찬 상태로 핫삼과 마지막 한 마리끼리 대면할 때만 칠 수 있고, 파티에 리자몽이 있는 것을 생각하면 칠 장면이 적습니다. 배바닐라로 도발한 뒤 지진을 연타해도 충분합니다. 번개엄니는 갸라도스에 칠 기술이지만 역린으로 충분합니다.</li>
+    <li>내던지기는 별 의미가 없어 뺐습니다. 잠꼬대는 잠재우는 포켓몬(하마돈, 블래키)을 상대로 한카리아스가 어떤 기술이 나와도 이길 수 없어 의미가 없습니다. 스케일샷은 스카프 마스카나를 얼음뭉치와 합쳐 묶거나, 마지막 한 마리로 남은 기합의띠 한카리아스에게 기회를 만들 수 있지만, 그런 전개가 되기 어렵다고 보고 뺐습니다.</li>
+    <li>독찌르기, 바위 기술, 압정뿌리기를 놓고 검토했습니다. 압정뿌리기는 까는 것보다 때리는 편이 빨라서 탈락했습니다. 남은 것은 메가니움·엘풍을 상대로 한 승률(독찌르기)과 불카모스·리자몽을 상대로 한 바위 기술의 비교입니다. 님피아와 배바닐라가 있으니 메가니움·엘풍 쪽 승률은 나온다고 보고, 불카모스·리자몽을 무겁게 봐서 바위 기술을 넣었습니다.</li>
+    <li>바위 기술 후보별 장점은 다음과 같습니다. 암석봉인은 파라블레이즈와의 대면에서 이길 수 있습니다. 스톤샤워는 명중이 안정적이어서 리자몽에게 칠 수 있습니다. 스톤에지는 마폭시를 날리거나, 도깨비불 리자몽에게 깎인 상태에서 나와 처리할 수 있습니다.</li>
+    <li>이번에는 스톤에지를 우선했습니다. 아쿠스타로 리자몽 앞에 퀵턴을 친 뒤 HP·방어 위주 메가리자몽Y에게 도깨비불을 맞으면 지기 때문입니다. 이때 "퀵턴 + 화상 상태 스톤에지"로 처리하면 뒤의 배바닐라·님피아가 통과하기 쉬워집니다.</li>
+    <li>상대 시점에서는 스텔스록이 깔려 있어 교체하기 어렵고, 스톤샤워까지는 버티니 일단 날개쉬기를 끼우는 경우가 많습니다. 그래서 스톤에지의 위력이 유효합니다. 마폭시에게 칠 때도 위력 20 차이로 쓰러뜨리는 장면이 있습니다.</li>
+    <li>작성자가 올린 "고민되는 한카리아스" 이미지의 후보에는 위 기술 외에 비바라기도 보입니다. 본문 설명은 없습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 메가리자몽Y -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.6</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10035.png" alt="" loading="lazy">메가리자몽Y (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-fire)">불꽃</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>리자몽나이트Y</b></span><span>특성 <b>맹화 → 가뭄</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">175</span><span class="v">175</span><span class="bar"><i style="width:68.75%"></i></span><span class="p">22</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">93</span><span class="v down">111</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">98</span><span class="v">98</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">155</span><span class="v up">210</span><span class="bar"><i style="width:37.5%"></i></span><span class="p">12</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">105</span><span class="v">135</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">152</span><span class="v">152</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>웨더볼<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-flying)">비행</span>에어슬래시<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>니트로차지<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>솔라빔<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>최속 스카프 로토무를 니트로차지 후 앞지를 수 있습니다.</dd>
+    <dt>C</dt><dd>겁쟁이 특공 풀 배분 메가리자몽Y와 크게 차이 나지 않는 수준입니다. 쾌청 보정을 의식해 짝수로 맞췄습니다.</dd>
+    <dt>H</dt><dd>대면 성능을 확보하려고 가능한 한 높였습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>배바닐라의 두 번째 짝, "대공 마술사"입니다. 배바닐라가 스텔스록을 까는 포켓몬에 강하기 때문에, 상대는 스텔스록을 깔면 리자몽을 깎는 대신 배바닐라에게 압도적인 이득을 내주고, 안 깔면 HP가 가득 찬 리자몽이 뒤에서 내려오는 양자택일을 강요받습니다.</li>
+    <li>앞서 말한 대로 눈 아래에서 친 웨더볼로 수많은 한카리아스를 쓰러뜨렸습니다. 높은 화력 덕분에 대면 성능과 받이를 무너뜨리는 성능이 모두 높습니다. 이번에는 니트로차지를 넣어 막판에 쓸어 담는 에이스 역할도 맡겼습니다.</li>
+    <li>마스카나의 구애스카프가 줄어드는 추세이기도 해서, 니트로차지 후의 리자몽은 매우 믿음직했습니다.</li>
+    <li>웨더볼과 니트로차지는 고정입니다. 메가찌르호크에게 날개쉬기 연타를 허용하지 않을 뿐 아니라 넣는 것만으로 승률이 오르는 에어슬래시도 필요합니다. 솔라빔은 망나뇽 등을 의식해 용의파동으로 할지 고민했지만, 대쓰여너, 대검귀, 워시로토무, 아쿠스타, 거북왕 등을 의식해 솔라빔을 우선했습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 메가아쿠스타 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.121</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10280.png" alt="" loading="lazy">메가아쿠스타</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-psychic)">에스퍼</span></span>
+    <div class="meta"><span>도구 <b>아쿠스타나이트</b> (スターミナイト, 확인 필요)</span><span>특성 <b>자연회복 → 천하장사</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">151</span><span class="v">151</span><span class="bar"><i style="width:50%"></i></span><span class="p">16</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">126</span><span class="v up">154</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">105</span><span class="v">125</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">108</span><span class="v down">135</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">105</span><span class="v">125</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">165</span><span class="v">170</span><span class="bar"><i style="width:93.75%"></i></span><span class="p">30</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아브레이크<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>사념의박치기<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>퀵턴<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A</dt><dd>메가 후 공격 실수치를 11의 배수(154)로 맞췄습니다.</dd>
+    <dt>S</dt><dd>최속 메가플라엣테와 한카리아스를 앞지르는 수치입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>배바닐라의 세 번째 짝입니다. 배바닐라가 약한 불꽃·강철 기술을 반감으로 받으면서, 받기 어려운 빠른 고화력으로 교체전의 우위를 잡습니다.</li>
+    <li>리자몽이 약한 상대에 아쿠스타가 강하고 그 반대도 마찬가지여서, 메가진화 포켓몬끼리의 보완도 뛰어납니다.</li>
+    <li>이쪽은 어태커의 약점을 어태커로 메우는 방식으로 파티를 짰기 때문에, 교체로 받혀도 이득으로 이어지는 일이 많습니다. 반면 상대 시점에서는 선출 수 읽기가 되어, 어느 한쪽을 두껍게 보면 다른 쪽에 무너지는 사태가 벌어지기 쉽습니다. 그래서 주기적으로 쉽게 이기는 판이 나옵니다. 작성자는 "나는 기분 좋게 고화력 기술을 넣을 뿐인데 상대는 괴로워한다"며, 자신이 하고 싶은 게임을 하게 해 준 포켓몬이라고 합니다.</li>
+    <li>기술은 자속기를 우선한 네 개입니다. 아이스스피너, 고속스핀, 벌크업도 시험했지만, 대면 운영을 하는 데 어느 기술도 뺄 수 없었습니다. 에스퍼 기술은 사이코커터가 아니라 사념의박치기입니다. 맡은 역할이 "안정적인 쓸어 담기"가 아니라 "더 많은 일을 해내는 것"이기 때문입니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 하마돈 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.450</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy">하마돈 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>먹다남은음식</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>장난꾸러기</b> (방어↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">215</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">132</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">167</span><span class="bar"><i style="width:43.75%"></i></span><span class="p">14</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">79</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">112</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>게으름피우기<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>방어<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>B</dt><dd>명랑 대쓰여너의 웨이브태클을 버팁니다.</dd>
+    <dt>D</dt><dd>물리·특수를 모두 받으므로 조금 단단하게 했습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>쿠션입니다. 배바닐라·리자몽·아쿠스타는 "유리한 대면에서 고화력을 넣는" 것이 강한 포켓몬들이라, 교체해 들어갈 자리로 궁합이 좋습니다.</li>
+    <li>이 포켓몬을 보고 상대가 내는 누리레느, 마스카나, 워시로토무, 갸라도스 같은 포켓몬에는 배바닐라·리자몽·아쿠스타·한카리아스가 우위를 잡을 수 있어, 선출 화면에서부터 이득을 만들어 줍니다.</li>
+    <li>방어를 넣어 대쓰여너나 핫삼의 공격 후 교체 기술에 강하고, 수적 우위를 잡은 뒤의 하품+방어는 단순하게 강력해서 몰아넣기 수단으로 충분히 기능했습니다.</li>
+    <li>모래날림도 날씨 어태커들과 시너지를 냅니다. 날씨 턴 관리는 물론이고 웨더볼의 세 번째 타입(바위)으로도 쓸 수 있습니다. 덕분에 리자몽, 마폭시, 히트로토무처럼 "이쪽 리자몽이 유효타가 없는 불꽃타입"을 상대로도 무너뜨릴 요소가 됩니다. 작성자는 불·얼음·바위 세 가지로 고친 「나루토」 패러디 이미지로 이를 표현했습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 님피아 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.700</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/700.png" alt="" loading="lazy">님피아 (수컷)</h3><span class="badge">MVP</span>
+    <span class="types"><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>페어리스킨</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">171</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">86</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">178</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">150</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">112</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하이퍼보이스<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>파괴광선<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>전광석화<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>CS</dt><dd>둘 다 모자라 양쪽 모두 풀 배분했습니다. <b>본문은 스피드에 상승 보정 표시(+32)를 붙였지만, 스크린샷의 성격은 조심이고 스피드 112에도 보정 표시가 없습니다.</b> 표는 스크린샷 기준입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>파티의 마지막 조각이자 MVP입니다. "약한 파티에 선출할 자리"로 넣었지만, 이 포켓몬을 끼우면 선출이 정리되는 경우가 많아 선출률과 선출 시 승률이 모두 높았습니다.</li>
+    <li>채용 이유대로 "블래키가 낀 파티", "삼삼드래+메타그로스", "브리두라스+플라엣테", "망나뇽+킬가르도", "대도각참" 등에 선출해 활약했습니다.</li>
+    <li>상대가 HP·방어 위주 님피아의 약한 하이퍼보이스를 예상하고 움직일 때, 무서울 정도의 화력으로 허를 찌릅니다. 작성자는 마멋이 비명을 지르는 합성 이미지로 이 상황을 표현했습니다.</li>
+    <li>전광석화는 대비되는 일이 매우 드물어, 삼삼드래를 쓰러뜨리고 아쿠스타나 리자몽을 통과시키는 루트도 있었습니다. 삼삼드래의 HP를 0%로 만든 대전 화면도 "(약동감)"이라는 말과 함께 올렸습니다.</li>
+    <li>상대 시점에서는 먹다남은음식+희망사항 형태로 보여서, 받이를 무너뜨리라고 요구하면서 이쪽의 대면 선출로 박살 내거나, 삼삼드래와의 대면을 만들어 메타그로스에게 섀도볼을 맞히는 등 종횡무진 활약했습니다.</li>
+    <li>"파괴광선의 현장감이 굉장하다"며 폭발 연출 화면 세 장을 올렸습니다. 화면에서 맞은 상대의 남은 HP는 플라엣테 66%, 누리레느 25%, 대쓰여너 4%입니다.</li>
+  </ul></div>
+</article>
+
+<h2>기본 선출</h2>
+<p>상대에 따라 대응이 다양해 고정 선출은 없었습니다. 다만 자주 쓴 조합을 참고용으로 적었습니다. 맨 왼쪽이 선봉입니다.</p>
+<div class="selections">
+  <div class="sel"><div class="lineup">배바닐라 + 리자몽 + 한카리아스</div><p>기본 선출입니다. 콘셉트인 "받이를 무너뜨리는 성능도 뛰어난 대면 선출"을 구현하는 세 마리입니다.</p></div>
+  <div class="sel"><div class="lineup">리자몽 + 한카리아스 + 배바닐라</div><p>한카리아스가 없는 파티나, 옹골참 브리두라스로 전개할 것 같은 파티 상대입니다. 니트로차지로 시작해 미러코트나 암석봉인에 대비하면서 리자몽으로 날뛰고, 한카리아스와 배바닐라로 마무리합니다.</p></div>
+  <div class="sel"><div class="lineup">한카리아스 + 리자몽 + 배바닐라</div><p>라이츄+아머까오 등의 상대입니다. 선봉부터 유인 교체로 무너뜨려 갑니다.</p></div>
+  <div class="sel"><div class="lineup">아쿠스타 + 님피아 + 하마돈 또는 한카리아스</div><p>플라엣테+브리두라스, 마폭시나 리자몽이 낀 파티, 번치코 등의 상대입니다.</p></div>
+</div>
+<p style="margin-top:12px">그 밖에는 상황에 맞춰 대응합니다. 곤란하면 배바닐라·리자몽·한카리아스로 내면 승부가 된다고 합니다.</p>
+
+<h2>부담스러운 상대</h2>
+<p>전개와 대응에 따라 넓은 범위를 이길 수 있는 만큼, 쉽게 이길 수 있는 상대도 없었습니다. 선출 화면에서 상대 파티 구성을 어느 정도 읽고 선출을 맞혀 가는 수밖에 없습니다. 그중에서도 다음은 힘든 편입니다.</p>
+<ul>
+  <li>철벽 메타그로스</li>
+  <li>마폭시 + 대쓰여너 + 블래키</li>
+</ul>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-5 싱글배틀, 2026.08.05 ~ 09.09 10:59. 챔피언 클래스 <b>5위</b>, 최종 레이트 <b>2587.713</b>입니다.</li>
+  <li>챔피언스에서 처음으로 최종 한 자리 순위를 달성해 기쁘다고 했습니다.</li>
+  <li>대면+받이 무너뜨리기라는, 자신이 좋아하는 요소를 담은 파티로 즐겁게 달릴 수 있었다고 합니다.</li>
+  <li>앞으로도 자신에게 맞는 자세와 페이스로 즐기고 싶다고 했습니다.</li>
+  <li>질문은 @Claris_starve의 DM으로 받습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>崩し / 対面構築</dt><dd>받이를 무너뜨리는 압박 / 대면 위주 파티</dd>
+  <dt>再現性</dt><dd>매 판 비슷한 운영을 반복할 수 있음</dd>
+  <dt>数的有利</dt><dd>수적 우위(남은 포켓몬 수가 많음)</dd>
+  <dt>受け出し / あと投げ</dt><dd>교체로 받기 / 교체로 내보내기</dd>
+  <dt>スカーフステロ</dt><dd>구애스카프를 든 채 스텔스록을 까는 운영</dd>
+  <dt>炎メガ</dt><dd>불꽃타입 메가진화 포켓몬</dd>
+  <dt>スカガブ / クイタン / ニトチャ / ミラコ</dt><dd>스카프 한카리아스 / 퀵턴 / 니트로차지 / 미러코트</dd>
+  <dt>バニラ / リザ / ガブ / ガルド / グロス</dt><dd>배바닐라 / 리자몽 / 한카리아스 / 킬가르도 / 메타그로스</dd>
+  <dt>カイリューガルド / サザングロス</dt><dd>망나뇽+킬가르도 / 삼삼드래+메타그로스</dd>
+  <dt>滅びゲンガー</dt><dd>멸망의노래 팬텀</dd>
+  <dt>残飯エルフーン</dt><dd>먹다남은음식 엘풍</dd>
+  <dt>ASMR, くそざこASMR</dt><dd>글에서 화력 약한 님피아의 하이퍼보이스를 놀리는 표현</dd>
+  <dt>準速 60族抜き抜き</dt><dd>스피드 종족값 60 포켓몬(준속)을 앞지르는 상대를 다시 앞지름</dd>
+  <dt>11n / 8n+1</dt><dd>실수치를 11의 배수 / 8의 배수+1로 맞춤</dd>
+  <dt>イージーウィン / イージー</dt><dd>쉽게 이김</dd>
+  <dt>ラスイチ</dt><dd>마지막 한 마리</dd>
+  <dt>釣り交換</dt><dd>상대의 교체를 유인해 받아치는 교체</dd>
+  <dt>キュウべえ</dt><dd>「마법소녀 마도카☆마기카」의 큐베. 님피아를 흑막에 빗댄 농담입니다.</dd>
+  <dt>大空魔術(師)</dt><dd>파티 이름과 리자몽의 별명. 한자를 그대로 읽어 "대공 마술(사)"로 적었습니다.</dd>
+</dl>
+
+<footer>원문: <a href="https://claris-bradbury.hatenablog.com/entry/2026/09/09/%E3%80%90M-5_%E6%9C%80%E7%B5%825%E4%BD%8D%E3%80%91%E5%A4%A7%E7%A9%BA%E9%AD%94%E8%A1%93">華氏451度 「【M-5 最終5位】大空魔術」 (2026-09-09)</a>. 실수치·포인트·PP는 원문 스크린샷과 대조했습니다. 리자몽·아쿠스타의 메가 후 실수치는 본문 값이고, 본문에 없는 아쿠스타 메가 후 특공 135는 계산값입니다. 개별 화면 일부는 팀 화면과 닉네임이 다른 개체입니다. 수치와 기술은 같지만 리자몽의 성별은 팀 화면 수컷, 개별 화면 암컷으로 달라 팀 화면 기준으로 적었습니다.</footer>
+</div>
+</body>
+</html>
