@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>따라큐 M-6 54위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324; --t-electric:#d9a400;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>따라큐의 시즌 M-6 최종 54위 파티</h1>
+  <p class="lede">한국 유저 따라큐의 파티 기록을 게임 화면 기준으로 표에 옮겼습니다. 메가스톤을 든 리자몽과 메타그로스를 함께 넣고 하마돈·누리레느·따라큐·브리두라스를 더한 구성입니다. 작성자가 소개 글 없이 상세 화면만 올린 글이라 배분 의도와 운영 해설은 없습니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>54위</b></div>
+    <div class="chip">최종 레이트<b>2448.603</b></div>
+    <div class="chip">시즌 / 룰<b>M-6 / 싱글</b></div>
+    <div class="chip">클래스<b>챔피언 클래스</b></div>
+    <div class="chip">기간<b>2026.09.09 ~ 10.07</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 막대와 오른쪽 숫자가 포인트, 가운데 숫자가 실수치입니다. 메가 후 실수치는 원문 화면에 없어 메가 전 실수치·포인트·성격으로 계산한 값입니다. PP도 원문 화면에 없어 넣지 않았습니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><b>하마돈</b> ♂</td><td>모래날림</td><td>자뭉열매</td><td>신중</td><td>지진 / 스텔스록 / 하품 / 암석봉인</td></tr>
+    <tr><td>2</td><td><b>메가리자몽X</b> ♂</td><td>맹화 → 단단한발톱</td><td>리자몽나이트X</td><td>고집</td><td>플레어드라이브 / 역린 / 니트로차지 / 칼춤</td></tr>
+    <tr><td>3</td><td><b>메가메타그로스</b></td><td>클리어바디 → 단단한발톱</td><td>메타그로스나이트</td><td>명랑</td><td>사이코팽 / 철벽 / 바디프레스 / 냉동펀치</td></tr>
+    <tr><td>4</td><td><b>누리레느</b> ♀</td><td>급류</td><td>기합의띠</td><td>조심</td><td>문포스 / 물거품아리아 / 아쿠아제트 / 앙코르</td></tr>
+    <tr><td>5</td><td><b>따라큐</b> ♂</td><td>탈</td><td>저주의부적</td><td>고집</td><td>치근거리기 / 섀도클로 / 야습 / 칼춤</td></tr>
+    <tr><td>6</td><td><b>브리두라스</b> ♂</td><td>옹골참</td><td>달인의띠</td><td>조심</td><td>용성군 / 10만볼트 / 악의파동 / 러스터캐논</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>개체 소개</h2>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.450</span><h3>하마돈 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>자뭉열매</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>신중</b> (특방↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v"></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">215</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">132</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">140</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">79</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v up">136</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>암석봉인</div>
+    </div>
+  </div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.6</span><h3>메가리자몽X (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-fire)">불꽃</span><span class="type" style="background:var(--t-dragon)">드래곤</span></span>
+    <div class="meta"><span>도구 <b>리자몽나이트X</b></span><span>특성 <b>맹화 → 단단한발톱</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">157</span><span class="v">157</span><span class="bar"><i style="width:12.5%"></i></span><span class="p">4</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">147</span><span class="v up">198</span><span class="bar"><i style="width:93.75%"></i></span><span class="p">30</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">98</span><span class="v">131</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">116</span><span class="v down">135</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">105</span><span class="v">105</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">152</span><span class="v">152</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>플레어드라이브</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>역린</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>니트로차지</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤</div>
+    </div>
+  </div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.376</span><h3>메가메타그로스</h3>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-psychic)">에스퍼</span></span>
+    <div class="meta"><span>도구 <b>메타그로스나이트</b></span><span>특성 <b>클리어바디 → 단단한발톱</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">173</span><span class="v">173</span><span class="bar"><i style="width:56.25%"></i></span><span class="p">18</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">155</span><span class="v">165</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">170</span><span class="v">190</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">103</span><span class="v down">112</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">110</span><span class="v">130</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">129</span><span class="v up">173</span><span class="bar"><i style="width:87.5%"></i></span><span class="p">28</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>사이코팽</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>철벽</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>바디프레스</div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>냉동펀치</div>
+    </div>
+  </div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.730</span><h3>누리레느 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>급류</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v"></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">157</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">84</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">94</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">195</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">136</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">112</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>문포스</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>물거품아리아</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>앙코르</div>
+    </div>
+  </div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.778</span><h3>따라큐 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>저주의부적</b></span><span>특성 <b>탈</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v"></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">158</span><span class="bar"><i style="width:87.5%"></i></span><span class="p">28</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">156</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">103</span><span class="bar"><i style="width:9.375%"></i></span><span class="p">3</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">125</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">119</span><span class="bar"><i style="width:9.375%"></i></span><span class="p">3</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>치근거리기</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도클로</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤</div>
+    </div>
+  </div>
+</article>
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.1018</span><h3>브리두라스 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-dragon)">드래곤</span></span>
+    <div class="meta"><span>도구 <b>달인의띠</b></span><span>특성 <b>옹골참</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v"></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">167</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">112</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">150</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">194</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">85</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">137</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용성군</div>
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>10만볼트</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>악의파동</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>러스터캐논</div>
+    </div>
+  </div>
+</article>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-6 싱글배틀, 2026.09.09 ~ 10.07 10:59. 챔피언 클래스 <b>54위</b>, 최종 레이트 <b>2448.603</b>입니다.</li>
+  <li>작성자는 파티가 약하다고 생각해 따로 소개하지 않고 상세 화면만 올린다고 했습니다.</li>
+  <li>최종일 대전 모음은 <a href="https://youtu.be/HUW6oYB1z1Y">이 영상</a>에서 볼 수 있다고 안내했고, 원문 끝에는 <a href="https://youtu.be/KyQ8hNHkg9U">영상 링크</a>가 하나 더 있습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>구축</dt><dd>파티 구성</dd>
+  <dt>대전집</dt><dd>대전 모음 영상</dd>
+  <dt>カバルドン, ミミッキュ</dt><dd>원문 화면에 일본어로 표시된 이름입니다. 각각 하마돈과 따라큐로 옮겼습니다.</dd>
+</dl>
+
+<footer>원문: <a href="https://blog.naver.com/jiwon0523-/224434697933">blog.naver.com/jiwon0523- (포챔스 시즌6 최종 54위)</a>. 메가 전 실수치·포인트·기술·도구·성별은 원문 스크린샷과 대조했고, 순위·레이트·팀은 pokedb 기록과도 일치합니다. 메가 후 실수치는 계산값입니다.</footer>
+</div>
+</body>
+</html>
