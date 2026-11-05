@@ -934,5 +934,47 @@
   "status": "ok",
   "file": "parties/judaspoke-M5-party.html",
   "at": "2026-11-05T21:28:16"
+ },
+ "https://pokesol.app/u/nature/articles/1647f9f3d9611bc3": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/nature-M5-party.html",
+  "at": "2026-11-05T22:31:56"
+ },
+ "https://keykko.hatenablog.com/entry/2026/09/11/005848": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/keykko-M5-party.html",
+  "at": "2026-11-05T22:32:08"
+ },
+ "https://pokesol.app/u/sui_pokemon/articles/9f7d4f3382462f09": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/sui_pokemon-M5-party.html",
+  "at": "2026-11-05T22:35:57"
+ },
+ "https://uster-ml.hatenadiary.com/entry/2026/09/09/234125": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/uster-ml-M5-party.html",
+  "at": "2026-11-05T22:37:28"
+ },
+ "https://or-5282517.hatenablog.com/entry/2026/09/09/233118": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/or-5282517-M5-party.html",
+  "at": "2026-11-05T22:41:22"
+ },
+ "https://pokesol.app/u/satomi_poke/articles/34ffd06806bda1d3": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/satomi_poke-M5-party.html",
+  "at": "2026-11-05T22:41:38"
+ },
+ "https://note.com/emiya_922/n/nb5997a76ac5d": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/emiya_922-M5-party.html",
+  "at": "2026-11-05T22:46:32"
  }
 }
