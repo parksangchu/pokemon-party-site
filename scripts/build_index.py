@@ -106,6 +106,7 @@ footer a{color:inherit}
  td.team-cell{grid-column:1/-1}
  td.src{display:none}
 }
+tr[hidden]{display:none!important}
 </style>
 </head>
 <body>
