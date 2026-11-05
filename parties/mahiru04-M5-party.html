@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마히루 M-5 108위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-grass:#4f9e45;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>마히루의 시즌 M-5 최종 108위 파티</h1>
+  <p class="lede">일본 유저 마히루(マヒル, mahiru04)의 파티 소개 글 「뒤집은 마히루식 대면(裏マヒル式対面)」을 한국어판 용어 기준으로 정리했습니다. 작성자가 유행시킨 메가우츠보트 대면 파티처럼 보이게 라인업을 맞춰 놓고, 실제로는 껍질깨기 거북왕과 트릭룸, 오로라베일로 승리 루트를 바꾸는 구성입니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>108위</b></div>
+    <div class="chip">최종 레이트<b>2454.857</b></div>
+    <div class="chip">시즌 / 룰<b>M-5 / 싱글</b></div>
+    <div class="chip">기간<b>2026.08.05 ~ 09.09</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다. 원문 자료에 PP는 없어 적지 않았습니다. 메가 전 실수치도 원문에 없어 포인트·성격·공식 종족값으로 계산한 값입니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10036.png" alt="" loading="lazy"><b>메가거북왕</b> ♂</td><td>젖은접시 → 메가발사</td><td>거북왕나이트</td><td>조심</td><td>해수스파우팅 / 악의파동 / 파동탄 / 껍질깨기</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10279.png" alt="" loading="lazy"><b>메가우츠보트</b> ♀</td><td>엽록소 → 내용물분출</td><td>우츠보트나이트</td><td>덜렁</td><td>기가드레인 / 오물폭탄 / 기습 / 힘흡수</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/778.png" alt="" loading="lazy"><b>따라큐</b> ♀</td><td>탈</td><td>생명의구슬</td><td>고집</td><td>치근거리기 / 야습 / 트릭룸 / 저주</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/902.png" alt="" loading="lazy"><b>대쓰여너</b> ♂</td><td>적응력</td><td>저주부적</td><td>고집</td><td>성묘 / 웨이브태클 / 대타 / 아쿠아제트</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/584.png" alt="" loading="lazy"><b>배바닐라</b> ♀</td><td>눈퍼뜨리기</td><td>녹지않는얼음</td><td>조심</td><td>눈보라 / 프리즈드라이 / 오로라베일 / 얼음뭉치</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/681.png" alt="" loading="lazy"><b>킬가르도</b> ♀</td><td>배틀스위치</td><td>기합의띠</td><td>고집</td><td>폴터가이스트 / 인파이트 / 칼춤 / 야습</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>콘셉트</h2>
+<ul>
+  <li>대면 파티로서의 힘을 유지하면서, 트릭룸과 벽으로 상황에 맞게 승리 루트를 바꿀 수 있게 합니다.</li>
+  <li>라인업을 유행 중인 메가우츠보트 축 대면 파티에 맞춥니다. 작성자는 자기 파티가 유행한 것이 무척 기쁘다고 덧붙였습니다. 상대가 예상하지 못한 껍질깨기와 트릭룸으로 판을 유리하게 끌고 갑니다.</li>
+</ul>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>출발점: 유행해 버린 우츠보트 대면</h3>
+    <ul>
+      <li>지난 시즌 후지마루(フジマル)가 결과를 내고, REJECT컵에서 이치조 리리카(一条莉々華)가 같은 계열 파티로 멋진 경기를 보여 주면서 우츠보트 축 대면 파티가 환경에서 크게 유행했습니다. 작성자는 이를 매우 기뻐합니다.</li>
+      <li>그만큼 형태가 들키면 성능 차이가 큰 띠 대도각참과 저주·방어 따라큐는 열기가 식을 때까지 제 성능을 내기 어렵다고 판단했습니다. 그래서 이 두 자리를 바꾸고 새로운 승리 방식을 찾는 데서 시즌을 시작했습니다.</li>
+      <li>우츠보트 사용률도 100위대에서 50위대로 올라 메이저 포켓몬이 됐습니다. 상당수 유저가 "내 파티로는 어떻게 처리할까"를 미리 생각하고 랭크배틀에 온다는 점까지 고려해야 했습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>① 껍질깨기 거북왕</h3>
+    <p>가장 먼저 떠올린 것이 껍질깨기 거북왕입니다. 전부터 껍질깨기 전개를 섞어 대면과 랭크업 전개를 겸하는 방향도 괜찮다고 생각했기에, 이를 살리는 것을 콘셉트로 잡았습니다.</p>
+  </div>
+  <div class="step">
+    <h3>② 오로라베일 배바닐라</h3>
+    <p>껍질깨기를 쓴다면, 지난 시즌에도 대면 파티에서 쓴 배바닐라에 오로라베일을 넣기로 했습니다. 눈보라·프리즈드라이·얼음뭉치로 높은 대면 성능을 내면서, 기회가 되면 벽을 깔아 랭크업 전개를 돕습니다. 대면 파티와 랭크업 전개를 잇는 다리로 가장 알맞은 포켓몬이었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>③ 위장용이자 대면 요원인 메가우츠보트</h3>
+    <p>라인업을 마히루식에 맞춰 껍질깨기를 눈치채지 못하게 하려고 우츠보트는 확정으로 넣었습니다. 원래 거북왕과 보완이 좋고, 이 포켓몬과 다른 두 마리를 내면 그대로 정통 대면 선출이 되기 때문에, 이번 시즌에도 잘 통하는 대면에서 비할 데 없는 활약을 보여 줬습니다.</p>
+  </div>
+  <div class="step">
+    <h3>④ 기합의띠 킬가르도</h3>
+    <p>지난 시즌부터 두 번째로 내는 우츠보트나 다른 메가 자리가 강하다고 생각했기에, 선봉에서 폭넓게 맞싸울 수 있는 띠 요원을 찾고 있었습니다. 브리두라스에 강한 점, 고스트·격투의 공격 범위, 마지막 한 마리로서의 성능을 고려해 킬가르도를 골랐습니다.</p>
+  </div>
+  <div class="step">
+    <h3>⑤ 트릭룸 따라큐</h3>
+    <p>거북왕에 해수스파우팅을 넣고 파티 전체가 느려지는 점을 고려하면, 벽 전개 외의 승리 루트로 트릭룸이 있으면 편리합니다. 바톤터치 파티를 상대로 저주를 걸 수 없으면 불안하다는 이유도 있어 트릭룸 따라큐를 넣었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>⑥ 대쓰여너</h3>
+    <p>마지막 자리는 마히루식 라인업에서 벗어나지 않고, 트릭룸 에이스도 되며, 대면 성능도 보장되는 대쓰여너입니다.</p>
+  </div>
+  <div class="step">
+    <h3>완성 후 평가와 참고한 글</h3>
+    <ul>
+      <li>요소를 너무 많이 담은 나머지 여섯 마리 모두 방침에 따라 어떤 조합으로든 선출할 수 있게 됐습니다. 지난 시즌까지와 달리 선출도 대전 중 운영도 선택지가 너무 넓은, 무척 어려운 파티가 됐다고 작성자는 말합니다.</li>
+      <li>거북왕+트릭룸 따라큐+대쓰여너 조합은 코하루비(こはるび)의 글에서 아이디어를 얻었습니다. 그 글의 바탕이 된 「귀신의 6메가 대면(鬼の6メガ対面)」은 작성자가 예전 파티를 짤 때 참고한 파티이기도 해서, 그동안의 챔피언스를 집대성하는 느낌에 혼자 불타올랐다고 합니다. 인용은 허락을 받았다고 밝혔습니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가거북왕 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.9</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10036.png" alt="" loading="lazy">메가거북왕 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span></span>
+    <div class="meta"><span>도구 <b>거북왕나이트</b></span><span>특성 <b>젖은접시 → 메가발사</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">183</span><span class="v">183</span><span class="bar"><i style="width:90.6%"></i></span><span class="p">29</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">92</span><span class="v down">110</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">122</span><span class="v">142</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">134</span><span class="v up">189</span><span class="bar"><i style="width:53.1%"></i></span><span class="p">17</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">125</span><span class="v">135</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">116</span><span class="v">116</span><span class="bar"><i style="width:56.25%"></i></span><span class="p">18</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>해수스파우팅</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>악의파동</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>파동탄</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>껍질깨기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H·B</dt><dd>HP를 8의 배수-1(183)로 맞추고 방어에 2를 줘서, 공격 특화 한카리아스의 지진을 94% 확률로 2번 버팁니다.</dd>
+    <dt>S</dt><dd>껍질깨기 후 고집 스카프 한카리아스를 앞지릅니다.</dd>
+    <dt>C</dt><dd>남은 포인트입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>이번 시즌은 거북왕의 장점을 전부 끌어내는 파티가 됐습니다.</li>
+    <li><b>스피드 116이 절묘합니다.</b> 2배가 되면 고집 스카프 한카리아스를 앞지르고, 무배분 따라큐와 동속입니다. 껍질깨기형으로서 최소한 앞질러야 할 선을 넘기면서, 따라큐와 함께 상대의 스피드를 확인한 뒤 트릭룸을 쓸 수 있는 매우 깔끔한 수치였습니다.</li>
+    <li>느린 상대보다는 먼저 움직일 수 있어, 내구형 포켓몬에게 먼저 해수스파우팅을 쓰거나, 브리두라스를 앞지를 정도의 스피드인 대쓰여너에게 먼저 악의파동을 쓰는 장면이 많았던 것도 좋았습니다.</li>
+    <li>내구도 대면형 거북왕에서 크게 줄지 않아, 껍질깨기를 쓰지 않을 때도 대면 요원으로 기존처럼 일했습니다.</li>
+    <li>킬가르도 다음으로 선봉 비율이 높습니다. 가장 많은 승리 패턴은 첫 대면에서 유리하면 껍질깨기로 가능한 만큼 쓰러뜨리고, 남은 상대를 뒤의 대면 요원이나 트릭룸 대쓰여너로 정리하는 것이었습니다.</li>
+    <li>라인업을 보고 미러코트를 예상한 플라엣테가 명상부터 쓰거나 메가리자몽Y가 화염방사부터 쓰는 일도 있어, 껍질깨기 해수스파우팅으로 쉽게 이긴 판도 꽤 있었습니다.</li>
+    <li>최종일에는 선봉 껍질깨기를 쓰지 않아 진 한 판을 빼고 모두 선봉 껍질깨기로 이겼습니다. 작성자는 이를 "양키 상등(ヤンキー上等)", 즉 막무가내 플레이 대환영이라고 농담처럼 표현했습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 메가우츠보트 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.71</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10279.png" alt="" loading="lazy">메가우츠보트 (암컷)</h3><span class="badge">선출률 19% · 승률 69%</span>
+    <span class="types"><span class="type" style="background:var(--t-grass)">풀</span><span class="type" style="background:var(--t-poison)">독</span></span>
+    <div class="meta"><span>도구 <b>우츠보트나이트</b></span><span>특성 <b>엽록소 → 내용물분출</b></span><span>성격 <b>덜렁</b> (특공↑ 특방↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">187</span><span class="v">187</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">126</span><span class="v">146</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">85</span><span class="v">105</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">167</span><span class="v up">205</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">81</span><span class="v down">103</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">91</span><span class="v">91</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>기가드레인</div>
+      <div class="move"><span class="type" style="background:var(--t-poison)">독</span>오물폭탄</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>기습</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>힘흡수</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H</dt><dd>내용물분출의 데미지를 확보하려고 풀 배분했습니다.</dd>
+    <dt>C</dt><dd>풀 배분입니다.</dd>
+    <dt>S</dt><dd>동속을 의식해 1을 더했습니다.</dd>
+    <dt>A</dt><dd>남은 포인트입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>작성자가 "영원한 친구 자리(ズッ友枠)"라고 부르는 포켓몬입니다. 이번 시즌에는 대면 선출을 할 때의 선택지이자 까다로운 라인업을 얼버무리는 역할이었습니다.</li>
+    <li>우츠보트 대처법이 너무 널리 알려져, 궁리 없이 기본 힘을 내기는 어렵다고 느꼈습니다. 그래서 거북왕이나 킬가르도가 쓰러뜨리기 쉬운 포켓몬을 상대가 선출하도록 유도하고, 거북왕·우츠보트·따라큐·대쓰여너·배바닐라 라인업의 맨 위에 둬서 트릭룸과 껍질깨기의 냄새를 감추는 역할을 맡겼습니다.</li>
+    <li>우츠보트 덕분에 플라엣테와 함께 메가 후보 두 마리로 선출된 마폭시나, 거북왕이 비교적 안전하게 껍질깨기를 쓸 수 있는 메타그로스가 선봉으로 나와 주었고, 첫 대면 우위로 밀어붙인 판이 꽤 많았습니다.</li>
+    <li>이번 시즌에는 선출률을 19%까지 낮췄지만 선출했을 때 승률은 69%로, 낼 수 있는 대면에서는 예전처럼 활약했습니다. 앞으로도 오래 함께할 것 같다고 합니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 따라큐 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.778</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/778.png" alt="" loading="lazy">따라큐 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>탈</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">149</span><span class="bar"><i style="width:59.4%"></i></span><span class="p">19</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">150</span><span class="bar"><i style="width:84.4%"></i></span><span class="p">27</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">120</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">125</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">116</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>치근거리기</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습</div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>트릭룸</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>저주</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H·B</dt><dd>공격 특화 메가갸라도스의 1랭크 상승 폭포오르기를 최고 난수만 빼고 버팁니다.</dd>
+    <dt>H·B</dt><dd>공격 특화 메가메타그로스의 불릿펀치를 탈이 벗겨질 때의 피해까지 포함해 버팁니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>이번에는 저주·방어형에서 대면 겸 교체 트릭룸 요원으로 바뀌었습니다.</li>
+    <li>내구에 배분한 덕분에 교체로 받은 뒤에도 한 번 더 버틸 수 있어, 여러 경기에서 쿠션과 트릭룸으로 판을 뒤집어 줬습니다.</li>
+    <li>이 따라큐가 뒤에 있어 거북왕에게 트릭룸이라는 선택지가 생깁니다. 거북왕이 껍질깨기 등으로 한 마리를 돌파 → 뒤에서 마스카나 등장 → 따라큐로 교체해 마스카나를 쓰러뜨리거나 트릭룸 → 거북왕이 다시 나와 마스카나를 포함한 나머지를 공격하는 흐름이 가능해졌습니다.</li>
+    <li>이 포켓몬 덕분에 거북왕의 선출률이 80%를 넘었습니다.</li>
+    <li>치근거리기와 야습으로 대면 성능이 있어서, 선출 단계에서 트릭룸 계획이 확정되지 않아도 냈습니다. 상대의 랭크업 기술에 맞추거나, 다른 포켓몬의 기술이 얼마나 잘 통하는지 확인한 뒤 트릭룸을 쓰면 승리 루트가 늘어 매우 편리했습니다.</li>
+    <li>메가가 아닌 포켓몬 중 선출률은 가장 낮았지만, 질 판을 이긴 판으로 바꿔 준 횟수는 가장 많았습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 대쓰여너 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.902</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/902.png" alt="" loading="lazy">대쓰여너 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>저주부적</b></span><span>특성 <b>적응력</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">205</span><span class="bar"><i style="width:31.25%"></i></span><span class="p">10</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">180</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">104</span><span class="bar"><i style="width:59.4%"></i></span><span class="p">19</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">97</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">101</span><span class="bar"><i style="width:9.4%"></i></span><span class="p">3</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>성묘</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>웨이브태클</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>대타</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>트릭룸을 깔지 않는 판이 더 많아, 무배분 메가니움이나 이상해꽃은 최소한 앞지르려고 했습니다. 흔한 트릭룸 대쓰여너의 내구 배분(H=B+D)에서 특방 3을 스피드로 돌려, 무배분 스피드 종족값 80을 앞지릅니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>배바닐라·거북왕과 나란히 있으면 상대의 하마돈 선출률이 눈에 띄게 줄어듭니다. 그래서 퀵턴 없이 트릭룸으로 운용할 때 강력한 저주부적형을 골랐습니다.</li>
+    <li>스피드에 쓸 포인트를 내구에 두텁게 돌린 덕분에, 대면 선출에서 마지막 1대1이 됐을 때 한 번 버티고 저주부적 성묘로 확실히 이기는 장면이 늘었습니다.</li>
+    <li><b>대타가 매우 강했습니다.</b> 모든 장면에서 승리로 이어지는 좋은 기술이었다고 평가합니다.
+      <ul>
+        <li>캥카나 우츠보트 등의 기습을 피합니다.</li>
+        <li>트릭룸 아래에서 마스카나의 타입 변화를 흘려보낸 뒤 성묘를 씁니다.</li>
+        <li>트릭룸 마지막 턴에, 자기보다 먼저 움직이지만 대타 몫의 HP가 남을 상대에게 대타를 씁니다. 다음 턴 대타가 남은 상태로 먼저 성묘를 쓰고, 다음에 나온 포켓몬에게도 대타를 방패 삼아 성묘를 씁니다.</li>
+      </ul>
+    </li>
+  </ul></div>
+</article>
+
+<!-- 5. 배바닐라 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.584</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/584.png" alt="" loading="lazy">배바닐라 (암컷)</h3><span class="badge">이번 시즌 MVP</span>
+    <span class="types"><span class="type" style="background:var(--t-ice)">얼음</span></span>
+    <div class="meta"><span>도구 <b>녹지않는얼음</b></span><span>특성 <b>눈퍼뜨리기</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">175</span><span class="bar"><i style="width:90.6%"></i></span><span class="p">29</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">103</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">110</span><span class="bar"><i style="width:15.6%"></i></span><span class="p">5</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">178</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">99</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>눈보라</div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>프리즈드라이</div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>오로라베일</div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>얼음뭉치</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H</dt><dd>HP를 16의 배수-1(175)로 맞췄습니다.</dd>
+    <dt>C</dt><dd>풀 배분입니다.</dd>
+    <dt>B</dt><dd>남은 포인트입니다.</dd>
+    <dt>S</dt><dd>누리레느만 앞지르면 충분하고 트릭룸 운용도 고려해 무배분입니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>눈보라와 프리즈드라이로 강철·불꽃 외의 상대에게 대면 성능이 매우 높습니다. 한카리아스의 지진 같은 등배 물리기는 교체로 받을 수 있어, 대면 요원·벽 요원·쿠션으로 크게 활약했습니다.</li>
+    <li>이번 시즌에는 거북왕의 껍질깨기를 돕기 위해 네 번째 기술을 오로라베일로 정했습니다.</li>
+    <li>마지막 한 마리로 남은 따라큐를 상대로 승률을 조금이라도 올리려고 내구와 화력에 포인트를 모두 썼습니다.</li>
+    <li>첫 대면에서 밀릴 위험이 커서 선봉으로 내 벽을 까는 일은 적었습니다. 대신 경기 중반에 상대가 눈보라를 읽고 유리한 포켓몬으로 교체할 때 벽을 깔고 쓰러지거나 교체했습니다. 그렇게 거북왕의 껍질깨기를 돕거나 대쓰여너의 내구를 높여 앞지를 수 있는 포켓몬 수를 늘리는 식으로 승리에 기여했습니다.</li>
+    <li>눈보라는 반감이어도 데미지가 꽤 나옵니다. 교체할 수 없을 때 반감이어도 연타하면 루카리오에게 60% 정도 들어가는 등 의외로 밀어붙일 수 있었습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 킬가르도 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.681</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/681.png" alt="" loading="lazy">킬가르도 (암컷)</h3><span class="badge">이번 시즌 띠 자리</span>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>배틀스위치</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span><span>실수치 <b>실드폼 기준</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">137</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">112</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">160</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">160</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">112</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>폴터가이스트</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>인파이트</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>A·S</dt><dd>공격과 스피드에 풀 배분하고 남은 포인트를 HP에 줬습니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <p>트릭룸·벽을 넣을지 기존의 대면 특화 파티를 파고들지 고민하던 중, 선봉 띠 요원 → 두 번째 메가 자리 흐름이 강하다는 걸 깨달았습니다. 그래서 우츠보트를 보고 내는 상대에게 강하고 첫 대면에서 가장 덜 밀리는 띠 요원을 찾았고, 그중 가장 강했던 것이 킬가르도입니다. 평가 항목은 다음과 같습니다.</p>
+    <ul>
+      <li>고스트와 격투를 모두 반감 이하로 받는 포켓몬이 히스이 조로아크뿐입니다.</li>
+      <li>스텔스록이 깔린 상태로 마지막 한 마리로 나와도 실드폼 내구로 한 방을 버티는 일이 많습니다.</li>
+      <li>폴터가이스트는 비접촉이라 한카리아스의 까칠한피부에 띠가 깎이지 않습니다.</li>
+      <li>특수형으로 오인시키거나, 선봉이 아닐 때 내면 띠를 읽히기 어려운 등 허를 찌르는 요소가 갖춰져 있습니다.</li>
+      <li>칼춤을 쓸 수 있는 대면에서 쓰면 받이 파티를 그대로 쉽게 이길 수 있습니다.</li>
+    </ul>
+    <ul>
+      <li>특히 우츠보트가 까다로워하는 브리두라스를 HP·방어형이 아니면 인파이트로 처리할 수 있는 점이 유능했습니다. 거북왕을 내고 미러코트에 벌벌 떠는 일도 적었습니다.</li>
+      <li>이 라인업에 나오기 쉬운 메가갸라도스도 띠가 유지돼 있으면 인파이트로 처리할 수 있습니다.</li>
+      <li>유일한 단점은 폴터가이스트가 맞기 전의 묘한 뜸이 심장에 나쁘다는 것이라고 합니다.</li>
+      <li>주오 세나(十王星南)가 킬가르도라는 설을 믿고 있어서 닉네임을 SENA로 지었다고 합니다.</li>
+    </ul>
+  </div>
+</article>
+
+<h2>기본 선출</h2>
+<p>선출률 상위 3개 패턴은 다음과 같습니다. 수치는 원문 이미지 기준입니다.</p>
+<div class="selections">
+  <div class="sel"><div class="lineup">1위: 킬가르도 + 거북왕 + 배바닐라</div><p>선출률 32% · 승률 86%. 가장 많이 쓰고 승률도 가장 높은 선출입니다.</p></div>
+  <div class="sel"><div class="lineup">2위: 거북왕 + 따라큐 + 대쓰여너</div><p>선출률 15% · 승률 60%. 트릭룸 선출로, 메타그로스나 마폭시가 있는 파티에 자주 썼습니다.</p></div>
+  <div class="sel"><div class="lineup">3위: 거북왕 + 킬가르도 + 따라큐</div><p>선출률 12% · 승률 75%.</p></div>
+</div>
+<h3>1위 선출 운영</h3>
+<ul>
+  <li>단순합니다. 선봉 킬가르도로 눈앞의 상대를 쓰러뜨리고, 이후 낼 수 있는 쪽부터 차례로 내서 대면으로 싸웁니다.</li>
+  <li>배바닐라를 먼저 내면 벽 전개가 가능합니다.</li>
+  <li>거북왕을 먼저 내서 막혔을 때는, 거북왕을 자주 막는 누리레느·따라큐·마스카나에 배바닐라가 강해 그대로 이기는 경우가 많았습니다.</li>
+</ul>
+<h3>2위 선출 운영</h3>
+<ul>
+  <li>거북왕이 첫 대면에서 유리하면 껍질깨기로 쓸어 담습니다. 막히면 따라큐로 그 포켓몬을 쓰러뜨리거나, 트릭룸을 깔고 쓰러진 뒤 대쓰여너로 나머지를 쓰러뜨렸습니다.</li>
+  <li>거북왕이 첫 대면에서 밀리거나 마스카나처럼 먼저 처리해 오는 포켓몬을 만나면 따라큐로 교체합니다. 그다음 트릭룸 아래에서 거북왕을 다시 내보내 판을 뒤집었습니다.</li>
+  <li>상대가 트릭룸 턴을 벌려고 움직일 때가 많아, 트릭룸 마지막 턴에 껍질깨기를 써서 몰아넣는 운영도 자주 나왔습니다. 작성자는 이것이 굉장히 기분 좋다고 합니다.</li>
+</ul>
+<h3>그 밖의 선출</h3>
+<ul>
+  <li>나머지는 상대 라인업에 맞춰, 메가 없는 선출까지 포함해 잘 통하는 세 마리를 자유롭게 골랐습니다.</li>
+  <li>선봉 비율은 킬가르도 50%, 거북왕 40%, 그 외 10% 정도입니다.</li>
+  <li>우츠보트×거북왕을 제외한 모든 조합이 선출 가능하고 조합마다 계획이 달라, 작성자 본인도 선출 난이도에 혀를 내둘렀습니다. 그래서 긴장으로 떨리던 최종일에는 모든 판에서 기도하듯 거북왕을 선봉으로 냈다고 합니다.</li>
+  <li>대쓰여너의 내구가 오르면 이길 것 같을 때 벽을 깔고, 배바닐라의 얼음 기술이 잘 통하면 배바닐라를 위해 트릭룸을 쓰기도 했습니다.</li>
+  <li>따라큐는 생명의구슬 치근거리기·야습으로 대면 성능이 보장돼, 트릭룸을 전제하지 않아도 적극적으로 선출했습니다.</li>
+  <li>경기 중에 트릭룸 승리 루트가 보여 즉흥으로 쓰는 일도 꽤 많았습니다. 그래서 "뭔가 해 줬으면 할 때" 선출하는 것이 이 파티를 잘 다루는 요령이라고 느꼈다고 합니다.</li>
+</ul>
+
+<h2>부담스러운 상대</h2>
+<div class="steps">
+  <div class="step">
+    <h3>망나뇽 + 핫삼</h3>
+    <ul>
+      <li>망나뇽에게 유리하다고 할 수 있는 포켓몬이 배바닐라와 따라큐뿐인데, 둘 다 선봉으로 내기 어려워 매우 부담스러웠습니다.</li>
+      <li>핫삼이 있으면 배바닐라에게 쉽게 교체로 들어와, 유턴으로 교체전을 돌리거나 칼춤으로 무너뜨려 상대 페이스가 되는 일이 많았습니다.</li>
+      <li>상대가 배바닐라를 경계해 망나뇽을 선출하지 않는 경우가 많아, 핫삼을 쓰러뜨리려고 거북왕과 대쓰여너를 내고 남은 한 자리는 망나뇽을 의식해 배바닐라나 따라큐로 했습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>캥카와 이어롭</h3>
+    <ul>
+      <li>배짱 속이다가 무서워 선봉에 킬가르도를 두기 어려웠습니다.</li>
+      <li>둘 다 선공기가 강해 껍질깨기한 거북왕이 처리되기 쉬운 것도 괴로웠습니다.</li>
+      <li>캥카는 파동탄 연타로 밀어붙였고, 이어롭이 있는 파티에는 따라큐를 내서 따라큐로 처리하거나 트릭룸 파동탄으로 처리했습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>킬라플로르</h3>
+    <ul>
+      <li>상대 파티에 있으면 선출이 뒤틀려 어쩔 수 없었습니다.</li>
+      <li>거북왕이 잘 통하는 대면 파티에 들어 있는 경우가 많은데, 독압정 처리를 위해 우츠보트를 내고 싶어지는 점이 괴로웠습니다.</li>
+      <li>킬가르도로는 독압정을 깔게 되고, 거북왕은 에너지볼 2번에 처리되며, 우츠보트를 보고 나오는 킬라플로르에는 부식형도 많습니다. 이번 시즌 가장 괴롭힌 포켓몬이었습니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-5 싱글배틀, 2026.08.05 ~ 09.09 10:59. 챔피언 클래스 <b>108위</b>, 최종 레이트 <b>2454.857</b>입니다.</li>
+  <li>지난 시즌은 파티를 계속 고민하다 부진했지만, 이번 시즌에는 한때 순간 두 자리 순위에 닿았고, 한 시즌을 건너 자기 최고 레이트와 순위도 경신해 크게 만족한 시즌이었다고 합니다.</li>
+  <li>그 밖에도 다 적지 못할 만큼 기쁜 일이 많았다고 합니다. 이치조 리리카가 작성자의 파티를 쓴 일, 쿠로코(くろこ)의 영상 설명란에 글 주소가 실린 일, 밤비(バンビー)가 작성자를 지목한 대책 영상을 올린 일, 시그마(シグマ)가 파티를 돌려 본 일 등입니다.</li>
+  <li>자기 파티가 유행하고, 그 유행과의 어긋남을 이용하는 전법을 생각해 실제 결과로 이어진 것이 무척 기뻤다고 합니다.</li>
+  <li>이번에는 플레이 의존도가 꽤 높은 파티가 됐으니, M-C에서는 다시 간단하게 대전 수를 많이 쌓을 수 있는 파티를 짜고 싶다고 합니다.</li>
+  <li>디스코드와 트위터에서 아이디어를 함께 고민하고 같이 달려 준 사람들, 글을 읽어 준 사람들에게 감사를 전했습니다.</li>
+</ul>
+
+<h2>홍보</h2>
+<p>작성자는 평소처럼 디스코드 서버도 소개했습니다. 챔피언스 활동을 시작한 뒤 수십 명이 참가해 인원이 240명을 넘었고, 초보자와 복귀 유저도 많습니다. 이번 시즌에는 처음으로 최종 세 자리 순위를 달성한 사람도 몇 명 나왔다고 합니다. 커뮤니티에서 하는 포켓몬 배틀은 즐겁고 배울 점이 많다며, 이야기 상대를 찾는다면 조금만 용기 내어 참가해 달라고 권합니다. 포켓몬 외의 TCG나 오타쿠 콘텐츠 이야기도 활발하다고 합니다.</p>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>마히루식 (マヒル式)</dt><dd>작성자가 유행시킨 메가우츠보트 축 대면 파티의 라인업</dd>
+  <dt>뒤집은 마히루식 (裏マヒル式, 확인 필요)</dt><dd>글 제목. 겉모습은 마히루식이지만 운영은 다르다는 뜻으로 옮겼습니다.</dd>
+  <dt>영원한 친구 자리 (ズッ友枠)</dt><dd>오래 함께하는 애착 포켓몬 자리</dd>
+  <dt>양키 상등 (ヤンキー上等, 확인 필요)</dt><dd>근거 없이 배짱으로 밀어붙이는 플레이도 환영한다는 농담으로 추정</dd>
+  <dt>교체 트릭룸 (スイッチトリル)</dt><dd>교체로 들어와 트릭룸을 까는 운영</dd>
+  <dt>정통 대면 선출 (ガチ対面選出)</dt><dd>특수 전술 없이 대면 성능만으로 싸우는 선출</dd>
+  <dt>순간 두 자리 (瞬間2桁)</dt><dd>시즌 중 한때 10~99위에 든 것</dd>
+  <dt>띠 (襷)</dt><dd>기합의띠</dd>
+  <dt>첫 대면 우위·열세 (出し勝ち·出し負け)</dt><dd>선봉끼리 만났을 때 유리·불리한 것</dd>
+  <dt>H=B+D</dt><dd>HP 실수치를 방어·특방 실수치의 합에 가깝게 맞춰 내구 효율을 높이는 배분</dd>
+  <dt>일반 자리 (一般枠)</dt><dd>메가가 아닌 포켓몬</dd>
+  <dt>M-C</dt><dd>다음 레귤레이션</dd>
+</dl>
+
+<footer>원문: <a href="https://pokesol.app/u/mahiru04/articles/140b9088df6ba130">pokesol.app/u/mahiru04</a>. 메가 후 실수치·포인트·성격·기술은 원문의 포켓몬 카드, 성별·순위·레이트·기간은 원문 결과 이미지를 기준으로 옮겼습니다.</footer>
+</div>
+</body>
+</html>

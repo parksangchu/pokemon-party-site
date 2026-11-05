@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>키타바타케 M-5 127위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-electric:#e0b21a; --t-flying:#6f9fe0; --t-grass:#4fa83d;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>키타바타케의 시즌 M-5 최종 127위 파티와 "정석과 연구"</h1>
+  <p class="lede">일본 유저 かきます(note, 트레이너 이름 キタバタケ)의 글을 한국어판 용어 기준으로 정리했습니다. 작성자는 시즌이 바뀌면 환경이 새로워지므로 파티 소개만으로는 효과가 적다고 보고, 무과금으로 2기 연속 챔피언 클래스와 먼슬리 두 자리 순위를 달성한 방법론을 중심에 놓았습니다. 결론은 "이기는 데 필요한 것은 정석과 연구뿐"입니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>127위</b></div>
+    <div class="chip">최종 레이트<b>2433.014</b></div>
+    <div class="chip">시즌 / 레귤레이션<b>M-5 / M-B</b></div>
+    <div class="chip">기간<b>2026.08.05 ~ 09.09</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png" alt="" loading="lazy"><b>메가이상해꽃</b></td><td>엽록소 → 두꺼운지방</td><td>이상해꽃나이트</td><td>대담</td><td>대지의힘 / 오물폭탄 / 씨뿌리기 / 광합성</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10236.png" alt="" loading="lazy"><b>히스이 대검귀 ♂</b></td><td>예리함</td><td>기합의띠</td><td>개구쟁이</td><td>비검천중파 / 성스러운칼 / 셸블레이드 / 냉동빔</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="" loading="lazy"><b>메타몽</b></td><td>괴짜</td><td>구애스카프</td><td>무사태평</td><td>변신</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy"><b>하마돈 ♀</b></td><td>모래날림</td><td>먹다남은음식</td><td>신중</td><td>얼음엄니 / 스텔스록 / 하품 / 게으름피우기</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10305.png" alt="" loading="lazy"><b>메가라이츄Y ♀</b></td><td>피뢰침 → 노가드</td><td>라이츄나이트Y</td><td>겁쟁이</td><td>전자포 / 매혹의보이스 / 앙코르 / 기합구슬</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10034.png" alt="" loading="lazy"><b>메가리자몽X ♂</b></td><td>맹화 → 단단한발톱</td><td>리자몽나이트X</td><td>고집</td><td>니트로차지 / 역린 / 번개펀치 / 칼춤</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>출발점: 메가이상해꽃의 몰아넣기</h3>
+    <p>파티는 메가이상해꽃의 몰아넣는 성능에서 시작했습니다. 이상해꽃의 약점을 찌르지 못하는 파티에는 쉽게 이길 수 있습니다.</p>
+  </div>
+  <div class="step">
+    <h3>선봉: 히스이 대검귀</h3>
+    <p>타입 상성이 서로 보완되고 씨뿌리기와 시너지가 있습니다. 상대가 씨뿌리기를 싫어해 포켓몬을 교체하면 압정 데미지가 들어가고, 이를 되풀이해 이기는 것이 콘셉트입니다.</p>
+  </div>
+  <div class="step">
+    <h3>마지막 자리: 메타몽</h3>
+    <p>이상해꽃을 뚫으려는 포켓몬을 복사해 반격합니다. <b>대검귀 + 이상해꽃 + 메타몽</b>이 기본 세 마리입니다.</p>
+  </div>
+  <div class="step">
+    <h3>남은 포켓몬: 승리 플랜을 통과시키기 위한 자리</h3>
+    <p>나머지 세 마리도 전부 이유가 있습니다. 라이츄와 리자몽은 상대의 선출을 유도하고, 하마돈은 기본 선출이 이기지 못하는 망나뇽을 맡습니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+<p>원문에는 배분 의도가 하마돈의 특방 위주 구성 외에 따로 적혀 있지 않습니다. 메가 후 실수치는 원문 화면에 없어, 메가 전 수치와 포인트·성격, 메가진화 종족값으로 계산했습니다.</p>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.3</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10033.png" alt="" loading="lazy">메가이상해꽃 (수컷)</h3><span class="badge">기본 선출 · 승리 수단</span>
+    <span class="types"><span class="type" style="background:var(--t-grass)">풀</span><span class="type" style="background:var(--t-poison)">독</span></span>
+    <div class="meta"><span>도구 <b>이상해꽃나이트</b></span><span>특성 <b>엽록소 → 두꺼운지방</b></span><span>성격 <b>대담 (방어↑ 공격↓)</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">187</span><span class="v">187</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">91</span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">143</span><span class="v up">187</span><span class="bar"><i style="width:84.375%"></i></span><span class="p">27</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">120</span><span class="v">142</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">127</span><span class="v">147</span><span class="bar"><i style="width:21.875%"></i></span><span class="p">7</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">100</span><span class="v">100</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>대지의힘<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-poison)">독</span>오물폭탄<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>씨뿌리기<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>광합성<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>이 파티를 짜게 된 계기입니다. <b>상대를 몰아넣는 성능</b>이 뛰어나서, 이상해꽃의 약점을 찌르지 못하는 파티는 쉽게 이길 수 있습니다.</li>
+    <li>파티 전체를 복잡하게 만들지 않고, 이상해꽃으로 몰아넣는 것만 염두에 두고 짰습니다. 다른 선출이나 포켓몬도 결국 이상해꽃이 마무리할 상황을 만들기 위한 것입니다.</li>
+    <li>상대에게 메가 후보가 3마리처럼 보이고 하마돈과 리자몽까지 있으면, 상대는 메가진화 없이 쓰는 엽록소 이상해꽃일 가능성을 생각합니다. 이 가능성은 아래 메타그로스전 정석의 근거가 됩니다.</li>
+  </ul></div>
+</article>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.503</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10236.png" alt="" loading="lazy">히스이 대검귀 (수컷)</h3><span class="badge">선봉</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-dark)">악</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>예리함</b></span><span>성격 <b>개구쟁이 (공격↑ 특방↓)</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">165</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">176</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">100</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">122</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">137</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>비검천중파<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>성스러운칼<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>셸블레이드<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>냉동빔<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>이상해꽃과 타입 상성이 서로 보완되고 씨뿌리기와 시너지가 있어 선봉 요원으로 넣었습니다.</li>
+    <li>비검천중파로 압정을 깔아 둡니다. 상대가 씨뿌리기를 싫어해 포켓몬을 교체하면 압정 데미지가 들어가고, 이를 되풀이해 이기는 것이 파티의 콘셉트입니다.</li>
+    <li>냉동빔은 라이츄와 리자몽을 보고 나오는 한카리아스를 잡기 위한 기술입니다.</li>
+    <li>기습을 넣지 않아 이쪽은 수 읽기 싸움을 만들지 않습니다. 반면 상대는 기습을 경계해 변화기를 쓰는 경우가 많아, 결과적으로 이쪽 기술이 통하는 일이 많았습니다.</li>
+  </ul></div>
+</article>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.132</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png" alt="" loading="lazy">메타몽</h3><span class="badge">기본 선출</span>
+    <span class="types"><span class="type" style="background:var(--t-normal)">노말</span></span>
+    <div class="meta"><span>도구 <b>구애스카프</b></span><span>특성 <b>괴짜</b></span><span>성격 <b>무사태평 (방어↑ 스피드↓)</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">155</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">68</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">110</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">68</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">70</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v down">61</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>변신<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>기본 선출의 마지막 한 자리입니다. 랭크를 쌓은 이상해꽃을 뚫으려는 포켓몬을 복사해 반격합니다.</li>
+    <li>메타그로스전처럼 상대가 어느 기술을 치든 이쪽 교체가 안정적인 장면에서 교체로 내보내, 구애스카프를 든 복사본으로 우위를 굳힙니다.</li>
+  </ul></div>
+</article>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.450</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy">하마돈 (암컷)</h3><span class="badge">대 망나뇽</span>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>먹다남은음식</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>신중 (특방↑ 특공↓)</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">215</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">134</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">138</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">79</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v up">136</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>얼음엄니<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>게으름피우기<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl><dt>HD·얼음엄니</dt><dd>범용성을 버리고 망나뇽 대책에 특화한 구성입니다.</dd></dl></div>
+  <div class="desc"><ul>
+    <li>기본 선출은 망나뇽을 이기지 못합니다. 그래서 망나뇽이 보이면 메타몽 대신 이 하마돈을 선출합니다.</li>
+    <li>그런데도 에어슬래시의 풀죽음이 계속 나오면 뚫립니다. 작성자는 <b>질 수도 있기 때문에 오히려 대책이 된다</b>고 설명합니다.</li>
+    <li>상대는 "하마돈에게는 망나뇽을 뚫을 수단이 없다"고 전제하므로 망나뇽을 교체하지 않습니다. 이쪽은 부담스러운 망나뇽을 하품으로 흘려보내려고 하마돈을 낸 것처럼 보이게 합니다. 망나뇽 쪽은 하품을 맞은 뒤에 교체하는 것이 안정적이므로 에어슬래시를 연타합니다.</li>
+    <li>불운이 이어지지 않으면 스텔스록을 깔고, 체력을 남긴 상태로 망나뇽을 쓰러뜨립니다. 나머지는 이상해꽃으로 몰아넣어 이깁니다.</li>
+  </ul></div>
+</article>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.26</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10305.png" alt="" loading="lazy">메가라이츄Y (암컷)</h3><span class="badge">선출 유도</span>
+    <span class="types"><span class="type" style="background:var(--t-electric)">전기</span></span>
+    <div class="meta"><span>도구 <b>라이츄나이트Y</b></span><span>특성 <b>피뢰침 → 노가드</b></span><span>성격 <b>겁쟁이 (스피드↑ 공격↓)</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">137</span><span class="v">137</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">99</span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">75</span><span class="v">75</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">142</span><span class="v">212</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">100</span><span class="v">100</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">178</span><span class="v up">200</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>전자포<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>매혹의보이스<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>앙코르<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>기합구슬<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>역할은 <b>선출 유도</b>입니다. 이상해꽃이 이기지 못하는 아머까오를 상대가 선출하지 않게 만듭니다. 엽록소 이상해꽃일 가능성과 라이츄의 압박이 겹쳐 실제로 아머까오 선출을 막을 수 있었습니다.</li>
+    <li>또 하나의 역할은 한카리아스를 끌어내는 것입니다. 그래서 대검귀에 냉동빔을 넣었습니다.</li>
+    <li>이렇게 상대의 선출을 고정하면 정해진 말끼리 두는 장기처럼 정석이 생긴다는 것이 작성자의 설명입니다.</li>
+  </ul></div>
+</article>
+
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.6</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10034.png" alt="" loading="lazy">메가리자몽X (수컷)</h3><span class="badge">선출 유도</span>
+    <span class="types"><span class="type" style="background:var(--t-fire)">불꽃</span><span class="type" style="background:var(--t-dragon)">드래곤</span></span>
+    <div class="meta"><span>도구 <b>리자몽나이트X</b></span><span>특성 <b>맹화 → 단단한발톱</b></span><span>성격 <b>고집 (공격↑ 특공↓)</b></span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">153</span><span class="v">153</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">149</span><span class="v up">200</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">100</span><span class="v">133</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">116</span><span class="v down">135</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">105</span><span class="v">105</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">152</span><span class="v">152</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>니트로차지<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>역린<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>번개펀치<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>작성자는 할 말이 적다고 합니다. 역할은 이상해꽃을 엽록소로 보이게 하는 것과 한카리아스를 끌어내는 것입니다.</li>
+    <li>받이 루프 파티를 상대로 선출하면 이겨 준다고 합니다.</li>
+  </ul></div>
+</article>
+
+
+<h2>기본 선출</h2>
+<div class="selections">
+  <div class="sel"><div class="lineup">대검귀 + 이상해꽃 + 메타몽</div><p>기본 선출입니다. 이상해꽃으로 몰아넣을 수 있으면 이깁니다.</p></div>
+  <div class="sel"><div class="lineup">대검귀 + 이상해꽃 + 하마돈</div><p>망나뇽이 있는 파티용입니다. 메타몽 대신 하마돈을 냅니다.</p></div>
+  <div class="sel"><div class="lineup">리자몽 선출</div><p>받이 루프 파티를 상대할 때 선출합니다. 나머지 두 자리는 원문에 적혀 있지 않습니다.</p></div>
+</div>
+
+<h2>정석: 약점을 찌르는 상대를 이기는 법</h2>
+<p>장기와 달리 포켓몬 대전은 말이 정해져 있지 않으므로 정석을 직접 만들어야 합니다. 이상해꽃으로 몰아넣는 것이 쉽지 않은 상대, 즉 이상해꽃의 약점을 찌르는 상대를 어떻게 이겼는지가 이 글의 본론입니다.</p>
+<div class="steps">
+  <div class="step">
+    <h3>메타그로스전: 삼삼드래·메타그로스·누리레느 vs 대검귀·이상해꽃·메타몽</h3>
+    <p>M-B에서 맹위를 떨쳤고 이상해꽃으로는 이기지 못한다고 여겨지는 메타그로스를 예로 듭니다.</p>
+    <ol>
+      <li>선봉 대검귀가 크게 불리한 누리레느와 대면합니다.</li>
+      <li>이상해꽃으로 교체해 문포스를 받습니다.</li>
+      <li>누리레느에게 씨뿌리기를 씁니다.</li>
+      <li>누리레느가 교체해 메타그로스가 나오고, 메타그로스가 씨뿌리기 상태가 됩니다.</li>
+      <li>여기서 메타그로스에게 이상해꽃을 그대로 두고 대지의힘을 칩니다.</li>
+      <li>메타그로스는 처음에 낸 대검귀로 교체할 것을 읽고 번개펀치나 암해머를 누릅니다.</li>
+      <li>씨뿌리기와 대지의힘으로 메타그로스의 HP를 80% 깎습니다. 여기서 쓰러뜨리지 못한 점까지 이용합니다.</li>
+      <li>메타그로스가 이상해꽃에 통하는 기술을 치든, 대검귀 교체를 읽고 행동하든 메타몽으로 교체하는 것이 안정적입니다.</li>
+    </ol>
+    <p>결과적으로 상대 메타그로스는 HP가 90% 깎이고, 이쪽은 모든 포켓몬이 거의 다치지 않은 채 구애스카프를 든 메가메타그로스가 필드에 있습니다. 압도적인 우세입니다.</p>
+    <p>정말 이대로 되느냐는 의문에 작성자는 "된다. 되지 않으면 챔피언 클래스까지 갈 수 없다"고 답합니다.</p>
+  </div>
+  <div class="step">
+    <h3>누리레느가 왜 물러나는가: 엽록소일 가능성</h3>
+    <p>이상해꽃과 누리레느의 대면에서 누리레느가 교체하는 이유는 엽록소 이상해꽃일 가능성이 있기 때문입니다. 요점은 <b>그 가능성을 0으로 만들지 않는 것</b>입니다. 메가 후보가 3마리인 데다 하마돈과 리자몽이 있으면 상대는 그 가능성을 고려합니다. 시간을 조금 쓴 뒤 이상해꽃을 내면, 누리레느가 부담스러워 억지로 이상해꽃을 낸 것처럼 보입니다. 가능성이 조금이라도 있으면 상대는 교체합니다. 그래서 이 장면도 수 읽기 싸움이 아니라 정석으로 작동합니다.</p>
+  </div>
+  <div class="step">
+    <h3>망나뇽전: 하마돈</h3>
+    <p>상대는 하마돈에게 망나뇽을 뚫을 수단이 없다고 전제해 에어슬래시를 연타합니다. 그 사이 스텔스록을 깔고 얼음엄니로 망나뇽을 쓰러뜨린 뒤 이상해꽃으로 마무리합니다. 자세한 내용은 하마돈 카드에 적었습니다.</p>
+  </div>
+</div>
+<p style="margin-top:12px">원문에는 이 밖에도 정석이 많지만 전부 쓰면 지나치게 길어져 생략했다고 합니다.</p>
+
+<h2>연구: 지는 것</h2>
+<ul>
+  <li>작성자는 연구를 <b>지는 것</b>이라고 정의합니다. 위의 정석도 패배에서 나왔습니다.</li>
+  <li>처음에는 메타그로스에게 씨뿌리기를 넣은 뒤 대검귀로 교체하는 것을 안정 행동으로 삼았습니다. 메타그로스는 그것을 읽고 기술을 쳤고, 같은 일이 여러 번 되풀이됐습니다. 여기서 이상해꽃을 그대로 두는 것이 무모한 행동이 아니라 안정 행동이라는 결론이 나왔습니다.</li>
+  <li>상대의 행동을 예측할 수 있을 때까지 대전을 반복하는 것, 이것이 작성자가 말하는 연구입니다.</li>
+  <li>정해진 우세 상황까지 정석으로 끌고 갈 수 있으면 승률은 올라갑니다. 다만 그것은 스스로 만들어야 하며, 이 글을 읽는다고 똑같이 할 수는 없습니다.</li>
+  <li>새 포켓몬이 추가되면서 정석이 다시 쓰였고, 작성자 자신도 현재 하이퍼 클래스를 벗어나지 못하고 있다고 합니다. 처음부터 정석을 찾기 위해 지는 것을 즐겁게 여기느냐 지루하게 여기느냐가 갈림길로 보인다고 합니다.</li>
+</ul>
+
+<h2>운 요소를 최대한 줄이는 노력</h2>
+<ul>
+  <li>이기는 요령으로 <b>자기보다 레이트가 낮은 실황 방송을 보는 것</b>을 권합니다. 지는 방식을 이해하기 쉽기 때문입니다. 자기 패배는 상대 탓이나 운 탓으로 돌리기 쉬워 냉정하게 분석하지 못합니다.</li>
+  <li>그들이 자주 듣는 말은 "왜 그 포켓몬을 선출했어?"입니다. 이것을 없애지 않으면 정석이 성립하지 않습니다.</li>
+  <li>승리 플랜을 통과시키기 위해 나머지 포켓몬을 고릅니다. 이 파티에서는 이상해꽃이 엽록소로 보이게 하는 리자몽이 알기 쉬운 예입니다. 모든 포켓몬에 이유가 있어야 합니다.</li>
+</ul>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-5 싱글배틀, 챔피언 클래스 <b>127위</b>, 최종 레이트 <b>2433.014</b>입니다. 트레이너 이름은 "キタバタケ"입니다.</li>
+  <li>작성자는 "포켓몬 대전을 모든 사람에게"라는 이념으로 이 게임을 개발해 줘서 무척 기쁘다고 했습니다.</li>
+  <li>처음 대전한 작품은 썬·문이었고, 이 게임만 계속 즐겼다고 합니다. 그때의 대전을 챔피언스에서 다시 할 수 있게 됐고, 어릴 때처럼 돈을 들이지 않아도 됩니다. 그러면서 이길 수 있다면 더욱 즐겁다고 했습니다.</li>
+  <li>게임이 가장 즐거웠던 때는 아무것도 없던 어린 시절이라고 생각하며, 그때로 돌아가 즐길 수 있다는 것을 전하고 싶어 무과금으로 이길 수 있다는 이 글을 썼다고 합니다.</li>
+  <li>게임을 유지하려면 돈이 필요하고 자선 사업이 아니라는 것도 알고 있지만, 무과금으로 이기는 사람이 늘어나는 것은 좋은 일이라고 봅니다.</li>
+  <li>궁금한 점이나 "이 포켓몬으로 이기고 싶은데 잘 모르겠다"는 질문은 시간이 되는 한 답하겠다고 했습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>정석 (定石)</dt><dd>정해진 우세 상황까지 끌고 가는, 반복 검증한 운영 순서</dd>
+  <dt>연구 (研究)</dt><dd>상대 행동을 예측할 수 있을 때까지 져 가며 대전을 반복하는 것</dd>
+  <dt>몰아넣기 (詰ませ)</dt><dd>상대가 더는 뚫지 못하는 상태로 만드는 것</dd>
+  <dt>켄키바나 (ケンキバナ)</dt><dd>대검귀+이상해꽃</dd>
+  <dt>사잔그로스아시레 (サザングロスアシレ)</dt><dd>삼삼드래·메타그로스·누리레느</dd>
+  <dt>카바리자 (カバリザ)</dt><dd>하마돈+리자몽</dd>
+  <dt>택 (択)</dt><dd>수 읽기 싸움</dd>
+  <dt>받이 루프 (受けループ)</dt><dd>받이 포켓몬으로 교체를 돌려 이기는 파티</dd>
+  <dt>먼슬리 (マンスリー)</dt><dd>월간 대회</dd>
+  <dt>매혹의보이스 (みわくのボイス)</dt><dd>확인 필요. 게임 화면의 일본어 이름을 옮긴 표기입니다.</dd>
+</dl>
+
+<footer>원문: <a href="https://note.com/kiz_z98745/n/nf5f814eb9431">note.com/kiz_z98745 (M-5)</a>. 메가 전 실수치·포인트·PP는 원문 스크린샷과 대조했고, 메가 후 실수치는 계산값입니다. 순위·레이트는 pokedb 기록입니다.</footer>
+</div>
+</body>
+</html>
