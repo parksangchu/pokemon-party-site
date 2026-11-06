@@ -1054,5 +1054,23 @@
   "status": "ok",
   "file": "parties/winday77-M7-party.html",
   "at": "2026-11-06T01:14:36"
+ },
+ "https://9ma02.hatenablog.com/entry/2026/11/06/005907": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/9ma02-M7-party.html",
+  "at": "2026-11-06T10:04:51"
+ },
+ "https://nine-poke.hatenablog.com/entry/2026/11/06/000236": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/nine-poke-M7-party.html",
+  "at": "2026-11-06T10:05:33"
+ },
+ "https://note.com/magic_okapi2877/n/nc8b78b9d3165": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/mameme-M7-party.html",
+  "at": "2026-11-06T10:08:53"
  }
 }
