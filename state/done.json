@@ -1078,5 +1078,17 @@
   "status": "ok",
   "file": "parties/treasure-M7-party.html",
   "at": "2026-11-06T11:12:45"
+ },
+ "https://csunny.hatenablog.com/entry/2026/11/06/115720": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/csunny-M7-party.html",
+  "at": "2026-11-06T17:27:15"
+ },
+ "https://fukada1215.hatenablog.com/entry/2026/11/06/122337": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/fukada1215-M7-party.html",
+  "at": "2026-11-06T17:27:42"
  }
 }
