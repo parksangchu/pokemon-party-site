@@ -1096,5 +1096,17 @@
   "status": "ok",
   "file": "parties/daisuke-poke-M7-party.html",
   "at": "2026-11-06T22:56:09"
+ },
+ "https://brutal2832025.hatenablog.jp/entry/2026/11/06/225129": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/brutal2832025-M7-party.html",
+  "at": "2026-11-07T00:16:02"
+ },
+ "https://pokesol.app/u/altan/articles/1b10262a740b00f0": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/altan-M7-party.html",
+  "at": "2026-11-07T00:16:53"
  }
 }
