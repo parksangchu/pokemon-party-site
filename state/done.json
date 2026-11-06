@@ -1090,5 +1090,11 @@
   "status": "ok",
   "file": "parties/fukada1215-M7-party.html",
   "at": "2026-11-06T17:27:42"
+ },
+ "https://daisuke-poke.hatenablog.jp/entry/2026/11/06/185621": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/daisuke-poke-M7-party.html",
+  "at": "2026-11-06T22:56:09"
  }
 }
