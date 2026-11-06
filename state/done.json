@@ -1072,5 +1072,11 @@
   "status": "ok",
   "file": "parties/mameme-M7-party.html",
   "at": "2026-11-06T10:08:53"
+ },
+ "https://yakkun.com/bbs/party/n9026": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/treasure-M7-party.html",
+  "at": "2026-11-06T11:12:45"
  }
 }
