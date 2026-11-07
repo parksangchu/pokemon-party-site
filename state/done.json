@@ -1126,5 +1126,17 @@
   "status": "ok",
   "file": "parties/carbon-poke-M6-party.html",
   "at": "2026-11-07T17:26:50"
+ },
+ "https://yinyangpoke.hatenablog.com/entry/2026/11/07/171953": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/yinyangpoke-M7-party.html",
+  "at": "2026-11-07T19:32:30"
+ },
+ "https://note.com/mi_mori_hawksfan/n/n61d115ad5f94": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/mi_mori_hawksfan-M7-party.html",
+  "at": "2026-11-07T19:33:25"
  }
 }

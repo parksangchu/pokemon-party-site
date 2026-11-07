@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>momo M-7 63위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-grass:#4fa83d; --t-flying:#6f9fe0; --t-electric:#e0b21a; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>momo의 시즌 M-7 최종 63위 파티: 허격(虛擊) 대면주의</h1>
+  <p class="lede">일본 유저 momo(트레이너 이름 badboy proud)의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 원제는 「虚撃対面主義」이고, 글은 "전쟁이다. 준비, 땅 하고 정면으로 싸울 거라고 생각했냐?"라는 문장으로 시작합니다. 선출 화면에서 상대가 떠올리는 정석 운영(겉, オモテ)을 역이용해, 상대 선출이 어긋나게 만들고 이쪽이 연구해 둔 의외의 수(속, ウラ)로 대면 승부를 거는 파티입니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>63위</b></div>
+    <div class="chip">최종 레이트<b>2365.798</b></div>
+    <div class="chip">시즌 / 룰<b>M-7 / 싱글</b></div>
+    <div class="chip">기간<b>2026.10.07 ~ 11.04</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 막대와 오른쪽 숫자가 포인트이고, 그 왼쪽 숫자가 실수치입니다. 분홍색은 성격 상승 보정, 파란색은 하락 보정입니다. 원문 이미지는 결과 화면·팀 화면·대전 장면뿐이고 스테이터스 화면이 없어, 실수치와 포인트는 본문 텍스트 기준입니다(6마리 모두 포인트 합계 66, 실수치 계산과 일치). 메가진화 전 실수치는 원문에 없어 같은 포인트·성격으로 계산했고, PP는 원문에 없어 적지 않았습니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10008.png" alt="" loading="lazy"><b>히트로토무</b></td><td>부유</td><td>먹다남은음식</td><td>조심</td><td>10만볼트 / 오버히트 / 나쁜음모 / 방어</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/908.png" alt="" loading="lazy"><b>마스카나</b> ♂</td><td>변환자재</td><td>생명의구슬</td><td>조심</td><td>파워젬 / 파동탄 / 리프스톰 / 속임수</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/445.png" alt="" loading="lazy"><b>한카리아스</b> ♂</td><td>까칠한피부</td><td>구애스카프</td><td>명랑</td><td>지진 / 역린 / 암석봉인 / 독찌르기</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10038.png" alt="" loading="lazy"><b>메가팬텀</b> ♀</td><td>저주받은바디 → 그림자밟기</td><td>팬텀나이트</td><td>차분</td><td>섀도볼 / 에너지볼 / 아픔나누기 / 쾌청</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/700.png" alt="" loading="lazy"><b>님피아</b> ♂</td><td>페어리스킨</td><td>자뭉열매</td><td>조심</td><td>하이퍼보이스 / 하품 / 매지컬플레임 / 전광석화</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png" alt="" loading="lazy"><b>메가보만다</b> ♂</td><td>위협 → 스카이스킨</td><td>보만다나이트</td><td>고집</td><td>난동부리기 / 지진 / 용의춤 / 날개쉬기</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>들어가며</h3>
+    <p>작성자는 "길고 꽤 어렵다"고 먼저 경고합니다. 이 글은 이전 글(<a href="https://note.com/mi_mori_hawksfan/n/n4441cd3645b8">note 링크</a>)을 전제로 진행하므로, 개체 소개만 볼 사람이 아니라면 그 글을 꼭 먼저 읽으라고 합니다.</p>
+  </div>
+  <div class="step">
+    <h3>이론부터 세운다</h3>
+    <p>파티를 짤 때는 무엇보다 "이론과 함께 죽는 것"이 중요하고, 패배도 이론대로여야 한다고 봅니다. 이론상 대책이 얇은 곳에 지는 것은 괜찮지만, 이기도록 짠 상대에게 지는 것은 안 된다는 뜻입니다.</p>
+    <ul>
+      <li>목표는 최상위, 한 자릿수 순위였습니다(본인은 "안 됐습니다~"라고 덧붙입니다). 그러려면 현재 최상위 플레이어들을 이길 이론을 반드시 갖춰야 합니다.</li>
+      <li>최상위 플레이어들은 기본 대전 흐름이 "정석(겉)인 것" 자체에 큰 자부심을 갖고 있습니다. 작성자는 이것을 거꾸로 크게 이용하기로 했습니다.</li>
+      <li>즉 "환경의 정석 운영을 철저히 고찰하고, 채용한 의외의 수(속)와 맞물려 상대 선출을 무너뜨린 뒤, 이쪽이 유리한 대면 선출·대면 전개로 유도한다"에 전부 걸었습니다.</li>
+      <li>상대 선출이 무너지지 않았으면 채용한 개체의 기술로(개체는 의외, 기술 선택은 정석), 무너졌으면 눈앞 상황을 보지 않는 기술 선택으로(개체도 의외, 기술 선택도 의외) 싸우고, 고찰이 빗나간 판은 패배로 받아들이며 판수를 쌓습니다.</li>
+      <li>실전에서는 선출 화면에서 상대가 "결과론으로 대전을 처리하는 유형(속)"인지 "정직하게 3마리를 내는 유형(겉)"인지 가려, 선봉과 칠 기술을 정하고 한 판 단위의 반성은 하지 않습니다. 이것을 철저히 지켰습니다.</li>
+      <li>파티 안에 "예상 밖 요소 × 피하고 싶은 예상 내 요소"의 이중 구조를 여러 개 만들어, 상대가 대응에 쫓기다 원래 콘셉트를 못 쓰게 만드는 요소도 가능하면 넣고 싶었습니다.</li>
+      <li>랭크매치 운영도 지난번처럼 철저히 했습니다. 최상위 플레이어에게 파티 내용이 알려지지 않도록 시즌 막판에 레이트를 한꺼번에 올리는 방침을 택해, 2400대 플레이어가 나오기 시작할 무렵 2200대에 머물러 있었습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>막판 환경 고찰과 파티 기반 결정</h3>
+    <p>지난 시즌에는 리자몽Y·메가루카리오Z·메가망나뇽이 축인 대면 파티와, 메가메타그로스·메가갑주무사를 넣은 반대면·스토퍼 포함 스탠더드 파티가 상위를 차지했습니다.</p>
+    <ul>
+      <li>그래서 이번 시즌 막판 환경의 중심은 히트로토무, 그리고 "히트로토무가 강하다"는 논리를 축으로 한 구성이 될 것이라고 예상했습니다.</li>
+      <li>여기에 가장 강한 조합으로 <b>파워젬을 넣은 생명의구슬 마스카나 + 명랑 스카프 한카리아스</b>에서 출발했습니다. 당연히 본인도 히트로토무를 넣으므로, 남은 3자리는 메가 자리 + 1마리로 채우기로 했습니다. 이 조합은 막판에 파라블레이즈가 늘어날 것을 내다본 것이기도 합니다.</li>
+      <li>히트로토무가 강한 환경에서는 리자몽X가 약합니다. 히트로토무는 리자몽X에 약하지만, 히트로토무가 강하다는 것은 곧 리자몽X가 살아남기 어려운 환경이라는 뜻이기 때문입니다.</li>
+      <li>거꾸로 이론이 틀렸을 경우를 대비해 리자몽X 축 파티(리자몽X+누리레느+브리두라스)도 하나 더 준비해, 마지막 날 예상이 빗나가면 대응할 생각이었습니다. 하지만 끝까지 히트로토무 이론으로 싸울 수 있었고, 리자몽+브리두라스 구성을 실제로 상대해 보니 상대 시점에서 너무 허술해 전혀 쓸 마음이 들지 않았다고 합니다.</li>
+    </ul>
+    <p>"히트로토무가 강한 환경"이란, 히트로토무가 여러 턴 버틸 수 있는 상대 포켓몬이 강한 환경, 즉 리자몽Y·메가메타그로스·메가갑주무사·메가루카리오가 강한 환경입니다. 따라서 히트로토무·리자몽Y·메가메타그로스에 유리한 <b>파워젬·속임수 구슬 마스카나</b>와, 루카리오+스카프 대쓰여너나 상대 한카리아스를 모두 역할 범위에 넣는 <b>명랑 스카프 한카리아스</b>는 어떻게 해도 쓸모없어질 일이 없다고 판단했습니다.</p>
+  </div>
+  <div class="step">
+    <h3>히트로토무의 형태</h3>
+    <p>이론대로 히트로토무를 넣고, 로토무 자체를 대면에서 가장 강하게 쓸 수 있도록 나쁜음모·10만볼트·오버히트+1에서 출발해 마지막 한 자리를 방어로 정했습니다.</p>
+    <ul>
+      <li>방어의 주된 목적은 형태 오인 유도, 트릭룸·순풍 턴 어긋나게 하기, 무승부로 끌고 가기, 종합 내구 향상입니다.</li>
+      <li>"실질적으로 노력치 여유가 생긴다", "버티는 턴에 확실한 이득이 생긴다"는 장점이 특히 폼체인지 로토무들과 궁합이 매우 좋습니다.</li>
+      <li>히트로토무 단독이 이미 강하다는 이론으로 넣은 이상, "○○ 기술이 있어서 강하다"는 생각에 매달리지 않았습니다. 속임수나 도깨비불이 강하다는 생각에 얽매이지 않고, 히트로토무가 강하다는 전제로 기술을 골랐습니다(이론의 철저화).</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>남은 3자리 선정 기준</h3>
+    <p>상대가 중간 스피드·중간 내구·고화력 포켓몬(리자몽X나 메가메타그로스)을 편하게 쓰지 못하게 하고 싶었기 때문에, 히트로토무 외에 여러 턴 버티기만 하는 평범한 포켓몬은 넣을 마음이 전혀 없었습니다. 그래서 하마돈·아머까오·브리두라스·블래키·찌리배리·타부자고, 그 밖의 회복 기술을 가진 저화력 포켓몬은 먼저 제외했습니다.</p>
+    <ul>
+      <li>이런 포켓몬은 상대에게도 같은 포켓몬(하마돈·아머까오·브리두라스·블래키·찌리배리·타부자고, 그리고 누리레느)을 편하게 쓰게 해 주고, 무엇보다 상대의 전략, 즉 정보가 드러난 상태를 만들어 수 읽기를 정밀하게 따지는 걸 주무대로 삼는 겉 특화 최상위 플레이어의 이론 위에서 싸우게 되기 쉽습니다.</li>
+      <li>상대가 원래 약한 포켓몬을 강하게 쓰게 만드는 개체를 넣지 않으면, 사실상 이쪽이 사전에 고찰한 겉·속 대전 능력만으로 결정되는 판으로 끌고 갈 수 있습니다.</li>
+      <li>또 3번 이상 맞아야 쓰러지는 기술을 주고받는 전개는 되도록 피하고 싶었습니다. 급소 한 방에 승부가 좌우되기 때문입니다.</li>
+    </ul>
+    <p>작성자는 현 환경에서 급소가 패배로 직결되기 쉬운 이유를 구애머리띠·구애안경이 없다는 점에서 찾습니다. 이 도구들이 없으니 "역할 대상의 기술을 1.5발 분량 버틸 필요가 없는" 상황이 만들어졌다는 것입니다. 챔피언스에 나오지 않은 구애안경·구애머리띠는 사실상 사용자가 원하는 타이밍에 상대 예상을 벗어나 공격 한 발을 급소로 맞히는 것과 거의 같은 의미이고, 이것이 있으면 대전 구상 능력이 지금 이상으로 필요해지므로 초보자에게 맞지 않는다고 운영 측이 판단한 물건이라고 봅니다. 그 결과 만들어진 것이 급소가 승패를 크게 좌우하는 맞공격 환경입니다.</p>
+    <p>그렇다면 아예 급소를 맞는 게 상관없도록, 한 방에 쓰러지는 경우가 많은 포켓몬을 쓰는 선택 자체가 급소에 의한 운 패배를 압도적으로 줄일 수 있다고 생각했습니다. 이것을 실천한 것이 M-5의 「격정 확신범 스탠더드」(<a href="https://note.com/mi_mori_hawksfan/n/n71dc8ad1aee8">note 링크</a>)였습니다.</p>
+  </div>
+  <div class="step">
+    <h3>메가팬텀 확정</h3>
+    <p>지금까지의 3마리(마스카나·한카리아스·히트로토무)만으로는 상대가 패리퍼·브리두라스·대짱이를 내기만 해도 판이 끝나 버립니다. 그래서 개량판 "ガチ破壊(확인 필요)" 차분 HP·특방 기반, 아픔나누기·쾌청·에너지볼 메가팬텀을 확정했습니다.</p>
+    <ul>
+      <li>패리퍼의 스카프 비 하이드로펌프 + 쾌청 상태 하이드로펌프를 버티고, 아픔나누기로 대면에서 처리할 수 있습니다. 완전한 대응입니다.</li>
+      <li>파티 축에서 대책이 얇아진 하마돈+메가킬라플로르+1마리에 대해 주로 깎는 역할 또는 마무리 역할을 맡깁니다. 선봉 마스카나 + 스카프 한카리아스 + HP·특방 메가팬텀으로 이 상대를 봅니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>남은 2자리: 님피아 + 메가보만다</h3>
+    <p>히트로토무 이론을 쓰는 메가 자리·일반 자리 후보로는 "루카리오+대쓰여너", "하마돈+메타그로스" 등이 있었습니다. 하지만 멈추고 싶지 않은 상대에 막혀 버리는 루카리오·메타그로스의 어중간한 성능을 보완할 스카프 대쓰여너는, 이번에 스카프를 한카리아스에 쓰기 때문에 준비할 수 없었습니다.</p>
+    <p>그래서 "대쓰여너 없이도 정리되는 이론이면서 다른 조합에 지지 않는 축"으로 <b>중간 내구·화력 있는 하품·자뭉열매 님피아 + 메가보만다</b>를 넣었습니다. 메가보만다는 대쓰여너 기반 파티에 선출 화면에서 완전히 우위에 설 수 있다는 의미도 있고, 겉보기로 한카리아스+님피아 전개를 주장할 수 있는 것도 장점입니다.</p>
+  </div>
+  <div class="step">
+    <h3>유도가 일어난다</h3>
+    <p>6마리를 나란히 놓으면 선출 화면에서 상위 플레이어들이 좋아하는 정석 구도를 다음처럼 주장할 수 있습니다.</p>
+    <ul>
+      <li>마스카나·보만다·히트로토무 중심의 교체전 파티</li>
+      <li>한카리아스·님피아 중심의 스텔스록·하품 전개 파티</li>
+      <li>팬텀·님피아 중심의 메가팬텀 축</li>
+      <li>독압정 팬텀 + 메가한카리아스Z + 님피아 중심의 전개 파티</li>
+    </ul>
+    <p>이 겉 구성이 만드는 압박이 마스카나의 생명의구슬, 한카리아스의 구애스카프, 님피아의 형태, 히트로토무의 먹다남은음식을 가려 줍니다.</p>
+    <p>여기가 "속의 이론"의 핵심입니다. 6마리 중 3마리 선출에서 선출이 무너지면 대부분의 사람은 "가장 믿을 수 있는 승리 패턴, 재현 가능한 마무리 수순을 상정한 선출 또는 대면 선출"을 고릅니다. 기껏해야 "예상 중 가장 나올 것 같은 구성에 대한 답 선출"입니다. 어느 쪽이든 본인도 모르게 "겉의 이론으로 하는 대전"을 강요당하는 것입니다. 이후에는 이쪽이 고찰한 속 기반 대면 파티의 판을 실제로 하면 됩니다.</p>
+    <p>완성형에 가까운 속 이론 기반 파티는 상위권과도 중견층과도 선출 자체의 사고 부담이 크게 다르지 않게 판을 돌릴 수 있다는 점도 장점입니다. 사고 회로 부담이 적으면 그대로 단단한 멘탈로 이어지고, 승률이라는 숫자로 나타난다고 합니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 히트로토무 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.479</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10008.png" alt="" loading="lazy">히트로토무</h3>
+    <span class="types"><span class="type" style="background:var(--t-electric)">전기</span><span class="type" style="background:var(--t-fire)">불꽃</span></span>
+    <div class="meta"><span>도구 <b>먹다남은음식</b></span><span>특성 <b>부유</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">157</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">134</span><span class="bar"><i style="width:21.875%"></i></span><span class="p">7</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">151</span><span class="bar"><i style="width:40.625%"></i></span><span class="p">13</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">134</span><span class="bar"><i style="width:21.875%"></i></span><span class="p">7</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">113</span><span class="bar"><i style="width:21.875%"></i></span><span class="p">7</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-electric)">전기</span>10만볼트</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>오버히트</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>나쁜음모</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>방어</div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>이론의 중심입니다.</li>
+    <li>울퉁불퉁멧을 들었을 가능성을 보여 상대 마스카나가 트리플악셀을 치지 못하게 하면서, 한카리아스로 마스카나에 돌격하는 상황을 만듭니다. 아픔나누기·도깨비불을 가졌을지도 모른다는 가능성으로 무리한 물리 포켓몬 전개 선출도 허용하지 않습니다(실제 기술은 아님).</li>
+    <li>특정 기술을 받으러 교체로 들어가는 윤활유 같은 존재가 "파티 안에 히트로토무밖에 없도록" 만들어, 상대가 히트로토무를 무시하지 못하게 합니다.</li>
+    <li>실전에서 오버히트는 생각보다 적게 쳐서 예상보다 승률을 떨어뜨리지 않고 싸웠다고 생각했는데, 마지막 판에서 제대로 빗나가 무승부가 됐다고 합니다.</li>
+    <li>그 마지막 판을 포함해, 변덕쟁이 스코빌런과의 운 싸움에서 불리하게 굴렀을 때 방어가 판을 무승부로 만들어 주기도 한 점이 가장 든든했습니다. 변덕쟁이 스코빌런에게는 "승리를 내주지 않는 정도"면 레이트 시스템 경쟁·환경 측면에서 충분히 이긴 것이라고 생각했습니다.</li>
+    <li>히스이 대검귀를 의식한다면 스피드 라인을 확실히 늘리는 편이 좋습니다. M-7 막판 환경에서는 실수치 특공 154·스피드 119가 있으면 히스이 대검귀를 히트로토무 선출 때 무시해도 된다고 한때 판단했지만, 비슷한 사고를 하는 상위 플레이어가 스카프 대검귀를 내면 매우 불쾌하기 때문에 이번에는 무시하지 않는 방향으로 형태를 정했습니다(한카리아스 항목에서도 다룸).</li>
+  </ul></div>
+</article>
+
+<!-- 2. 마스카나 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.908</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/908.png" alt="" loading="lazy">마스카나 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-grass)">풀</span><span class="type" style="background:var(--t-dark)">악</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>변환자재</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">155</span><span class="bar"><i style="width:12.5%"></i></span><span class="p">4</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">117</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">146</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">173</span><span class="bar"><i style="width:93.75%"></i></span><span class="p">30</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>파워젬</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>파동탄</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>리프스톰</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>속임수</div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>작성자의 표현으로 "절대 대면 게임 제작위원회 회장", "속 전술의 왕"입니다. 개인적으로 마스카나 상대로 가장 승률이 나오는 건 스카프 한카리아스 선봉 역린이라고 생각할 만큼, 정석 대전을 하지 않을 때의 결정력이 지나치게 높은 포켓몬이라고 합니다.</li>
+    <li>망나뇽·한카리아스와의 대면에서는 겉보기로 트리플악셀을 칠 것처럼 압박하고, 실제로는 파동탄을 쳐서 교체로 들어오는 브리두라스를 기능 정지시킵니다.</li>
+    <li>무엇보다 "구슬 번개펀치가 있을 것 같은 겉모습"으로, 물 타입에서 아머까오로 교체하는 정석 구상을 허용하지 않습니다. (번개펀치·트리플악셀은 실제 기술 구성에 없습니다.)</li>
+    <li>상대 선봉이 루카리오일 때는 "교체전 파티처럼 보이는 겉모습"을 역이용해, 상대 루카리오의 진공파·러스터캐논·랭크업 기술에 맞춰 밑에서(늦게) 구슬 파동탄을 치는 구상으로 선출을 짜므로 루카리오가 있는 파티에도 선봉으로 냈습니다. 전법 자체는 허술하지만, 이 선출이 얼마나 성가신지는 상위권이라면 모두 알 것이라고 합니다.</li>
+    <li>마스카나의 공격을 다 버틸 것 같은 하마돈 상대로 유일하게 압도적인 승률을 내는 것이 구슬 리프스톰입니다. 신중 HP·특방 풀 배분 하마돈을 75% 확률로 쓰러뜨리기 때문입니다.</li>
+    <li>이렇게 수많은 "어쩔 수 없이 선봉으로 낸 하마돈"과 "선출에서 이겼다는 얼굴의 브리두라스"를 부숴 왔습니다.</li>
+    <li>"호시노 씨!! ミラコブリ(확인 필요)는 안 돼도 마스카나는 괜찮은 건가요!?"라는 농담으로 끝맺습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 한카리아스 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.445</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/445.png" alt="" loading="lazy">한카리아스 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>구애스카프</b></span><span>특성 <b>까칠한피부</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">183</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">182</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">117</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">90</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">105</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">169</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>역린</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>암석봉인</div>
+      <div class="move"><span class="type" style="background:var(--t-poison)">독</span>독찌르기</div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>"총알받이(鉄砲玉)", "이론 포기의 왕"이라고 소개합니다.</li>
+    <li>한카리아스를 파티에 넣지 않으면 애초에 포켓몬 챔피언스라는 게임을 할 수 없다고 봅니다. 특히 메가한카리아스Z가 나와 고위력 특수 불꽃 기술을 얻은 지금은 가장 존재를 허락해서는 안 되는 포켓몬이 됐습니다. 그래서 상대 한카리아스를 가장 무시할 수 있는 포켓몬으로 한카리아스를 넣었습니다.</li>
+    <li>명랑 스카프 한카리아스의 가장 강한 점은, 스피드를 타협한 껍질깨기 거북왕, 비 파티의 대짱이, 스카프 한카리아스, 스카프 삼삼드래, 스카프 에써르를 단독으로는 무시할 수 있다는 것입니다.</li>
+    <li>작성자는 스카프 한카리아스를 쓴다면 명랑 말고는 있을 수 없다고 생각합니다. 고집 스카프 한카리아스를 쓰는 장점을 "좋아해서", "그냥" 말고 답할 수 있는 사람은 정말 적다고 합니다. 유일하게 그럴듯한 지적은 "개굴닌자를 쓰러뜨릴 수 있는 위력으로 역린을 칠 수 있다"는 것인데, 명랑으로도 돌격할 수 있게 파티를 짜는 편이 내구·플레이 조건이 까다로워지지 않으면서 훨씬 높은 수준의 대응력을 갖출 수 있다고 봅니다.</li>
+    <li>특히 앞에서 든 "대전 전에 무시할 수 있는 상대"의 수가 압도적으로 다릅니다.</li>
+    <li>스카프 한카리아스가 명랑이면 이를 앞지르려는 포켓몬의 스피드 라인을 크게 끌어올리게 만들 수 있고, 곧 상대 스피드 조작 포켓몬의 내구를 실질적으로 낮출 수 있습니다. 간단히 말해 명랑 스카프 한카리아스는 "조심 거북왕"의 "내구 배분"을 허용하지 않습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 메가팬텀 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.94</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10038.png" alt="" loading="lazy">메가팬텀 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span><span class="type" style="background:var(--t-poison)">독</span></span>
+    <div class="meta"><span>도구 <b>팬텀나이트</b></span><span>특성 <b>저주받은바디 → 그림자밟기</b></span><span>성격 <b>차분</b> (특방↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">159</span><span class="v">159</span><span class="bar"><i style="width:75%"></i></span><span class="p">24</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">76</span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">80</span><span class="v">100</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">153</span><span class="v">193</span><span class="bar"><i style="width:9.375%"></i></span><span class="p">3</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">139</span><span class="v up">161</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">137</span><span class="v">157</span><span class="bar"><i style="width:21.875%"></i></span><span class="p">7</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>에너지볼</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>아픔나누기</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>쾌청</div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>"하늘 맑아집니다~"라는 소개와 함께, 음침한 캐릭터가 이론적으로 밝은 캐릭터를 연기하면 정말 세계를 부순다는 좋은 예라고 합니다.</li>
+    <li>역할 대상에게 전승했습니다. 이번에는 파티 전체를 상대가 패리퍼·대짱이·브리두라스를 내기 쉽게 짜 두었기 때문에, 거의 그 3마리가 그대로 나왔고 팬텀 1마리로 완승했습니다.</li>
+    <li>패리퍼의 스카프 비 하이드로펌프 + 쾌청 하이드로펌프, 비 웨더볼 + 쾌청 웨더볼까지 버티고, 아픔나누기 후 섀도볼로 쓰러뜨립니다. 뒤에서 나온 브리두라스에게 다시 아픔나누기로 체력을 회복하며 재전개하고, 대짱이는 1턴에 쓰러뜨립니다. 이 파티에서 가장 완성도가 높은 개체였습니다.</li>
+    <li>하마돈+메가킬라플로르(+메타그로스)에도 선출하고 싶어서 스피드 라인을 크게 늘렸습니다. 실제로 하마돈+킬라플로르, 킬라플로르+메가망나뇽 등에 선출해 나온 상대를 크게 깎았으므로 정답이었다고 합니다.</li>
+    <li>원문에는 사진 갤러리(쾌청·에너지볼 사용, 대짱이 2마리에 효과가 굉장했다, 상대 브리두라스 쓰러짐 장면)가 이어집니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 님피아 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.700</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/700.png" alt="" loading="lazy">님피아 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>자뭉열매</b></span><span>특성 <b>페어리스킨</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">171</span><span class="bar"><i style="width:3.125%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">76</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">117</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">165</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">150</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">93</span><span class="bar"><i style="width:40.625%"></i></span><span class="p">13</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하이퍼보이스 <small>(스킨으로 페어리)</small></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>매지컬플레임</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>전광석화 <small>(스킨으로 페어리)</small></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>"하품과 불꽃 기술을 쓸 수 있고, 자뭉열매도 들 수 있고, 선공기도 있고, 아군이 메가진화할 수 있는 플라엣테"라고 소개합니다(본인도 "아니 그건 반칙이지"라고 덧붙입니다).</li>
+    <li>드닐레이브 상대를 포함해(풀죽음은 포기) 꽤 넓게 선출할 수 있고, 하품으로 상대 전개를 방해할 수 있습니다.</li>
+    <li>하마돈은 상대의 특수 물 기술이나 느린 하품 포켓몬에게 몇 턴 움직임을 허용해 상대 포켓몬을 강하게 쓰게 만들지만, 님피아는 상대 본체를 때리는 힘이 강합니다. 게다가 전광석화와 중간 내구를 함께 갖춰 급소(1.5발 분량)를 맞는 영향을 어느 정도 줄일 수 있습니다.</li>
+    <li>중간 내구 + 자뭉열매 + 전광석화로 앞의 상대를 쓰러뜨리면서 따라큐의 탈 특성을 벗길 수 있는 것도 장점입니다.</li>
+    <li>메가보만다와 궁합이 너무 좋아서, 대면 기반 선출을 하는데도 저절로 하품 → 메가보만다 흐름이 됩니다.</li>
+    <li>아쉽게도 상대 고집 메가보만다(공격 실수치 216)의 이판사판태클은 75% 확률로만 버팁니다. 다른 수치를 더 깎을 수 없어 눈물을 머금고 받아들였습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 메가보만다 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.373</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png" alt="" loading="lazy">메가보만다 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>보만다나이트</b></span><span>특성 <b>위협 → 스카이스킨</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">173</span><span class="v">173</span><span class="bar"><i style="width:9.375%"></i></span><span class="p">3</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">189</span><span class="v up">200</span><span class="bar"><i style="width:53.125%"></i></span><span class="p">17</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">100</span><span class="v">150</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">117</span><span class="v down">126</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">124</span><span class="v">134</span><span class="bar"><i style="width:75%"></i></span><span class="p">24</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">142</span><span class="v">162</span><span class="bar"><i style="width:68.75%"></i></span><span class="p">22</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>난동부리기 <small>(스킨으로 비행)</small></div>
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용의춤</div>
+      <div class="move"><span class="type" style="background:var(--t-flying)">비행</span>날개쉬기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>특방</dt><dd>겁쟁이 메가루카리오Z가 나쁜음모 후 치는 러스터캐논을 버팀</dd>
+    <dt>스피드</dt><dd>162: 스피드 상승 성격·풀 배분 에써르 앞지르기</dd>
+    <dt>공격</dt><dd>실수치 200 확보 (공격·특방·스피드 기반 배분으로 위 세 조건을 모두 양립)</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>난동부리기를 넣어, 이판사판태클 반동까지 계산해 보만다를 쓰러뜨리려는 누리레느 파티에 이론상 이길 수 있습니다. 실제로 깎인 킬라플로르 + 철저광선 메가루카리오Z + 풍선 누리레느를 상대로, 두 번째 철저광선(루카리오는 반동으로 쓰러짐)에 HP 풀에서 용의춤을 맞춰 쌓고 남은 상대를 난동부리기로 마무리한 판도 있었습니다. 상대 시점에서는 "이판사판태클 반동까지 넣으면 잡을 수 있다"고 봤지만, 실제로는 난동부리기라서 끝난 판입니다.</li>
+    <li>날개쉬기는 장면마다의 정답을 용의춤으로 만들기 위한 기술이라고 봅니다. 예를 들어 타부자고 상대로 뒤에서 이어 보만다를 전개했을 때, 용의춤을 두 번 쌓는 전개를 수 읽기 싸움으로 만들지 않으려면 마무리 수순에 날개쉬기가 필요합니다.</li>
+    <li>메가보만다 자체는 전혀 강하지 않지만, 이론으로 보조해 주면 매우 우수한 대면 말로 기능합니다. 흔히 대면 파티의 메가보만다는 약하다고 하지만, 오히려 대면 파티가 아닌 곳의 메가보만다야말로 정보가 드러난 상태에서 수 읽기를 계속 맞춰 당하는 최악의 성능이고, 기술이 노린 상대에게 맞지 않는 불리한 전개가 생기기 쉽다고 봅니다. 역시 마지막 한 마리로 남는 메가보만다가 이상적입니다.</li>
+    <li>플레이어가 메가보만다의 성질에 휘둘리느냐, "그 플레이어이기에 빛나는 메가보만다"로 만들어 주느냐에 이 포켓몬의 평가가 갈린다고 합니다.</li>
+  </ul></div>
+</article>
+
+<h2>부담스러운 상대</h2>
+<ul>
+  <li><b>메가팬텀과 드닐레이브</b>: 너무 위험해 "누구로 이기냐" 수준이라고 합니다. 특히 드닐레이브를 거듭 강조합니다. 맘모꾸리는 그나마 어떻게든 됩니다.</li>
+  <li>마지막 날에는 비 파티를 만나지 않아서, 팬텀을 물리형 루카리오 쪽으로 바꾸는 게 정답이었을 것 같다고 돌아봅니다. 「雷撃」(확인 필요, 대회 이름으로 추정)에서는 팬텀을 루카리오로 바꿔 사용했습니다.</li>
+</ul>
+
+<h2>결과와 소감</h2>
+<p>시즌 M-7 싱글배틀, 챔피언 클래스에서 최종 63위, 최종 레이트 2365.798로 마쳤습니다(트레이너 이름 badboy proud).</p>
+
+<h3>Q&amp;A</h3>
+<dl class="gloss">
+  <dt>겉·속(オモテ·ウラ)이 잘 이해가 안 됐어요</dt><dd>
+    <p>미안합니다, 나도 잘 모릅니다. 대부분의 플레이어가 직관적으로 진행하고 싶은 대전 계획이 겉이고, 그 겉을 무너뜨리는 선택이 속입니다. 이른바 "어긋나게 하기(ずらし)"로 이해해도 되지만, 그것을 더 파고들어 6→3 선출에서 각 겉·속, 기술 구성, 선출 상정의 경로를 늘려 이론적으로 어긋나게 하는 것이 "속을 이론으로 쓰는 것"이라고 합니다. 쉽게 말하면 성실하지 않은 포켓몬 대전 방식이라고 합니다.</p>
+    <p>예를 들어 겉이 버린 속이 나오면 지는 경우, 즉 리자몽으로 마스카나에 돌격했다가 파워젬을 맞고 지는 경우가 있습니다. 리자몽 쪽은 겉의 이론으로 돌격해 속의 파워젬에 진 것입니다. 하지만 마스카나의 파워젬도 겉에 넣고 파티를 짠 뒤에 선봉 리자몽을 낸다는 사람도 있을 겁니다. 그런 사람이 "물론 모든 마스카나에 대비할 수단은 있지만, 완전 대응이 거의 불가능한 이 6마리 구성에서 날아오는 선봉 파워젬 마스카나는 버린 것뿐"이라고 말할 수밖에 없는 구성으로 만드는 것이 속의 이론으로 싸우는 것입니다.</p>
+    <p>그 밖에도 대비하기 어려운 요소가 많아서 마스카나에는 어쩔 수 없이 돌격할 수밖에 없는 선출을 짜게 되는 패턴으로 유도하는 식입니다. 함정을 파티 안에 여러 개 넣어 두고, 하나만 걸려도 승률이 기울도록 설계했다고 합니다.</p>
+    <p>이판사판태클 반동까지 계산해 보만다를 보는 상대를 난동부리기로 마무리하는 것도 마찬가지입니다. 중요한 것은 "난동부리기 보만다가 강하다고 생각해서 쓰는" 것이 아니라, "이 구성에서 나오는 난동부리기 보만다는 어쩔 수 없다"고 생각하는 상대를 이기기 위해 난동부리기를 넣었다는 점입니다.</p></dd>
+  <dt>하품 님피아 + 메가보만다가 잘 안 돼요</dt><dd>
+    <p>"뭐든지 다 되도록 짠 게 아니라고!"라고 답합니다. 이 파티 님피아의 하품은 선봉 + 스카프 한카리아스 + 님피아로 선출했을 때 번치코의 랭크업 발판이 되지 않기 위해서만 넣은 기술이고, 그 밖에 치는 것은 주 전술이 아니었습니다.</p>
+    <p>처음에는 보만다 자리가 앱솔이었는데, 환경이 대면 쪽으로 기울어서 그럼 보만다로 하자고 바꿨습니다. 물론 한카리아스에도 스텔스록은 없습니다. 하품을 치는 전개로 가서 상대가 일부러 잠들고, 결국 가장 빨리 깨어나는 33%를 패배의 게임으로 만드느니, 솔직하게 하이퍼보이스 + 뒤 포켓몬의 기술 범위에 넣는 편이 승률이 나온다고 봅니다. 유리한 대면이라면 오히려 "하품 + 희망사항으로 반무한으로 버티는 님피아"인 척하며 하이퍼보이스를 치는 편이 낫다는 이론입니다.</p></dd>
+  <dt>저도 이런 속 이론 같은 행동을 자주 하는데, 무시당하고 돌격당해서 져요</dt><dd>
+    <p>당연하다고 답합니다. 이른바 속은 때로 "정면으로 지러 가는" 기술 선택이니, "이 행동을 자주 한다"면 자주 질 것이라고 합니다.</p>
+    <p>승률이 나오는 속 기반 구상이니까 속의 행동이 통하면 이기고 안 통하면 져 두는 것이 가능한 것이고, 무엇이 겉인지 다 알지 못한 채 어설프게 속의 기술을 쳐도 승률은 나오지 않습니다. 하나가 통해도 남은 2마리로 순리대로 역전당할 수 있기 때문입니다. 반대로 2마리로 역전하는 말로는 나쁜음모 히트로토무가 매우 우수하다고 합니다. 일단 상대 상정에서 제외되기 때문입니다.</p>
+    <p>정리하면, 불만이 나온다는 것은 이론과 함께 죽지 못했거나 패배 수가 많다는 것이고, 패배 수가 많다는 것은 다음 중 하나라고 합니다.</p>
+    <ul>
+      <li>쓸모없는 속 이론이다.</li>
+      <li>겉 플레이에서 "어쩔 수 없다"며 밀어붙일 라인을 가려내지 못했다.</li>
+      <li>겉을 완전히 꿰뚫어 보지 못했다.</li>
+    </ul>
+    <p>그러므로 단순히 게임이나 환경에 대한 이해가 부족한 것이고, 성실하게 겉만으로 된 파티를 끝까지 만들어 겉만으로 이기려다 패배를 쌓는 편이 나은 단계라고 합니다. 작성자 본인도 매 시즌 반드시 이런 겉 플레이에 매달려 패배를 쌓는 시행착오를 한다고 합니다. 그때 생긴 수 읽기 싸움을 하나하나 기억해, 애초에 그 수 읽기가 생기지 않도록 전술을 짜기 위해서입니다. 다만 그런 이상적인 것은 없으니, 통하지 않으면 바로 지는 선택을 상대가 잘 틀려 주게 해서 통과시키는 전술을 쓰고 있는 것이라고 합니다.</p></dd>
+</dl>
+
+<h3>마치며</h3>
+<ul>
+  <li>속 이론의 밑바탕에는 반드시 겉의 정답 플레이가 있습니다. 장면마다의 정답을 대전 전·구상 단계에서 이해할 수 있어야 비로소 속을 다룰 수 있습니다.</li>
+  <li>각 판에서 상대의 겉 플레이는 6:6 선출 화면이 뜬 순간 거의 다 꿰뚫어 봐야 하므로, 사고 처리 속도가 느린 사람에게 속까지 넣어 싸우는 것은 현실적이지 않다고 합니다. 거의 모든 최상위권(한 자릿수 단골)은 겉 플레이를 선출 화면에서 몇 초 만에 꿰뚫어 볼 수 있다고 생각하며, 멤버 한정 방송 화면 등을 보면 알 수 있다고 합니다.</li>
+  <li>10초 정도에 상대 3마리 패턴의 겉 플레이를 꿰뚫어 보고, 나머지 시간에 어떤 패턴의 게임으로 할지 정하는 경우가 대부분입니다. 선출 화면의 1분 30초를 어떻게 쓰느냐, 반대로 상대가 이상적으로 쓰지 못하게 어떻게 하느냐의 문제입니다.</li>
+  <li>결국 어떻게 포켓몬 대전이나 수 싸움을 피해 가느냐에 대한 이론일 뿐이라고 합니다. 원래 겉 플레이만으로 성립하는 파티가 이상적인 것은 틀림없지만, 급소 하나나 추가 효과 하나가 승률에 너무 크게 관여하는 환경인 것도 틀림없습니다.</li>
+  <li>그 증거로, 이 파티가 유리한 국면을 잡고도 가장 많이 지는 전개는 보만다로 날개쉬기를 치는 판이라고 합니다.</li>
+  <li>어디서 "이건 이제 어쩔 수 없다"고 할 것인가. 이 파티와 작성자에게 그것은 리자몽으로 마스카나에 돌격하는 전개도, 하마돈이 급소를 맞는 시행 횟수를 무시하는 전개도 아니라 "겉 플레이만으로 싸우는 것을 포기하는 것"이었다고 합니다. "'포켓몬 대전'은 다른 사람에게 시켜 두면 된다."</li>
+  <li>글 끝에서 작성자는 두 플레이어(サックー, 兎に角ぴりか)를 실명으로 강하게 비판합니다. 「雷撃」(확인 필요)이 끝나기 전에 마지막 날 대전 영상을 조회수 목적으로 공개해, 파티 내용이 거의 공개되지 않은 상태에서 형태가 드러날 위험을 떠안게 됐다는 이유입니다. 특히 한 영상에는 마지막 판 내용이 그대로 찍혀 님피아가 먹다남은음식이 아니고 히트로토무가 울퉁불퉁멧이 아니라는 사실이 많은 사람에게 알려졌다고 합니다. 작성자는 자신이 옳다고 주장하려는 게 아니라 그저 불쾌하다는 것이며, 서로 존중할 의사가 없는 상대이기에 이번에는 이름을 밝혔다고 적었습니다(원문은 욕설을 섞어 직설적으로 표현).</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>オモテ / ウラ</dt><dd>겉 / 속. 대부분의 플레이어가 직관적으로 따르는 정석 운영과, 그것을 무너뜨리는 의외의 선택</dd>
+  <dt>虚撃対面主義</dt><dd>제목. 허를 찌르는 공격으로 하는 대면주의 정도의 뜻</dd>
+  <dt>理屈と心中する</dt><dd>이론과 함께 죽는다. 세운 이론을 끝까지 따르고 그 결과를 받아들임</dd>
+  <dt>ヒトム / ペリラグブリ / カバフロル</dt><dd>히트로토무 / 패리퍼·대짱이·브리두라스 / 하마돈+킬라플로르</dd>
+  <dt>スカガブ / ガブニンフ / マスカマンダヒトム</dt><dd>스카프 한카리아스 / 한카리아스+님피아 / 마스카나·보만다·히트로토무</dd>
+  <dt>顔面○○</dt><dd>그 기술이 있을 것처럼 보이는 겉모습으로 상대를 압박함</dd>
+  <dt>FCロトム族</dt><dd>폼체인지 로토무들(히트·워시 등)</dd>
+  <dt>@1 / @3</dt><dd>남은 1자리 / 남은 3자리</dd>
+  <dt>確定3発 / 確定1発</dt><dd>3번 맞아야 확정으로 쓰러짐 / 한 번에 확정으로 쓰러짐</dd>
+  <dt>75%落ち / 25%切り耐え</dt><dd>75% 확률로 쓰러뜨림 / 25%만 빼고(75% 확률로) 버팀</dd>
+  <dt>ADSベース</dt><dd>공격·특방·스피드 중심 배분</dd>
+  <dt>起点回避</dt><dd>상대 랭크업의 발판이 되지 않도록 함</dd>
+  <dt>最速起き</dt><dd>잠듦 상태에서 가장 빠른 턴에 깨어남</dd>
+  <dt>ずらし</dt><dd>상대 예상을 어긋나게 하는 행동</dd>
+  <dt>メン限</dt><dd>멤버(유료 구독자) 한정 방송</dd>
+  <dt>ムラっけ</dt><dd>변덕쟁이(특성)</dd>
+  <dt>ガチ破壊 (확인 필요)</dt><dd>메가팬텀 형태 앞에 붙은 표현. 작성자의 이전 개체나 별칭으로 추정</dd>
+  <dt>ミラコブリ (확인 필요)</dt><dd>미라이돈·코라이돈·브리두라스 등의 줄임말일 가능성이 있으나 확인하지 못했습니다. 星野(호시노)도 누구인지 원문에 설명이 없습니다.</dd>
+  <dt>雷撃 (확인 필요)</dt><dd>문맥상 시즌 직후 열린 대회 이름으로 추정</dd>
+</dl>
+
+<footer>원문: <a href="https://note.com/mi_mori_hawksfan/n/n61d115ad5f94">【Single M-7 最終63位】虚撃対面主義 (note.com)</a>. 순위·레이트·기간·성별은 원문 결과 화면으로, 도구는 팀 이미지로 확인했습니다. 실수치와 포인트는 원문 본문 기준입니다.</footer>
+</div>
+</body>
+</html>
