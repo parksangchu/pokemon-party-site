@@ -1108,5 +1108,11 @@
   "status": "ok",
   "file": "parties/altan-M7-party.html",
   "at": "2026-11-07T00:16:53"
+ },
+ "https://wataame480.hatenablog.com/entry/2026/11/07/030804": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/wataame480-M7-party.html",
+  "at": "2026-11-07T12:20:37"
  }
 }
