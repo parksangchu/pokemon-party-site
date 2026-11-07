@@ -1138,5 +1138,17 @@
   "status": "ok",
   "file": "parties/mi_mori_hawksfan-M7-party.html",
   "at": "2026-11-07T19:33:25"
+ },
+ "https://nitro-charge.hatenablog.com/entry/2026/11/07/204043": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/nitro-charge-M7-party.html",
+  "at": "2026-11-07T21:38:34"
+ },
+ "https://chillchillchill.hatenablog.com/entry/M7Maw": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/maayaemiri-M7-party.html",
+  "at": "2026-11-07T21:39:55"
  }
 }
