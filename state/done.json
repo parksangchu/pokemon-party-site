@@ -1114,5 +1114,17 @@
   "status": "ok",
   "file": "parties/wataame480-M7-party.html",
   "at": "2026-11-07T12:20:37"
+ },
+ "https://note.com/goyahelmold831/n/n5418d28e6a30": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/goya-M7-party.html",
+  "at": "2026-11-07T17:26:03"
+ },
+ "https://carbon-poke.hatenablog.com/entry/2026/10/08/120000": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/carbon-poke-M6-party.html",
+  "at": "2026-11-07T17:26:50"
  }
 }
