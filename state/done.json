@@ -1168,5 +1168,23 @@
   "status": "ok",
   "file": "parties/naruhodo824-M7-party.html",
   "at": "2026-11-08T22:59:23"
+ },
+ "https://ryza808.hatenablog.com/entry/2026/11/04/192226": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/ryza808-M7-party.html",
+  "at": "2026-11-11T08:42:02"
+ },
+ "https://muu-poke.hatenablog.com/entry/2026/11/10/194638": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/muu-M7-party.html",
+  "at": "2026-11-11T08:42:34"
+ },
+ "https://pokesol.app/u/rimu/articles/35309bafdff1fa38": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/rimu-M7-party.html",
+  "at": "2026-11-11T08:45:45"
  }
 }
