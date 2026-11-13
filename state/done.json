@@ -1186,5 +1186,17 @@
   "status": "ok",
   "file": "parties/rimu-M7-party.html",
   "at": "2026-11-11T08:45:45"
+ },
+ "https://note.com/kata_luke15661/n/n6a3a9180813f": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/catharsis-M8-party.html",
+  "at": "2026-11-13T09:27:14"
+ },
+ "http://hydrangea1039.blog.fc2.com/blog-entry-28.html": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/hydrangea1039-M7-party.html",
+  "at": "2026-11-13T09:32:09"
  }
 }

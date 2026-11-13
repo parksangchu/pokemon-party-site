@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>카타르시스 M-8 한때 1위 바톤터치 파티 근황</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>카타르시스의 시즌 M-8 근황: 세계 최초 레이트 2000, 한때 1위</h1>
+  <p class="lede">일본 유저 카타르시스(カタルシス)의 note 글을 한국어판 용어 기준으로 정리했습니다. 지난 글에서 소개한 바톤터치 파티로 M-8 시즌 도중 세계에서 가장 먼저 레이트 2000에 도달하고 한때 1위에 올랐다는 근황과, 현재 환경에서 이 파티가 힘들어진 상대 분석을 담은 글입니다. 이번 글에는 개체별 배분·스크린샷이 없어 개체 카드는 만들지 않았습니다.</p>
+  <div class="result">
+    <div class="chip">최고 순위<b>1위 (한때)</b></div>
+    <div class="chip">최고 레이트<b>2000 (세계 최초 도달)</b></div>
+    <div class="chip">시즌 / 레귤레이션<b>M-8 / 진행 중</b></div>
+    <div class="chip">지난 시즌<b>M-7 230위</b></div>
+  </div>
+  <div class="note">순위·레이트는 원문 제목 기준입니다. 시즌이 진행 중이라 최종 기록은 아닙니다. 작성자 스스로 "이미 레이트가 녹기 시작했다"고 적었습니다.</div>
+</header>
+
+<h2>인사와 글의 취지</h2>
+<ul>
+  <li>지난 글까지 읽어 준 독자와 처음 읽는 독자 모두에게 감사를 전했습니다. 첫 글은 조회수가 2000회를 넘겨 매우 기쁘다고 했습니다.</li>
+  <li>이번 글의 내용은 제목과 조금 다르다고 미리 밝혔습니다. 제목은 눈길을 끌려고 붙인 것이라고 솔직하게 적었습니다.</li>
+  <li>지난 시즌 230위, 이번 시즌 세계 최초 레이트 2000·한때 1위를 기록한 지금이 가장 빛나는 순간이라고 생각해 글을 올렸다고 합니다.</li>
+  <li>앞으로는 다시 정체될 것으로 보고 있으며, 이미 레이트가 떨어지기 시작했다고 덧붙였습니다.</li>
+</ul>
+
+<h2>현재 환경 분석: 지난 시즌 바톤터치 파티가 힘들어진 상대</h2>
+<p>지난 시즌과 비교해, 지금 환경에서 지난 시즌의 바톤터치 파티로는 버겁다고 느끼는 상대 세 가지를 꼽았습니다.</p>
+<div class="steps">
+  <div class="step">
+    <h3>① 레드카드를 든 브리두라스</h3>
+    <ul>
+      <li>배틀 데이터베이스(사용률 통계)상 레드카드 채용률은 12.3%지만, 체감상 그보다 많다고 합니다.</li>
+      <li>원래도 일반 브리두라스에 약한 파티인데, 레드카드로 능력 상승을 쌓은 포켓몬을 강제 교체당하면서 더 힘들어졌습니다.</li>
+      <li>일단 어흥염을 부란다로 바꿨기 때문에, 부란다의 기세등등(つけあがる, 한국어판 명칭 확인 필요)으로 브리두라스를 돌파할 수는 있습니다. 실제로 이 방법으로 아마 한 번은 이겼다고 합니다.</li>
+      <li>레드카드 채용률은 앞으로 떨어질 것으로 보지만, 당분간은 힘들 것 같다고 했습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>② 따라큐</h3>
+    <ul>
+      <li>몰드류와 화염레오로 전혀 견제가 안 되고, 상대가 아무렇지 않게 따라큐를 낸다고 합니다. "내 글을 읽고 있는 건가" 하고 농담을 덧붙였습니다.</li>
+      <li>작성자의 해석: 메가진화 환경에서는 대부분 6마리 중 2자리를 메가진화 후보에 쓰므로, 나머지 4마리 중 2마리를 고를 때 결국 "이것저것 다 할 수 있는" 따라큐가 뽑히는 것 아닐까 합니다.</li>
+      <li>매직가드 란쿨루스로 어떻게든 해야 하나 고민 중이며, 좋은 대책이 있으면 알려 달라고 했습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>③ 메가보만다</h3>
+    <ul>
+      <li>지난 시즌 막바지에 조금 늘어난 느낌이었지만, 시즌 중에는 다소 줄었었기에 가볍게 보고 있었다고 합니다.</li>
+      <li>선봉으로 나오지만 않으면 위에서 철벽을 쌓을 수 있어 대처가 됩니다.</li>
+      <li>지난 시즌 초반에는 승기 엠페르트로, 상대 선봉 메가보만다의 위협(특성)에 반응해 특공을 올리는 방식으로 견제하려 했습니다.</li>
+      <li>드닐레이브를 빼고 (엠페르트를) 파티에 넣었던 시기도 있었다고 합니다.</li>
+      <li>선봉에서 펜드라와 마주치면 철벽과 방어 중 하나를 고르는 양자택일이 됩니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>그 밖의 생각과 소감</h2>
+<ul>
+  <li>지난 시즌 1위 유저의 방송 중에 매칭돼 한 번 이겼다고 합니다. 상대가 대책을 빼 두었을 때는 이 파티가 잘 통한다는 것을 실감했습니다.</li>
+  <li>M-8 시즌은 아직 20일 정도 남아 있습니다. 지금은 오히려 잘 통하지 않는 시기라고 보며, 환경의 대책이 느슨해질 때 쭉쭉 레이트를 올리고 싶다고 했습니다.</li>
+  <li>다만 정점은 조금 전까지였다고 생각해, 당분간은 글로 올릴 만한 일이 없을 수도 있다고 했습니다.</li>
+  <li>글이 올라오지 않으면 "레이트를 녹였구나" 하고 생각해 달라고 웃으며 마무리했습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>바톤 구축 (バトン構築)</dt><dd>바톤터치로 능력 상승을 넘겨 주는 파티</dd>
+  <dt>순간 1위 (瞬間1位)</dt><dd>시즌 도중 한때 1위에 오름(최종 순위 아님)</dd>
+  <dt>세계 최속 레이트 2000 (世界最速レート2,000)</dt><dd>전 세계에서 가장 먼저 레이트 2000에 도달함</dd>
+  <dt>레이트가 녹는다 (レートが溶ける)</dt><dd>연패로 레이트가 빠르게 떨어짐</dd>
+  <dt>꽂힌다 (刺さる)</dt><dd>환경의 대책이 부족해 파티·포켓몬이 잘 통함</dd>
+  <dt>대책을 자른다 (対策を切る)</dt><dd>특정 상대에 대한 대책을 파티에서 빼 둠</dd>
+  <dt>메가 자리 (メガ枠)</dt><dd>파티에서 메가진화 후보에 할당한 자리</dd>
+  <dt>기세등등 (つけあがる)</dt><dd>자신의 능력 상승 단계만큼 위력이 오르는 악타입 기술. 한국어판 명칭 확인 필요</dd>
+</dl>
+
+<footer>원문: <a href="https://note.com/kata_luke15661/n/n6a3a9180813f">note.com/kata_luke15661 「【シーズンM-8】世界最速レート2,000、瞬間1位」</a>. 원문에 스크린샷·개체 수치가 없어 본문 텍스트만 옮겼습니다.</footer>
+</div>
+</body>
+</html>
