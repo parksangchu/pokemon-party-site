@@ -1198,5 +1198,11 @@
   "status": "ok",
   "file": "parties/hydrangea1039-M7-party.html",
   "at": "2026-11-13T09:32:09"
+ },
+ "https://pokesol.app/u/saya_poke/articles/21fde78861f87e7d": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/saya_poke-M8-party.html",
+  "at": "2026-11-19T00:08:54"
  }
 }
