@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>가루도포케 M-7 60위 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-grass:#4fa83d; --t-flying:#6f9fe0;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul,ol{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul,.desc ol{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel .vs{font:600 12px var(--display);color:var(--accent);letter-spacing:.04em;margin-bottom:2px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0 0 6px}
+.sel p:last-child{margin-bottom:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>가루도포케의 시즌 M-7 최종 60위 파티</h1>
+  <p class="lede">일본 유저 가루도포케(ガルドぽけ, 트레이너 이름 いろP)의 글 「드래곤테일 보만다 + 킬가르도(竜尾マンダガルド)」를 한국어판 용어 기준으로 정리했습니다. 용의춤과 드래곤테일을 함께 든 메가보만다를 축으로, 맞대결과 받이 뚫기를 한 마리가 모두 해내게 해서 선출이 무너지는 판을 줄이는 것이 콘셉트입니다.</p>
+  <div class="result">
+    <div class="chip">최종 순위<b>60위</b></div>
+    <div class="chip">최종 레이트<b>2368.182</b></div>
+    <div class="chip">시즌 / 룰<b>M-7 / 싱글</b></div>
+    <div class="chip">기간<b>2026.10.07 ~ 11.04</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다. 한국어판 정식 명칭은 확인하지 못해 "포인트"로 적었습니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png" alt="" loading="lazy"><b>메가보만다</b> ♀</td><td>위협 → 스카이스킨</td><td>보만다나이트</td><td>명랑</td><td>이판사판태클 / 드래곤테일 / 날개쉬기 / 용의춤</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/970.png" alt="" loading="lazy"><b>킬라플로르</b> ♀</td><td>독치장</td><td>기합의띠</td><td>겁쟁이</td><td>오물폭탄 / 대지의힘 / 매지컬샤인 / 에너지볼</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy"><b>하마돈</b> ♂</td><td>모래날림</td><td>울퉁불퉁멧</td><td>장난꾸러기</td><td>지진 / 하품 / 스텔스록 / 게으름피우기</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/681.png" alt="" loading="lazy"><b>킬가르도</b> ♀</td><td>배틀스위치</td><td>먹다남은음식</td><td>고집</td><td>폴터가이스트 / 야습 / 칼춤 / 킹실드</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy"><b>누리레느</b> ♂</td><td>급류</td><td>유루열매</td><td>조심</td><td>문포스 / 물거품아리아 / 명상 / 잠자기</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10307.png" alt="" loading="lazy"><b>메가앱솔Z</b> ♀</td><td>정의의마음 → 예리함</td><td>앱솔나이트Z</td><td>명랑</td><td>섀도클로 / 인파이트 / 기습 / 대타출동</td></tr>
+  </tbody>
+</table>
+</div>
+<p class="lede" style="margin-top:10px">팀 ID <code>9T2BMYSGKE</code>. 게임 안 팀 순서는 하마돈, 보만다, 킬가르도, 누리레느, 킬라플로르, 앱솔이고, 위 표는 원문 소개 순서입니다.</p>
+
+<h2>콘셉트</h2>
+<p>맞대결과 받이 뚫기를 <b>한 마리가 모두 해내는 포켓몬</b>을 축으로 삼아, 우리 쪽 선출이 무너지는 일을 최대한 줄이고 이기는 방식의 재현성을 높입니다.</p>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>① 방침 정하기: 메가 자리에 조건 두 개</h3>
+    <p>지금 환경에서는 파워가 높은 메가진화 포켓몬을 축으로 두고 그 약점을 일반 포켓몬으로 메우는 방식이 어느 정도 이치에 맞아, 작성자도 이 방식을 따랐습니다.</p>
+    <p>다만 지금은 메가 자리에 독보적인 1강이 없다고들 합니다. 작성자가 본 이유는 단순한 구조입니다.</p>
+    <ul>
+      <li>대면 성능이 높은 메가(메타그로스, 망나뇽 등)는 받이를 뚫는 힘이 부족해지기 쉽습니다.</li>
+      <li>받이를 뚫는 힘이 높은 메가(팬텀, 리자몽 등)는 맞대결 성능이 부족해지기 쉽습니다.</li>
+    </ul>
+    <p>이 구조를 근본적으로 깨는 포켓몬, 즉 두 성능을 메가 자리에 요구되는 수준으로 함께 갖춘 포켓몬이 지금은 없습니다. 한쪽만 높은 메가로는 실전에서 받이 뚫기와 불리한 대면 대비까지 생각하면 선출을 정리하기 어렵고, 안정된 대전을 하기 힘듭니다. 그래서 <b>조건 A: 대면 성능과 받이 뚫기 성능을 최대한 높은 수준으로 함께 갖춘 메가</b>를 찾기로 했습니다.</p>
+    <p>이와 별개로 포켓몬 챔피언스 환경에는 "파티의 선택지(포켓몬, 도구, 테라스탈이나 Z기술 같은 커스터마이즈 요소)가 적어서 파티의 강함만으로 압도적인 차이를 내기 어렵다"는 문제가 있습니다. 대전에서 노력으로 차이를 낼 수 있는 것은 파티와 플레이 두 가지입니다. 그런데 플레이로 차이를 내는 것은 대부분의 플레이어에게 현실적이지 않고 파티로 압도하기도 어려우니, 이기는 방식에 재현성을 만들기 어렵습니다.</p>
+    <p>다만 지금까지 챔피언스 상위 파티 거의 전부에는 "상대와의 인식 차이를 만들어 내는, 예상을 비튼 형태의 포켓몬이 들어 있다"는 공통점이 있었습니다. 순수한 파티 파워로 차이를 내기 어려운 이상, 인식 차이로 이득을 얻는 것이 지금 환경에서 어느 정도 재현성 있는 승리법이라고 봤습니다. 그래서 <b>조건 B: 세간에 알려지지 않은, 예상을 비튼 형태</b>의 메가를 축으로 삼기로 했습니다.</p>
+  </div>
+  <div class="step">
+    <h3>② 축: 용의춤 + 드래곤테일 메가보만다</h3>
+    <p>두 조건을 M-7 환경에서 가장 잘 채우는 메가로 메가보만다를 골랐습니다. 기본 성능이 높아 조건 A에 맞는 형태를 개척하기 쉬운데도 시즌 M-6에 파티 공개가 거의 없었습니다. 형태가 아직 개척되지 않았거나 개척된 형태가 알려지지 않은 상태여서 조건 B도 쉽게 채울 수 있었습니다.</p>
+    <p>검토 끝에 "용의춤 + 드래곤테일" 구성이면 다음 네 가지가 된다고 판단해 채용했습니다.</p>
+    <ol>
+      <li>설치 기술을 곁들이면, 지금까지는 뚫지 못했던 주요 용의춤 메가보만다 받이를 뚫을 수 있습니다. 철벽 아머까오, HB 블래키, 속임수가 없는 도깨비불 로토무, (독압정과 함께라면) 하마돈 등입니다.</li>
+      <li>메가보만다 미러, 메가갸라도스 같은 랭크업 에이스끼리의 대결, 대타출동이 없는 배턴터치 파티, 메가다크펫, 메가우츠보트 등에 드래곤테일이 잘 통합니다.</li>
+      <li>기존 용의춤 메가보만다의 큰 과제는 "위협을 아껴 두며 움직일 때 화력이 낮아 부담을 주지 못한다"는 점이었습니다. 설치 기술 + 드래곤테일을 데미지원으로 삼으면 자연스럽게 해결됩니다.</li>
+      <li>기존 메가보만다와 마찬가지로 용의춤 + 이판사판태클 + 날개쉬기의 제압력이 높아, 잡다한 상대에게 안정적입니다.</li>
+    </ol>
+  </div>
+  <div class="step">
+    <h3>③ 주변 포켓몬 고르기</h3>
+    <p>메가보만다가 주변 포켓몬에게 바라는 조건을 여섯 가지로 정리했습니다.</p>
+    <ol>
+      <li>메가보만다가 유일하게 뚫지 못하는 브리두라스에 강한 포켓몬으로 채운다.</li>
+      <li>스텔스록.</li>
+      <li>독압정.</li>
+      <li>"아머까오 이외의 메가보만다 받이 + 메가보만다에 유효타가 있으면서 독압정을 없애는 독타입" 조합을 뚫는다. 하마돈 + 메가킬라플로르, 블래키 + 메가팬텀, 하마돈 + 더시마사리 등입니다.</li>
+      <li>지진이 없는 메가보만다로는 힘든 메가메타그로스, 메가라이츄Y 축에 강하다.</li>
+      <li>주요 드래곤·얼음·페어리 기술에 위험 부담을 지운다. 얼어붙은바람 메가팬텀, 트리플악셀 메가이어롭, 마스카나, 메가개굴닌자, 드닐레이브, 메가플라엣테, 누리레느, 한카리아스, 메가망나뇽 등이 대상입니다.</li>
+    </ol>
+    <h3>기합의띠 킬라플로르 (조건 1, 3)</h3>
+    <p>브리두라스에 강한 독압정 담당 가운데, 선봉에서 틈을 보이고 싶지 않은 누리레느·한카리아스·하마돈을 상대로도 최소한 움직일 수 있는 포켓몬은 띠 특수형 마스카나와 띠 킬라플로르였습니다. 둘 다 써 봤습니다. 마스카나는 기술 선택이 까다롭고, 악타입으로서 에써르가 든 파티에 내고 싶을 때 그 옆의 아머까오 + 메가팬텀에게 큰 틈을 보이는 점이 걸려 킬라플로르를 골랐습니다.</p>
+    <h3>울퉁불퉁멧 스텔스록 하마돈 + 먹다남은음식 칼춤 킬가르도 (조건 1, 2, 5, 6)</h3>
+    <p>조건 1·2·5와 4·6의 일부는 땅타입 + 강철타입 조합으로 채울 수 있다고 봤습니다. 메가보만다와 상성 보완이 좋은 조합으로 이 둘을 고른 이유는 다음과 같습니다.</p>
+    <ul>
+      <li>메가메타그로스의 어떤 형태(냉동펀치 + 지진, 풀묶기, 사이코노이즈, 철벽 + 바디프레스)에도 쉽게 뚫리지 않습니다.</li>
+      <li>메가라이츄Y의 기술이 일관되게 통하는 것을 둘이서 모두 끊습니다.</li>
+      <li>단단한 울퉁불퉁멧 담당과 내구 높은 강철타입이라, 메가보만다에게 날아오기 쉬운 드래곤·페어리·얼음 기술을 흘리기 쉽습니다.</li>
+      <li>게으름피우기, 먹다남은음식 + 킹실드가 독압정과 잘 맞습니다.</li>
+      <li>설치 기술 + 용의춤 + 드래곤테일에 칼춤 + 폴터가이스트 킬가르도를 더해, 물리 받이 하나에 공격을 몰아 뚫을 수 있습니다.</li>
+      <li>메가킬라플로르와 메가팬텀에 강해, 뒤에 나오는 누리레느의 받이 뚫기를 돕기 쉽습니다.</li>
+    </ul>
+    <h3>유루열매 명상 누리레느 (조건 1, 4, 6)</h3>
+    <p>여기까지 짜고 보니 두 가지 과제가 남았습니다. 조건 4 가운데 하마돈 + 메가킬라플로르와 블래키 + 메가팬텀을 뚫기 어렵다는 것, 조건 6 가운데 비접촉 기술 + 하마돈 유효타 + 킬가르도 유효타로 넘어오는 드닐레이브와 메가개굴닌자가 특히 부담스럽다는 것입니다. 해결책으로 누리레느를 넣은 이유는 세 가지입니다.</p>
+    <ul>
+      <li>블래키와의 대면에서 명상 + 유루열매로 전개하면 뒤의 메가팬텀까지 뚫을 수 있고, 하마돈 + 메가킬라플로르에 일관되게 통하는 물 기술로 공격할 수 있습니다.</li>
+      <li>드닐레이브와의 대면에서 유리하고, 어느 정도는 교체로 내보낼 수도 있습니다.</li>
+      <li>킬가르도와 함께 메가개굴닌자의 기술 일관을 끊어, 변환자재를 잘 흘리면서 몰아가기 쉽습니다.</li>
+    </ul>
+    <p>실전에서 써 보니 감이 좋았습니다. 이론을 다시 봐도 킬라플로르, 하마돈, 킬가르도, 누리레느 네 마리 모두 브리두라스를 상대로 어느 정도 강하게 움직일 수 있어, 브리두라스를 거부하면서 필요한 요소를 채우는 최적의 조합이라고 보고 네 마리를 확정했습니다.</p>
+  </div>
+  <div class="step">
+    <h3>④ 보완: 메가앱솔Z</h3>
+    <p>위 다섯 마리는 전체적으로 스피드가 느려, 용의춤이나 야습 말고는 상대보다 먼저 움직여 행동을 제한할 수단이 부족했습니다. 그래서 여섯 번째로 구애스카프 담당이나 고속 메가를 넣기로 했습니다. 바란 조건은 우선순위 순으로 다음과 같습니다.</p>
+    <ol>
+      <li>최소한 메가개굴닌자 이상의 스피드를 가지고(빠를수록 좋음) 메가팬텀, 메가아쿠스타, 메가마폭시, 메가개굴닌자보다 먼저 움직여 묶을 수 있다.</li>
+      <li>에써르가 든 구성 전반(메가팬텀 + 에써르 계열의 스탠더드 파티, 에써르 + 메가거북왕 계열)에 강하게 나갈 수 있다.</li>
+      <li>보만다 입장에서 상대가 선출하면 곤란한 드닐레이브, 강철타입, 메가킬라플로르, 고속 메가들에게 최대한 큰 압력을 준다.</li>
+    </ol>
+    <p>이 세 가지를 가장 자연스럽게 채우는 포켓몬으로 메가앱솔Z를 넣었습니다. 마지막으로 세부 배분과 기술을 다듬어 파티를 완성했습니다.</p>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가보만다 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.373</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10089.png" alt="" loading="lazy">메가보만다 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-dragon)">드래곤</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>보만다나이트</b></span><span>특성 <b>위협 → 스카이스킨</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">201</span><span class="v">201</span><span class="bar"><i style="width:96.9%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">156</span><span class="v">166</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">101</span><span class="v">151</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">117</span><span class="v down">126</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">118</span><span class="v">128</span><span class="bar"><i style="width:56.25%"></i></span><span class="p">18</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">148</span><span class="v up">170</span><span class="bar"><i style="width:46.9%"></i></span><span class="p">15</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>이판사판태클<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>드래곤테일<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-flying)">비행</span>날개쉬기<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용의춤<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>스피드 종족값 102(한카리아스, 메가플라엣테)의 최속을 앞지릅니다.</dd>
+    <dt>H-D</dt><dd>특공 특화 메가루카리오Z의 특공 2랭크 상승 러스터캐논을 확정으로 버팁니다. 스텔스록 데미지 + 겁쟁이 메가루카리오Z의 철제광선은 75% 확률로 버팁니다. 특공 154 메가보만다(불대문자로 HP181·특방140 메가갑주무사를 확정 1발로 잡는 수치)의 용성군은 81.25% 확률로 버팁니다.</dd>
+    <dt>H-B</dt><dd>공격 특화 생명의구슬 따라큐의 치근거리기 + 야습을 99.61% 확률로 버팁니다.</dd>
+    <dt>A</dt><dd>남은 포인트입니다. 모래바람 데미지 + 공격 1랭크 상승 이판사판태클로 HP187·방어115 누리레느를 확정 1발로 쓰러뜨리는 것이 기준입니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <p>작성자의 표현으로 "하늘의 왕자"입니다. 용의춤 + 날개쉬기 + 이판사판태클로, 저항 수단이 없는 포켓몬과의 대면을 한 번만 만들면 거기서 경기를 부숴 버리는 엄청난 제압력이 있습니다.</p>
+    <ul>
+      <li>기존 용의춤 메가보만다는 네 번째 기술로 <b>지진</b>을 넣어 이판사판태클과 범위를 보완하거나, <b>대타출동</b>을 넣어 도깨비불 로토무나 하품 하마돈까지 랭크업 발판으로 삼는 것이 일반적이었습니다.</li>
+      <li>하지만 이 기술들로는 "하품 + 얼음엄니 하마돈", "철벽 아머까오", "속임수 로토무", "속임수 블래키"처럼 대타출동이나 지진에 저항할 수 있는 메가보만다 받이를 끝까지 뚫지 못합니다.</li>
+      <li>그래서 일반적인 용의춤 메가보만다 파티는 이런 포켓몬을 보면 "메가보만다 받이를 뚫는 특수 어태커"를 따로 선출해야 합니다. 동시에 "마스카나, 메가메타그로스, 브리두라스처럼 대면에서 메가보만다가 이기지 못하는 포켓몬을 받아 줄 교체처"와 "스텔스록, 하품, 스카프 트릭, 벽 등 용의춤을 돕는 요소"까지, 세 가지를 메가보만다 + 나머지 두 마리로 채워야 해서 선출을 정리하기가 매우 어려워집니다.</li>
+      <li>이 문제를 푸는 것이 <b>드래곤테일</b>입니다. 설치 기술을 곁들이면 위의 메가보만다 받이를 보만다 자신이 모두 뚫는 선택지가 생깁니다. "받이 뚫기"를 주변 포켓몬으로 준비할 필요가 없어지고, 선출 화면에서 생각할 것이 "불리한 대면 대비"와 "전개 보조" 두 가지로 줄어듭니다.</li>
+      <li>이것만으로 선출이 정리되는 판이 많았고, 재현성 높은 승리에 크게 기여했습니다. 실제로 누르는 횟수가 적어도 갖고 있는 것만으로 탄탄한 선출을 할 수 있어, 써 본 뒤 기술에 대한 평가가 더 올라갔습니다.</li>
+      <li>부수 효과도 있었습니다. 메가보만다 미러나 메가갸라도스 같은 랭크업 에이스끼리의 대결에서 스텔스록 + 드래곤테일로 매우 강해집니다. HB 드래곤테일 한카리아스에게 용의춤 + 드래곤테일이 아주 잘 통하고, 메가다크펫이나 메가우츠보트에게도 유효한 선택이 될 때가 있습니다.</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 2. 킬라플로르 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.970</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/970.png" alt="" loading="lazy">킬라플로르 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-rock)">바위</span><span class="type" style="background:var(--t-poison)">독</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>독치장</b></span><span>성격 <b>겁쟁이</b> (스피드↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">159</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">111</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">182</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">101</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">151</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-poison)">독</span>오물폭탄<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>대지의힘<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>매지컬샤인<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>에너지볼<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>최속입니다. 최속 브리두라스를 강하게 의식했습니다.</dd>
+    <dt>C</dt><dd>풀 배분입니다.</dd>
+    <dt>H-B</dt><dd>고집 한카리아스의 스케일샷을 버틸 확률이 바뀌는 수치입니다(99.86% → 확정으로 버팀).</dd>
+  </dl></div>
+  <div class="desc">
+    <p>작성자의 표현으로 "독의 꽃"입니다. 독·땅·페어리·풀의 넓은 기술 범위를 밀어붙이면서, 독치장으로 턴을 쓰지 않고 독압정을 깔 수 있다는 점이 SV 때와 마찬가지로 매우 강력합니다.</p>
+    <p>이번에는 일반 포켓몬 중에서도 특히 강력하다고 보는 브리두라스, 한카리아스, 누리레느, 하마돈 네 마리에게 틈을 보이지 않는 독압정 담당으로 넣었습니다. 그래서 네 마리 모두를 가장 아픈 기술로 때릴 수 있게 기술 범위를 최대한 넓혔습니다.</p>
+    <div class="tbl-wrap" style="margin:6px 0 12px">
+    <table>
+      <thead><tr><th>상대</th><th>기술</th></tr></thead>
+      <tbody>
+        <tr><td>누리레느</td><td>오물폭탄</td></tr>
+        <tr><td>브리두라스</td><td>대지의힘</td></tr>
+        <tr><td>한카리아스</td><td>매지컬샤인</td></tr>
+        <tr><td>하마돈</td><td>에너지볼</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p>이 기술 구성의 단점과 작성자의 대처는 다음과 같습니다. 대처는 해 두었지만 어렵다고 느낀 판도 많았다고 합니다.</p>
+    <div class="tbl-wrap" style="margin:6px 0 12px">
+    <table>
+      <thead><tr><th>없는 기술</th><th>생기는 문제</th><th>대처</th></tr></thead>
+      <tbody>
+        <tr><td>머드샷</td><td>띠 머드샷 킬라플로르, 띠 겁쟁이 에써르, 스카프 타부자고, 메가팬텀, 메가개굴닌자처럼 자신보다 빠른 특수 어태커에 약해집니다.</td><td>킬가르도와 메가앱솔Z를 잘 써서 대응합니다.</td></tr>
+        <tr><td>파워젬</td><td>HB 아머까오, 드닐레이브, 메가리자몽Y, 메가망나뇽에게 유효타가 부족합니다.</td><td>킬라플로르 대신 스텔스록 하마돈을 선출합니다.</td></tr>
+        <tr><td>스텔스록</td><td>하마돈에 스텔스록을 넣어야 합니다.</td><td>킬라플로르가 통하지 않는 구성에는 하마돈을 설치 담당으로 가려 쓸 수 있어 큰 단점이 아닙니다.</td></tr>
+        <tr><td>킬러스핀</td><td>메가보만다를 스텔스록에서 지킬 수 없습니다. 뚫기 어려운 고내구 물타입(밀로틱, HD 로토무 등)과의 대면에서 능동적으로 독을 걸지 못해 오물폭탄의 30% 독에 기대게 됩니다.</td><td>스텔스록을 까는 포켓몬(한카리아스, 하마돈, 브리두라스)에게는 기술 범위로 때려 유리를 잡습니다. 뚫기 어려운 고내구 물타입은 유루열매 명상 누리레느로 승리 또는 무승부로 끌고 갑니다.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <ul>
+      <li>대안으로 한때 "대지의힘 또는 머드샷 + 매지컬샤인 + 킬러스핀 + 스텔스록" 구성을 시험했습니다. 하마돈과 누리레느에게 킬러스핀 → 스텔스록 순으로 누르면 울퉁불퉁멧 하마돈 이외에는 일정한 이득을 얻는다는 점을 본 구성이었습니다. 하지만 오물폭탄이나 파워젬이 없어 순간 화력이 부족하고 포켓몬 단독의 파워가 크게 떨어진다고 판단해 채용하지 않았습니다.</li>
+      <li>메가보만다가 설치 기술에 기대는 성능이기는 합니다. 그래도 지금 환경에는 철제광선 메가루카리오Z, 하품 하마돈, 위협 보만다, 따라큐처럼 "수적 우위를 잡는 순간 엄청난 제압력을 내는 포켓몬"이 많아, 상대가 먼저 수적 우위를 잡지 못하게 하는 것이 매우 중요합니다. 그래서 독이나 스텔스록의 이득보다 수적 우위를 얻기 쉬운 공격 기술 4개 형태 자체는 강력했다고 느꼈습니다.</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 3. 하마돈 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.450</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy">하마돈 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>울퉁불퉁멧</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>장난꾸러기</b> (방어↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">215</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">132</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">166</span><span class="bar"><i style="width:40.6%"></i></span><span class="p">13</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">79</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">113</span><span class="bar"><i style="width:65.6%"></i></span><span class="p">21</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>게으름피우기<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H-B</dt><dd>명랑 메가이어롭의 무릎차기 + 트리플악셀을 94.78% 확률로 버팁니다.</dd>
+    <dt>H-D</dt><dd>겁쟁이 브리두라스의 러스터캐논 + 용성군을 91.8% 확률로 버팁니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <p>작성자의 표현으로 "안정감 1위 쿠션"입니다. 지진 + 하품 + 스텔스록 + 모래바람으로 상대에게 부담을 주지 못하는 경우가 거의 없어, 선출하고도 쓸모없어지는 판이 거의 없다는 것이 강점입니다.</p>
+    <ul>
+      <li>메가보만다의 짝으로서 하품 + 용의춤, 스텔스록 + 드래곤테일, 지진 + 이판사판태클이 각각 잘 맞습니다. 빠르모트 + 대쓰여너를 비롯한 대면 위주 파티를 상대로 위협 + 날개쉬기 + 게으름피우기로 반무한 교체전을 만드는 움직임도 매우 강력합니다.</li>
+      <li>공격 기술이 비행 하나뿐인 메가보만다를 쓰는 이상, 땅타입 자리에 이 포켓몬 말고는 생각할 수 없을 만큼 상성이 좋았습니다.</li>
+      <li>킬가르도와도 잘 맞습니다. 모래바람 + 하품 + 스텔스록으로 킬가르도를 돕고, 먹다남은음식 킹실드 + 게으름피우기로 교체전을 만들 수 있습니다.</li>
+      <li>뒤에서 설명할 조금 특이한 킬가르도로, 하마돈이 강하게 불러들이는 누리레느를 유인해 쓰러뜨린 뒤 하마돈으로 경기를 조율하는 움직임이 있습니다. 처음 보는 상대에게만 통하는 수법이지만 재현성과 성공했을 때의 승률이 매우 높았습니다.</li>
+      <li>함께 선출한 적은 많지 않지만 킬라플로르와도 잘 맞습니다. 모래바람 + 킬라플로르는 킬가르도를 내기 어려운 메가플라엣테 파티에 매우 강합니다. 강철 기술이 없는 킬가르도와 물리형 메가보만다로는 이기기 어려운 천진 HB 픽시도 모래바람 + 오물폭탄으로 해결할 수 있습니다.</li>
+      <li>누리레느의 명상, 앱솔의 대타출동과도 잘 맞습니다. 어떤 선출을 하든 하품 하마돈을 자연스럽게 강하게 쓸 수 있는 파티가 된 것이 승률을 올린 요인 중 하나였다고 느꼈습니다.</li>
+      <li>도구는 자뭉열매와 고민했지만, 메가메타그로스, 메가이어롭, 스카프 트리플악셀 마스카나를 무겁게 보고 울퉁불퉁멧으로 했습니다.</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 4. 킬가르도 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.681</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/681.png" alt="" loading="lazy">킬가르도 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>먹다남은음식</b></span><span>특성 <b>배틀스위치</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">실드폼</span><span class="v">블레이드폼</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">163</span><span class="v">163</span><span class="bar"><i style="width:87.5%"></i></span><span class="p">28</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">99</span><span class="v up">198</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">161</span><span class="v">71</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">63</span><span class="v down">—</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">160</span><span class="v">70</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">97</span><span class="v">97</span><span class="bar"><i style="width:53.1%"></i></span><span class="p">17</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>폴터가이스트<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>킹실드<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>아머까오가 방어나 특방 한쪽을 11의 배수 최대치로 맞추고 남은 포인트로 올릴 수 있는 스피드의 최대값 96을 앞지릅니다.</dd>
+    <dt>A</dt><dd>스피드 수치·내구 수치와 함께 맞출 수 있는 범위에서 가장 높은 11의 배수(블레이드폼 198)입니다.</dd>
+    <dt>H-B</dt><dd>실드폼일 때 공격 특화 한카리아스의 지진을 87.5% 확률로 버팁니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <p>작성자의 "파트너"입니다. 블레이드폼 실수치는 원문 본문에 적힌 값이고 특공은 본문에 없습니다.</p>
+    <ul>
+      <li>지금 환경에서 범용성을 크게 잃지 않으면서 누리레느와 브리두라스를 상대로 최소한의 교체전을 돌릴 수 있고, 형태에 따라서는 이 둘을 발판으로 뒤까지 뚫을 수 있는 귀한 포켓몬입니다.</li>
+      <li>여기까지는 같은 타입인 타부자고도 똑같이 할 수 있습니다. 킬가르도를 고른 이유는 두 가지입니다. 높은 능력치 × 야습 × 폴터가이스트가 메가메타그로스, 메가루카리오Z, 메가라이츄Y처럼 메가보만다만으로는 힘든 포켓몬에게 유효합니다. 그리고 물리 공격을 하마돈으로 받는 파티를 상대로 "독 또는 하품 + 칼춤 폴터가이스트 + 용의춤 드래곤테일"로 받이 하나에 공격을 몰아 뚫는 방법이 재현성이 높다고 봤습니다.</li>
+      <li>킬가르도는 킹실드와 칼춤을 함께 든 형태가 가장 파워가 높다고 보기 때문에, 기술 구성은 이 네 개 말고는 생각할 수 없다고 합니다.</li>
+    </ul>
+    <h3>스피드 실수치 97의 의미</h3>
+    <ul>
+      <li>가장 특이한 점은 스피드 실수치 97입니다. 누리레느를 상대로 인식 차이를 이용해 쉽게 이기려고 넣은 요소입니다.</li>
+      <li>상대 누리레느가 우리 하마돈이나 메가보만다와 대면한 상황에서 킬가르도를 교체로 내보내면, 누리레느 쪽은 먹다남은음식을 확인한 시점에 킬가르도의 스피드 실수치를 거의 틀림없이 72~84로 예상하고 움직입니다.</li>
+      <li>지금 환경의 누리레느는 퀵턴이나 멸망의노래 계열을 빼면 스피드 실수치를 88(스피드 무배분 아머까오 앞지르기)~93(준속 메가갑주무사 앞지르기) 범위나 그 근처로 맞추는 경우가 대부분입니다.</li>
+      <li>그래서 누리레느 쪽은 대개 "물거품아리아 또는 문포스에 킬가르도가 교체로 나옴 → 물거품아리아에 폴터가이스트 → 물거품아리아에 킹실드 → 킹실드에 앙코르"라는 흐름을 그립니다.</li>
+      <li>여기서 상대가 절대 예상하지 못하는 <b>먹다남은음식 × 스피드 97의 칼춤</b>을 누르면, 스피드 96 이하 누리레느가 물거품아리아를 쓰며 눌러앉는 것을 상대로 한 턴 만에 경기를 거의 끝낼 수 있습니다.</li>
+      <li>이것이 누리레느가 든 파티를 상대로 재현성이 매우 높은 승리 루트가 됐고, 성공한 판은 거의 전부 이겼습니다.</li>
+      <li>물론 킬가르도가 누리레느보다 느리거나, 먹다남은음식 누리레느에게 스피드 관계가 들켜 어려워지는 판도 있습니다. 다만 빠른 누리레느는 내구가 낮아 칼춤 × 야습으로 크게 깎아 우위에 설 수 있습니다. 먹다남은음식 누리레느에게 스피드 관계가 들키는 경우는 대개 킬가르도가 더 빠른 쪽이고, 폴터가이스트에 앙코르를 누르는 한 턴이 상대 입장에서 너무 약하다는 점을 생각해 칼춤을 눌렀습니다.</li>
+      <li>결과적으로 M-7 시점에는 먹다남은음식을 미리 보여 준 모든 대전에서 누리레느 대면의 칼춤이 통했습니다. 구성과 화력으로 봐서 누리레느가 기합의띠인 것이 분명한 판에서만 폴터가이스트를 골랐습니다.</li>
+      <li>킬가르도 덕분에 누리레느가 든 파티에 높은 승률을 낸 것도 전체 승률을 올린 요인이었습니다.</li>
+      <li>부수 효과라기엔 너무 큰 이점으로, 메가갑주무사, 철벽 또는 벌크업 아머까오, 킬가르도 미러 등에서도 스피드 배분의 덕을 봤습니다.</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 5. 누리레느 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.730</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy">누리레느 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>유루열매</b></span><span>특성 <b>급류</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">183</span><span class="bar"><i style="width:87.5%"></i></span><span class="p">28</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">84</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">115</span><span class="bar"><i style="width:65.6%"></i></span><span class="p">21</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">160</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">136</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">97</span><span class="bar"><i style="width:53.1%"></i></span><span class="p">17</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>문포스<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>물거품아리아<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>명상<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-psychic)">에스퍼</span>잠자기<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>이 파티의 킬가르도와 같은 수치입니다.</dd>
+    <dt>H-B</dt><dd>공격 특화 메가보만다의 이판사판태클을 확정으로 버팁니다. 스텔스록 데미지 + 명랑 메가보만다의 이판사판태클은 87.5% 확률로 버팁니다. 공격 특화 메가드닐레이브의 고드름떨구기 + 번개엄니는 94.54% 확률로 버팁니다.</dd>
+    <dt>C</dt><dd>특공 1랭크 상승 + 급류 발동 물거품아리아로 HP159·특방115 메가팬텀을 확정 1발로 쓰러뜨립니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <p>작성자의 표현으로 "레귤레이션 M-C 환경을 정의하는 포켓몬"입니다.</p>
+    <ul>
+      <li>지금 환경의 거의 모든 포켓몬과 대등하거나 그 이상으로 맞붙을 수 있습니다. 뚫기 어려운 고내구 하마돈, 아머까오, 블래키 등도 "유루열매 잠자기 또는 대타출동 + 명상", 앙코르, 사이코노이즈, 급류로 비교적 쉽게 뚫습니다. 소리 기술로 대타출동을 관통하고, 앙코르나 멸망의노래로 "대타출동 + 랭크업"이나 변덕쟁이 대책까지 자연스럽게 할 수 있는 커스터마이즈 폭이 훌륭합니다.</li>
+      <li>많은 포켓몬과 맞붙을 수 있는 만큼, 많은 판에 선출하면 역할이 모호해져 재현성 높은 경기를 만들기 어렵습니다. 그래서 역할을 좁혀 보완 자리로 잘 넣으면 파티를 강하게 만들기 쉬운 포켓몬이라고 봤습니다.</li>
+      <li>이번에는 "블래키 + 메가팬텀", "하마돈 + 메가킬라플로르", "드닐레이브", "메가개굴닌자"를 맡을 상대로 정했습니다. 그래서 수면 내성, 받이 뚫기, 끈질김을 함께 얻기 쉬운 유루열매 잠자기 + 명상형으로 넣었습니다.</li>
+      <li>하품이나 독압정의 도움을 받으면서 명상의 받이 뚫기, 유루열매의 수면 내성, "명상 + 유루열매 잠자기"로 중간 화력 특수 어태커를 몰아넣는 성능을 살려 기대한 대로 일해 줬습니다.</li>
+      <li>레이트 차가 큰 매칭에서 자주 만나는 "독압정 + 먹다남은음식 변덕쟁이 스코빌런 파티"에도 잠자기(독압정 내성) + 명상 + 물거품아리아(대타출동 관통)로 매우 강해, 레이트를 순조롭게 올릴 수 있었습니다.</li>
+    </ul>
+  </div>
+</article>
+
+<!-- 6. 메가앱솔Z -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.359</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10307.png" alt="" loading="lazy">메가앱솔Z (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-dark)">악</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>앱솔나이트Z</b></span><span>특성 <b>정의의마음 → 예리함</b></span><span>성격 <b>명랑</b> (스피드↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">142</span><span class="v">142</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">182</span><span class="v">206</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">80</span><span class="v">80</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">85</span><span class="v down">85</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">80</span><span class="v">80</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">139</span><span class="v up">223</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도클로<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>인파이트<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>기습<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>대타출동<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>S</dt><dd>메가마폭시, 메가이어롭, 메가개굴닌자, 메가○○Z 계열과의 동속을 의식한 최속입니다.</dd>
+    <dt>A</dt><dd>풀 배분입니다.</dd>
+    <dt>H</dt><dd>남은 포인트입니다. 배분을 다듬을 시간이 없었을 뿐이며, 방어나 특방 한쪽에 1을 주는 편이 낫다고 작성자가 적었습니다.</dd>
+  </dl></div>
+  <div class="desc">
+    <p>작성자의 표현으로 "환경에서 가장 빠른 메가"입니다. 메가진화 전에는 악 단일 타입이고, 메가 후 타입(악·고스트)과 특성은 원문 스크린샷에 나온 대로 옮겼습니다.</p>
+    <ul>
+      <li>악타입 × 초고속 × 고스트·격투 기술 범위로, 축이 불리한 메가팬텀 + 에써르 파티에 강하다는 점을 가장 높이 사서 넣었습니다. 스카프 에써르에 대비할 수 있는 하마돈이나 누리레느와 함께 움직이면, 메가앱솔Z를 선출한 판에서는 교체전형 에써르 파티에 높은 승률을 냈습니다.</li>
+      <li>에써르 + 메가거북왕 파티를 상대로는, 그라운드코트 에써르를 메가앱솔Z로 쓰러뜨린 뒤 나오는 메가거북왕에게 대타출동 연타 → 섀도클로로 움직여 안정적으로 대처합니다. 이유는 세 가지입니다.
+        <ul>
+          <li>킬라플로르의 독 데미지를 쌓습니다.</li>
+          <li>껍질깨기를 쓴 뒤의 메가거북왕을 섀도클로로 크게 깎아 스텔스록, 모래바람, 독과 합쳐 밀어붙입니다.</li>
+          <li>사이코필드 턴을 소모시켜 기습이나 야습을 통하게 합니다.</li>
+        </ul>
+      </li>
+      <li>독압정 + 대타출동 말고도, 하마돈의 하품에서 대타출동을 남긴 채 쓸어 담는 움직임이 따라큐나 스카프 한카리아스로 메가앱솔Z를 받아치려는 파티에 매우 강했습니다. 칼춤형이었다면 이기지 못했을 판을 건질 수 있었습니다.</li>
+      <li>메가팬텀 + 받이(블래키, 아머까오)를 상대로는 누리레느 + 하마돈과 함께 씁니다. 하마돈의 스텔스록 + 하품으로 판을 정리한 뒤, 메가팬텀과 받이 어느 쪽이 나와 있어도 뚫기를 시작할 수 있습니다.
+        <ul>
+          <li>블래키인 경우: 블래키와 누리레느의 대면을 만들어 명상으로 뚫습니다. 또는 메가팬텀과 메가앱솔Z의 대면을 만들어, 블래키로 교체하는 턴에 대타출동 → 인파이트 2번으로 뚫습니다.</li>
+          <li>아머까오인 경우: 아머까오와 누리레느의 대면을 만들어 명상으로 뚫습니다. 또는 메가팬텀과 메가앱솔Z의 대면을 만들어 스텔스록 + 섀도클로로 날개쉬기를 강요한 뒤, 아머까오와 누리레느의 대면을 만들어 뚫습니다.</li>
+        </ul>
+      </li>
+      <li>내구가 매우 낮아 효과가 보통인 기술을 한 번만 맞아도 거의 모든 기술에 쓰러집니다. 그래도 메가진화 전이 악 단일 타입이라, 하마돈에게 날아오는 메가팬텀의 섀도볼, 블래키의 속임수, 킬가르도에게 날아오는 메가개굴닌자의 악의파동에 억지로 교체해 들어갈 수 있다는 점이 도움이 된 판이 있었습니다.</li>
+      <li>특히 블래키를 상대로 메가진화하지 않은 채 대타출동을 보여 줘 속임수를 강요하거나, 속임수 타이밍에 교체로 내보내 메가 전 특성 정의의마음을 살려 뚫는 판이 의외로 많았습니다.</li>
+      <li>메가개굴닌자에게도 블래키와 마찬가지로 악의파동에 억지로 교체해 들어가 정의의마음을 발동시키는 움직임이 한 번도 대비당하지 않았고, 성공한 판은 거의 전부 이겼습니다.</li>
+      <li>선공 기술이 기습이라 수 읽기 싸움이 생길 요인이기는 합니다. 하지만 환경 최속이라 기본적으로 스카프 담당 말고는 더 빠른 상대가 없고, 독압정과 함께 쓰면 실질적으로 기습을 둘러싼 수 읽기는 거의 생기지 않았습니다.</li>
+      <li>메가팬텀 외에도 메가마폭시, 메가개굴닌자, 메가라이츄, 메가아쿠스타, 메가메타그로스, 메가이어롭, 메가화염레오, 생명의구슬 마스카나처럼 축으로 받기 어렵고 때려서 이기기도 어려운 고속 포켓몬을 모조리 먼저 움직여 묶을 수 있습니다. 선출 화면에서의 압력까지 포함해 보완 자리로 더할 나위 없이 활약했습니다.</li>
+    </ul>
+  </div>
+</article>
+
+<h2>파티의 요점</h2>
+<div class="steps">
+  <div class="step">
+    <h3>선출 단계에서 잘 비틀리지 않음</h3>
+    <p>특수한 파티를 쓰지 않는 한, 지금 환경의 선출 화면에서는 맞대결과 받이 뚫기를 선출 단위로 함께 갖추도록 생각해야 합니다. 이 둘을 혼자서 함께 갖춘 드래곤테일 + 용의춤 메가보만다를 축에 두어, 지금 환경에서 가장 흔한 패배 방식이라고 보는 "선출이 무너져서 지는 것"을 최대한 줄이려 했습니다.</p>
+    <p>여기에 맞대결과 받이 뚫기를 적절히 돕는 파워 높은 일반 포켓몬으로 주변을 채워, 파티 단위의 구조적인 강함을 확보했습니다.</p>
+    <ul>
+      <li><b>맞대결</b>: 띠 킬라플로르의 기술 범위, 킬가르도의 높은 능력치와 야습, 명상 + 잠자기 누리레느로 중간 화력 특수 어태커 몰아넣기, 게으름피우기 하마돈으로 중간 화력 물리 어태커 몰아넣기.</li>
+      <li><b>받이 뚫기</b>: 독치장, 칼춤 + 폴터가이스트, 하품 + 스텔스록, 명상.</li>
+    </ul>
+    <p>이렇게 축 단독으로도, 구성 단위로도 맞대결과 받이 뚫기를 함께 갖춘 파워 높은 포켓몬으로 채워, 선출이 자연스럽게 정리되는 파티로 만들었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>알아채기 어려운 형태 비틀기로 초반에 이득 잡기</h3>
+    <p>"선출이 무너져서 지는 것" 다음으로 많다고 보는 패배 방식은 "경기가 길어지면서 수 읽기나 확률 같은 불안정 요소가 생기는 것"입니다. 이를 줄이려고, 경기 초반에 상대가 알아채기 어려운 비튼 형태로 이득을 잡고 그대로 달아나는 승리 방식이 가능한 파티를 목표로 했습니다.</p>
+    <p>축인 드래곤테일 메가보만다는 물론, 스피드 배분 × 먹다남은음식 × 칼춤 킬가르도, 대타출동 메가앱솔Z까지 세 마리가 여기에 해당합니다. 특히 킬가르도가 누리레느를 상대로 이득을 잡는 방식은 재현성이 높아 쉽게 이긴 판을 많이 건졌습니다.</p>
+  </div>
+  <div class="step">
+    <h3>위기를 넘기는 능력이 높은 보완</h3>
+    <p>아무리 완성도 높은 축을 써도 버거운 구성은 일정 수 있습니다. 하지만 독이나 하품과 함께 쓰는 기습 + 대타출동 메가앱솔Z는 위기를 넘기는 능력이 매우 높습니다. 마찬가지로 플레이로 위기를 넘기는 능력이 높은 하품 + 게으름피우기 하마돈, 칼춤 + 킹실드 킬가르도와 합치면, 축으로 이길 수 있는 파티에는 축으로 안정적으로 이기고, 축으로 이기지 못하는 파티에도 억지로 승리를 가져올 선택지를 만들 수 있었습니다.</p>
+  </div>
+</div>
+
+<h2>기본 선출</h2>
+<div class="selections">
+  <div class="sel"><div class="vs">기본 선출</div><div class="lineup">킬라플로르 또는 하마돈 + 보만다 + 킬가르도</div><p>메가보만다 + 킬가르도를 통과시키는 데 독압정이 필요한 판은 킬라플로르, 스텔스록이 필요한 판은 하마돈을 냅니다.</p></div>
+  <div class="sel"><div class="vs">빠르모트 + 대쓰여너 계열</div><div class="lineup">킬라플로르 + 하마돈 + 보만다</div><p>상대 선봉 메가에 따라 전개가 조금 달라집니다. 메가픽시, 메가루카리오Z, 메가우츠보트 등과 맞붙을 수 있는 킬라플로르로 시작합니다. 메가다크펫이나 메가망나뇽은 하마돈이나 메가보만다의 드래곤테일로 흘려보냅니다. 뒤에서 나오는 빠르모트, 대쓰여너, 대도각참, 따라큐 네 마리는 하마돈 + 메가보만다로 대응해 끝까지 몰아갑니다.</p><p>하마돈이 우드해머 따라큐나 냉동빔 메가망나뇽 등에 무너지고 뒤에서 대도각참이나 빠르모트가 나오는 경우가 버겁지만, 그 밖에는 고전하지 않았습니다.</p></div>
+  <div class="sel"><div class="vs">에써르가 든 파티</div><div class="lineup">하마돈 또는 킬라플로르 + 앱솔 + 1마리</div><p>하마돈의 모래바람·스텔스록, 킬라플로르의 공격이나 독압정 중 하나로 에써르의 기합의띠를 깹니다. 그 뒤 앱솔 + 누리레느 또는 하마돈으로 스카프 에써르의 기술 일관을 끊으면서 몰아갑니다.</p><p>다만 상대 주변 포켓몬(주로 메가갑주무사와 누리레느)의 압력 때문에 모든 에써르 파티에 이 선출을 하기는 어려웠고, 하마돈과 메가보만다의 능력치로 억지로 에써르를 넘긴 판도 많았습니다.</p></div>
+  <div class="sel"><div class="vs">블래키 + 메가팬텀이 든 파티</div><div class="lineup">하마돈 + 앱솔 + 누리레느 또는 킬가르도</div><p>블래키 + 메가팬텀을 뚫는 데 유효한 하마돈, 앱솔, 누리레느를 기본으로 생각합니다. 하마돈과 앱솔이 버거워하는 상대 누리레느에 대비할 수 있는 킬가르도를 낼지 판단합니다.</p><p>누리레느 + 에써르처럼 상대에 누리레느가 함께 있고 킬가르도를 낼 수 없으면, 상대 선봉 누리레느와 그나마 가장 잘 맞붙는 누리레느를 선봉으로 냈습니다.</p></div>
+  <div class="sel"><div class="vs">드닐레이브, 개굴닌자가 든 파티</div><div class="lineup">누리레느나 앱솔을 상황에 맞게 섞음</div><p>축인 킬라플로르 + 하마돈 + 메가보만다 + 킬가르도로는 특히 버거운 두 마리라, 가능하면 누리레느나 앱솔을 섞어 선출합니다.</p><p>다만 이 둘이 든 파티는 주변에도 압력 높은 포켓몬이 모여 있는 경우가 많습니다(드닐레이브 + 리자몽, 개굴닌자 + 따라큐 + 불꽃타입 메가 등). 실제로는 축 네 마리로 어떻게든 플레이를 맞춰 대처해야 하는 판도 많았습니다.</p></div>
+</div>
+
+<h2>불리한 구성</h2>
+<p>찾으면 얼마든지 있지만 작성자가 특히 떠올린 구성입니다.</p>
+<div class="steps">
+  <div class="step">
+    <h3>누리레느와 독압정 양쪽에 내성이 있는 하마돈 파티</h3>
+    <p>하마돈 + 더시마사리, 하마돈 + 가라르 야도킹, 하마돈 + 메가킬라플로르 + 누리레느 받이, 하마돈 + 메가루카리오 + 갸라도스 또는 워시로토무 등입니다.</p>
+    <p>우리 쪽이 쓸 수 있는 방법은 스텔스록 + 칼춤 킬가르도 + 용의춤 드래곤테일 메가보만다로 공격을 몰아 뚫는 것입니다. 그런데 하마돈을 처리하는 과정에서 킬가르도가 쓰러지거나, 킬가르도와 메가보만다 중 하나가 한 번 잠드는 것이 거의 확정입니다. 그래서 하마돈 뒤에 나오는 포켓몬과 잠드는 턴 수에 승패가 좌우되기 쉬워 불안정한 대전이 많았습니다.</p>
+  </div>
+  <div class="step">
+    <h3>에써르 + 메가갑주무사 + 누리레느</h3>
+    <p>에써르에게는 앱솔을 내고 싶지만 메가갑주무사에게는 보만다를 내지 않으면 이기기 어렵습니다. 여기에 누리레느에게는 킬가르도로 이득을 잡고 싶은데 킬가르도는 에써르에게 유효타가 없어, 선출이 매우 어렵습니다.</p>
+    <p>다만 에써르 + 메가갑주무사는 에써르의 치유소원을 강하게 쓰는 것이 콘셉트인 경우가 많습니다. 스카프 에써르는 어느 정도 감수하고 움직일 수 있다고 보고, 메가갑주무사가 있는 경우에는 보만다 + 킬가르도를 선출해 넘긴 판이 많았습니다. 에써르의 기술 일관은 메가보만다 + 킬가르도로 끊을 수 있어, 킬가르도가 에써르에게 유효타가 없다는 것을 최대한 숨기며 움직였습니다.</p>
+  </div>
+  <div class="step">
+    <h3>개굴닌자 + 메가갑주무사</h3>
+    <p>위와 마찬가지로 앱솔 선출과 보만다 선출을 동시에 반쯤 강요당하면 어느 한쪽은 억지로 넘겨야 합니다. M-7 시점에는 가능하면 하마돈 + 킬가르도 + 앱솔을 선출하는 경우가 많았습니다.</p>
+    <p>잠든 뒤 최단 턴에 깨어나는 경우는 반쯤 감수하고 갑주무사를 하마돈 + 킬가르도로 억지로 상대합니다. 하마돈의 모래바람 + 킬가르도로 개굴닌자의 기합의띠를 벗긴 뒤, 킬가르도에게 날아오는 악의파동에 앱솔을 내보내 정의의마음을 발동시켜 이기러 가는 판이 대부분이었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>누리레느에 강한 얼음 기술 보유자 + 누리레느에 강한 불꽃 초화력</h3>
+    <p>"띠 또는 생명의구슬 마스카나, 또는 번개엄니 드닐레이브 + 메가리자몽Y", "번개엄니 드닐레이브 + 에이스번 또는 번개펀치 번치코" 등입니다.</p>
+    <p>불꽃 초화력에 맞설 수 있는 하마돈, 킬라플로르, 보만다 세 마리에게 얼음 기술이 일관되게 통합니다. 얼음을 막으려고 킬가르도나 누리레느를 내면, 불꽃 초화력이나 누리레느에 유효타가 있는 받기 어려운 포켓몬들에게 무너져 단순하게 버겁다고 느낀 판이 많았습니다. 킬라플로르에 파워젬과 스텔스록이 없고 누리레느에 아쿠아제트가 없는 것도 버거워지는 이유입니다.</p>
+    <p>메가리자몽Y가 없는 파티에는 앱솔을 통과시킬 수 있는 경우가 있어 그것을 노립니다. 하지만 얼음의 압력 때문에 하마돈이 스텔스록을 깔기 어려워, 메가리자몽Y가 든 파티에는 앱솔을 통과시킬 수 없다고 판단하고 얼음 기술이 보여도 억지로 보만다를 선출했습니다.</p>
+  </div>
+</div>
+
+<h2>부담스러운 포켓몬</h2>
+<div class="steps">
+  <div class="step">
+    <h3>맘모꾸리</h3>
+    <p>드닐레이브와 비교하면 하마돈의 모래바람과 보만다의 위협이 통하지 않고, 킬가르도와 누리레느가 받는 지진 데미지가 훨씬 큽니다. 단독으로는 가장 버겁고, 선출 화면에서 걸리는 제약이 가장 크다고 느꼈습니다.</p>
+    <p>대처법은 둘 중 하나입니다. 킬가르도를 선봉으로 맞춰 때려서 이기거나, 킬라플로르 또는 누리레느로 깎은 뒤 킬가르도의 야습이나 앱솔의 기습으로 묶습니다.</p>
+  </div>
+  <div class="step">
+    <h3>메가개굴닌자, 드닐레이브</h3>
+    <p>맘모꾸리처럼 "비접촉 얼음 기술 + 킬가르도·누리레느에 대한 높은 타점 + 킬가르도·누리레느의 기술을 한 번 버팀 + 킬라플로르에 대면 유리"를 함께 갖췄습니다. 앱솔을 특히 내기 어려운 메가갑주무사와 함께 나오면 어느 정도의 대응조차 불가능해지는 판이 많습니다.</p>
+    <p>특히 메가개굴닌자는 M-7 마지막 날 환경에서 늘어난 포켓몬이었습니다. 매칭이 치우쳤는지 메가개굴닌자가 든 파티를 만난 횟수가 적어 어떻게든 버틸 수 있었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>풍선 타부자고</h3>
+    <p>예상하지 못한 타이밍에 하마돈과의 대면이 만들어지면 그대로 경기가 끝납니다. 예상하고 킬라플로르를 내도 즉시 지는 것만 피할 뿐 특별히 유리해지지 않습니다. 처리 방법은 세 가지뿐입니다.</p>
+    <ul>
+      <li>나쁜음모를 쓰지 못하게 킬가르도나 누리레느를 대면시켜 처리합니다.</li>
+      <li>뒤에 둔 메가앱솔Z로 처리합니다.</li>
+      <li>메가보만다의 드래곤테일로 풍선을 터뜨리고 두 번째 교체 사이클에서 하마돈으로 처리합니다.</li>
+    </ul>
+    <p>섣불리 풍선을 터뜨리면 이번에는 폴터가이스트가 통하지 않게 되어 그것도 버겁습니다.</p>
+    <p>파티를 짜기 시작한 단계에서는 "스텔스록 킬라플로르 + 불꽃엄니 또는 얼음엄니 하마돈" 구성이어서 전혀 고전하지 않았습니다. 하지만 그 형태로는 다른 요소로 지는 일이 더 많았습니다. 킬라플로르를 내지 않을 때 설치 기술을 곁들일 수 없어 드래곤테일의 가치가 낮아지는 것이 패인이 되는 판이 많았습니다. 그래서 풍선 타부자고는 마지못해 감수했습니다.</p>
+    <p>다행히 M-7 마지막 날 무렵에는 스카프 타부자고가 많아 풍선 타부자고를 만나는 일이 적었습니다. 구성을 보고 풍선 타부자고라고 판단한 판에는 하마돈을 내지 않는 것을 철저히 지켜, 마지막 날 무렵에는 하마돈이 아무 저항 없이 풍선 타부자고의 랭크업 발판이 되어 진 대전은 없었다고 합니다.</p>
+  </div>
+  <div class="step">
+    <h3>브리두라스</h3>
+    <p>브리두라스에게 저항 수단이 없는 형태의 메가보만다를 축에 둔 이상, 최소한 브리두라스에게 경기가 부서지지 않도록 주변 포켓몬으로 필사적으로 저항했습니다. 하지만 브리두라스가 워낙 강력해서 상대가 체력 관리를 적절히 하면 손쓸 방법이 없어, 아무 저항도 못 하고 진 판이 많았습니다.</p>
+    <p>뒤에 두고 쓰는 악의파동 보유 어태커형 브리두라스가, 존재하는 형태와 쓰임새 가운데 가장 버겁습니다.</p>
+  </div>
+</div>
+
+<h2>결과와 총평</h2>
+<ul>
+  <li>시즌 M-7 싱글배틀, 2026.10.07 ~ 11.04 10:59. 트레이너 이름 "いろP"로 챔피언 클래스 <b>최종 60위</b>, 최종 레이트 <b>2368.182</b>입니다(본문 표기는 2368).</li>
+  <li>지금 환경의 온갖 어태커가 밀어붙이는 것을 최대한 버티면서 받이 뚫기를 재현성 높게 할 수 있는 파티를 나름대로 모색한 결과가 이 파티입니다.</li>
+  <li>다만 작성자는 완성도를 높게 보지 않습니다. 다른 파티에 비해 극단적으로 낮지는 않겠지만 높다고는 도저히 말할 수 없고, 결국 서로 선택이 맞물리는 운에 승부를 거는 수많은 파티 중 하나였다고 평가했습니다.</li>
+  <li>마지막 날과 그 무렵의 대전을 다시 보니, 자신보다 위의 최상위권에게는 순리대로 졌습니다. 운이 좋았는데도 그랬다고 덧붙였습니다.</li>
+  <li>그래도 맞물림 승부 안에서 최대한 우위에 서기 위해 "본질적인 강함을 크게 떨어뜨리지 않으면서 기습성을 가진 파티를 짠다"는 처음의 목표는 어느 정도 달성했습니다. 기습성이라는 요소를 깊이 파고들어 대전을 생각해 본 적이 거의 없었기에 좋은 경험이 됐다고 합니다.</li>
+  <li>이번 작품에서 직접 짠 파티 중에서는 완성도가 높은 편이라고 느꼈습니다. 내용이 전혀 알려지지 않았고 하마돈 + 보만다 축이 환경의 순풍을 받았다고들 하는 M-7 마지막 날 시점의 강함이라면 세간 기준으로 70점대 평가는 받을 수 있다고 믿고 싶다고 했습니다. M-8 현재의 자기 평가는 40점 이하로, 도저히 파티라고 부를 만한 완성도가 아니라고 합니다.</li>
+  <li>원문에는 "마지막 날 대전 영상" 항목이 있습니다. 받아 둔 본문 텍스트에는 영상 주소가 남아 있지 않으므로 원문에서 확인해 주세요.</li>
+</ul>
+
+<h2>작성자 후기</h2>
+<p>작성자는 "정말 아무래도 좋은 내용이니, 대전을 잘하고 싶어서 보러 온 사람은 여기서 글을 닫고 랭크배틀을 돌려 달라"고 먼저 적었습니다. 아래는 그 뒤의 개인적인 글을 요약한 것입니다.</p>
+<ul>
+  <li>매달 정신없이 대전에 매달렸지만 여러모로 한계가 왔다고 합니다. 작년 12월부터 11시즌 연속으로 마지막 날까지 대전했는데, 두 자리 순위가 3번, 순위를 보존했다면 두 자리였을 시즌이 3번이고, 한 자리에 근접한 시즌은 없었습니다.</li>
+  <li>지금 한 자리를 목표로 하는 것은 주제넘다고 보고 후반에는 10위대를 목표로 했지만 한 번 스친 것이 전부였습니다. 두 자리 중반에서 상위로 올라가지 못하고 있으며, 몇 번만 이기면 되는 목표인데도 마지막 날 그 순위대에서의 1승이 자신에게는 너무나 무겁다고 했습니다.</li>
+  <li>같은 시기(SV 초기)에 시작한 사람이나 또래 중에 최종 1위, 최종 한 자리 단골, 오프라인 대회 다회 우승자가 많아 열등감에 시달린다고 합니다. 원인이 있다는 것도 알고 짐작도 가지만, 지금은 대전에 긍정적으로 임할 마음이 들지 않는다고 했습니다.</li>
+  <li>싫어하는 말이지만 평소 자신에게 재능이 없다고 느끼고, 4년 가까이 했는데도 아직 이렇게 서투르냐며 절망한다고 적었습니다. 서투른 자신을 파티로 메워 이겨 왔지만 그것도 한계이고, 마지막 날만큼은 자신이 가장 강하다고 억지로 믿어 왔지만 이제 그것도 할 수 없게 됐다고 합니다.</li>
+  <li>이기는 사람들을 재능이라는 말로 정리하고 싶지는 않으며, 그들이 엄청나게 노력한다는 것을 안다고 했습니다. 자신도 노력의 양은 크게 뒤지지 않는다고 생각하므로 노력의 질 차이일 텐데, 무엇을 어떻게 바꿔야 질이 오르는지 모르게 됐다고 합니다.</li>
+  <li>정말 강하다고 느끼는 플레이어들의 공통점으로 "눈앞의 결과를 보지 않는다"는 것을 들었습니다. 최종 한 자리 같은 결과에 집착하지 않고 오직 강해지는 것만을 목적으로 임하는 사람들이 너무 강하다는 것입니다.</li>
+  <li>자신은 결과를 원해서 대전에 임하는 사람이라, 이번처럼 눈앞의 어중간한 결과로 도망치는 일이 많다고 했습니다. 그것이 좋지 않다고 보고 끝까지 대전한 시즌도 있었지만 모두 지고 끝났고, 상위를 노리는 야심도 다 타 버렸다고 합니다.</li>
+  <li>결과를 강하게 원하는 이유는 자기긍정감이 낮아 대전 결과를 자신을 긍정할 근거로 쓰기 때문이라고 스스로 진단했습니다. 결과를 너무 원한 나머지 눈앞의 대전에 집중해 실력을 올리지도 못하고, 내용과 관계없이 지는 것 자체에 지나치게 스트레스를 받는다고 했습니다.</li>
+  <li>대전 때문에 정신적으로도 신체적으로도 상처를 입는 나날에 한계가 왔고, 노력의 질·재능·마음가짐에서 최상위권과의 차이를 계속 확인하는 데 지쳤다고 적었습니다.</li>
+  <li>주변 사람들은 랭크배틀, 월간 대회, 대전 오프, 특수 룰, 대전 외 활동(오프 운영, 영상 투고, 방송 등)에서 저마다 훌륭한 결과를 내고 있는데, 자신은 랭크배틀에 집중했는데도 만족할 결과를 하나도 남기지 못한 채 1년 반 넘게 지났다고 했습니다. 이대로 아무 결과도 내지 못하고 끝날 것 같아 요즘 몹시 두렵다고 합니다.</li>
+  <li>당분간 포켓몬 대전과 거리를 둘 생각입니다. 거리를 둔다고 답을 찾을 수 있을지, 지금의 자신에서 달라질 수 있을지, 언제 결과를 낼 수 있을지 지금은 아무것도 모르겠고, 그 모른다는 것이 두려워 지쳤다는 말로 글을 맺었습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>류비 (竜尾)</dt><dd>드래곤테일. 원문 제목 「竜尾マンダガルド」는 "드래곤테일 보만다 + 킬가르도"라는 뜻입니다.</dd>
+  <dt>나구리아이 (殴り合い)</dt><dd>맞대결. 서로 공격을 주고받는 싸움</dd>
+  <dt>쿠즈시 (崩し)</dt><dd>받이 뚫기</dd>
+  <dt>선출 파탄 (選出破綻)</dt><dd>선출한 세 마리로는 상대를 감당할 수 없게 되는 것</dd>
+  <dt>즈라시 (ずらし)</dt><dd>상대의 예상을 비튼 형태</dd>
+  <dt>일반 자리 (一般枠)</dt><dd>메가진화하지 않는 포켓몬</dd>
+  <dt>설치 기술 (設置技)</dt><dd>스텔스록, 독압정처럼 필드에 깔아 두는 기술</dd>
+  <dt>독 회수 담당 (毒回収枠)</dt><dd>독압정을 밟아 없애는 독타입 포켓몬</dd>
+  <dt>랭크업 에이스 (積みエース)</dt><dd>용의춤 등으로 능력을 올린 뒤 쓸어 담는 에이스</dd>
+  <dt>역할 집중 (役割集中)</dt><dd>받이 하나에 여러 포켓몬의 공격을 몰아 뚫는 것</dd>
+  <dt>유살 (誘殺)</dt><dd>상대가 특정 포켓몬을 내게 유도한 뒤 쓰러뜨리는 것</dd>
+  <dt>쓰마세 (詰ませ)</dt><dd>상대가 더는 뚫을 수 없는 상태로 몰아넣기</dd>
+  <dt>고마카시 (誤魔化し)</dt><dd>불리한 상황을 임기응변으로 넘기는 것</dd>
+  <dt>위에서 묶기 (上から縛る)</dt><dd>먼저 움직여 쓰러뜨릴 수 있어 상대 행동을 제한함</dd>
+  <dt>일관 (一貫)</dt><dd>특정 타입 기술이 파티 전체에 통하는 것. "일관을 끊는다"는 그것을 막는다는 뜻</dd>
+  <dt>수적 우위 (数的有利)</dt><dd>남은 포켓몬 수가 상대보다 많음</dd>
+  <dt>이지 윈 (イージーウィン)</dt><dd>쉽게 이김</dd>
+  <dt>쇼켄고로시 (初見殺し)</dt><dd>처음 보는 상대에게만 통하는 수법</dd>
+  <dt>최단 기상 (最速起き)</dt><dd>잠든 뒤 가장 빠른 턴에 깨어남</dd>
+  <dt>맞물림 승부 (噛み合い勝負)</dt><dd>서로의 선택이 어떻게 맞물리느냐에 승패가 갈리는 승부</dd>
+  <dt>격차 매칭 (格差マッチング)</dt><dd>레이트 차이가 큰 상대와의 매칭</dd>
+  <dt>4w형 / 비행 1w</dt><dd>공격 기술 4개 형태 / 공격 기술이 비행(스카이스킨 이판사판태클) 하나뿐</dd>
+  <dt>11n</dt><dd>실수치를 11의 배수로 맞추는 조정</dd>
+  <dt>특화 (特化)</dt><dd>상승 성격 + 풀 배분</dd>
+  <dt>최속 / 준속</dt><dd>스피드 상승 성격 + S 풀 배분 / 무보정 성격 + S 풀 배분</dd>
+  <dt>○족 (○族)</dt><dd>스피드 종족값 ○</dd>
+  <dt>잔반 (残飯) / 울멧 (ゴツメ) / 띠 (襷) / 구슬 (珠)</dt><dd>먹다남은음식 / 울퉁불퉁멧 / 기합의띠 / 생명의구슬</dd>
+  <dt>@1</dt><dd>나머지 한 마리는 상황에 따라 고름</dd>
+  <dt>TN</dt><dd>트레이너 이름</dd>
+  <dt>메가○○Z, 메가라이츄Y</dt><dd>챔피언스의 메가진화 표기를 원문대로 옮겼습니다.</dd>
+</dl>
+
+<footer>원문: <a href="https://note.com/famous_crocus111/n/n4675981fa47c">note.com/famous_crocus111 「【M-7　最終60位】竜尾マンダガルド」</a>. 실수치·포인트·PP는 원문 스크린샷과 대조했습니다. 킬가르도 블레이드폼 실수치는 원문 본문 값입니다.</footer>
+</div>
+</body>
+</html>
