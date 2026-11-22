@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>poke_kiroku_9843 M-8 레이트 2000 메가루카리오Z 대면 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324;
+  --t-flying:#6f9fe0; --t-grass:#4fa83d;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>poke_kiroku_9843의 시즌 M-8 레이트 2000 파티 — 메가루카리오Z 대면 구축</h1>
+  <p class="lede">일본 유저 poke_kiroku_9843의 파티 소개 글을 한국어판 용어 기준으로 정리했습니다. 기합의띠 누리레느와 생명의구슬 따라큐로 시작해 메가루카리오Z와 메가리자몽Y 두 메가를 상대에 따라 골라 쓰는 대면 파티입니다. 작성자는 "무엇을 써도 못 이기니 적어도 불쾌하게 지는 일은 적은 파티"를 목표로 짰다고 밝혔습니다.</p>
+  <div class="result">
+    <div class="chip">최고 레이트<b>2000 달성</b></div>
+    <div class="chip">스크린샷 시점 레이트<b>2010.958</b></div>
+    <div class="chip">스크린샷 시점 순위<b>996위</b></div>
+    <div class="chip">랭크<b>마스터볼급 랭크 I</b></div>
+    <div class="chip">시즌 / 레귤레이션<b>M-8 / M-C</b></div>
+    <div class="chip">기간<b>2026.11.04 ~ 12.02</b></div>
+  </div>
+  <div class="note">챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 아래 막대와 오른쪽 숫자가 그 포인트이고, 가운데 숫자가 실수치입니다. 진행 중인 시즌에 쓴 글이라 레이트는 제목(레이트 2000)과 결과 화면 스크린샷 기준이며, 최종 기록이 아닙니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10310.png" alt="" loading="lazy"><b>메가루카리오Z</b> ♂</td><td>정신력 → 파동의방호 (はどうのぼうご)</td><td>루카리오나이트Z</td><td>조심</td><td>철제광선 / 기합구슬 / 러스터캐논 / 악의파동</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10035.png" alt="" loading="lazy"><b>메가리자몽Y</b> ♂</td><td>맹화 → 가뭄</td><td>리자몽나이트Y</td><td>조심</td><td>오버히트 / 화염방사 / 솔라빔 / 용의파동</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy"><b>누리레느</b> ♂</td><td>급류</td><td>기합의띠</td><td>조심</td><td>문포스 / 물거품아리아 / 미스트필드 / 아쿠아제트</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/778.png" alt="" loading="lazy"><b>따라큐</b> ♀</td><td>탈</td><td>생명의구슬</td><td>고집</td><td>치근거리기 / 우드해머 / 칼춤 / 야습</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1000.png" alt="" loading="lazy"><b>타부자고</b></td><td>황금몸</td><td>먹다남은음식</td><td>차분</td><td>섀도볼 / 러스터캐논 / 나쁜음모 / HP회복</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy"><b>하마돈</b> ♂</td><td>모래날림</td><td>자뭉열매</td><td>장난꾸러기</td><td>지진 / 스텔스록 / 하품 / 게으름피우기</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>출발점: 불쾌하게 지지 않는 대면 파티</h3>
+    <p>작성자는 무엇을 써도 이기지 못하는 상태였고, 그래서 적어도 불쾌하게 지는 일이 적은 대면 파티를 짜기로 했습니다. 여섯 마리 모두 파워가 높은 포켓몬으로 채운다는 것이 기준입니다.</p>
+  </div>
+  <div class="step">
+    <h3>① 기합의띠 누리레느 + 따라큐</h3>
+    <ul>
+      <li>선봉 대면에서 밀리는 일이 적은 기합의띠 누리레느를 먼저 정했습니다.</li>
+      <li>스토퍼 성능이 높고, 확실하게 못 이기는 상대가 적은 따라큐를 함께 넣었습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>② 메가리자몽Y → 메가루카리오Z</h3>
+    <ul>
+      <li>리자몽이 파티에 보이면 상대는 스텔스록을 까는 포켓몬을 선봉으로 내기 쉽습니다. 그 스텔스록 담당은 누리레느가 선봉 대면에서 이길 수 있는 상대라, 상대 선봉을 유도하는 역할로 메가리자몽Y를 넣었습니다.</li>
+      <li>스텔스록 데미지가 아프지 않으면서 대면 성능이 높은 메가루카리오Z를 넣었습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>③ 하마돈 + 타부자고</h3>
+    <ul>
+      <li>스텔스록을 깔 수 있는 쿠션 가운데 성능이 가장 높은 하마돈을 넣었습니다.</li>
+      <li>상대 누리레느에게 교체로 내보낼 수 있고 받이 포켓몬에도 약하지 않은 타부자고로 마무리했습니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가루카리오Z -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.448</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10310.png" alt="" loading="lazy">메가루카리오Z (수컷)</h3><span class="badge">메인 메가</span>
+    <span class="types"><span class="type" style="background:var(--t-fight)">격투</span><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>루카리오나이트Z</b></span><span>특성 <b>정신력 → 파동의방호 (はどうのぼうご, 확인 필요)</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">177</span><span class="v">177</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim down">117</span><span class="v down">108</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">97</span><span class="v">97</span><span class="bar"><i style="width:21.9%"></i></span><span class="p">7</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim up">166</span><span class="v up">220</span><span class="bar"><i style="width:50%"></i></span><span class="p">16</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">93</span><span class="v">93</span><span class="bar"><i style="width:9.4%"></i></span><span class="p">3</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">118</span><span class="v">179</span><span class="bar"><i style="width:25%"></i></span><span class="p">8</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>철제광선</div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>기합구슬</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>러스터캐논</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>악의파동</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>배분</dt><dd>삿쿠(サックー) 님의 지난 시즌 파티 배분을 그대로 가져온 뒤, 스피드에서 특방으로 1을 옮겼습니다.</dd>
+    <dt>H-D</dt><dd>스텔스록 데미지를 받은 상태에서 겁쟁이 구애스카프 에써르의 와이드포스를 75% 확률로 버팁니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>메인 메가이지만 작성자 스스로 평가가 갈리는 자리라고 봅니다. 대체로 두 번째로 내보냅니다.</li>
+    <li>처음에는 조심 성격에 특공·스피드 풀 배분으로 썼습니다. 그런데 구애스카프 에써르와 메가한카리아스Z에게 너무 많이 져서 내구에 배분하는 형태로 바꿨습니다.</li>
+    <li><b>러스터캐논</b>: 환경의 메가루카리오Z가 철제광선형뿐이라, 강철 기술밖에 칠 수 없는 타이밍에 상대 누리레느가 방어를 쓰거나 교체하는 것이 몹시 성가셨습니다. 그래서 반동 없이 안정적으로 칠 수 있는 타점으로 러스터캐논을 넣었습니다.</li>
+    <li><b>기합구슬</b>: 격투 기술은 치고 싶은 타이밍 자체가 적습니다. 그리고 가상의 적인 갑주무사, 로토무, 히스이 미끄래곤, 브리두라스, 아머까오에게는 기합구슬 쪽이 더 살아나는 장면이 많아 골랐습니다. HP·특방 배분 브리두라스에게 파동탄은 18.75% 난수에 그친다고 적었습니다(원문은 "HD 브리두라스에 파동탄이 18.75%"로만 적혀 있어 몇 번 공격 기준인지는 확인하지 못했습니다).</li>
+    <li>진공파가 없어서 진 판과 기합구슬이 빗나가서 진 판이 꽤 있었습니다. 그래서 기본적으로는 흔한 기술 구성이 낫다고 봅니다. 다만 "어차피 흔한 구성이겠지" 하고 상대가 한 가지만 읽고 들어오는 것이 불쾌했기 때문에 이 구성으로 만족한다고 했습니다.</li>
+    <li>견제가 심해서 지금 환경에서 강하다고 느끼지는 못했지만, 무엇을 써도 못 이기는 상황이라 계속 썼습니다.</li>
+    <li>흔히 짝으로 쓰는 대쓰여너는 대책이 너무 많이 깔려 있어서, 막판에 쓸어 담는 역할은 따라큐 쪽이 더 잘 통한다고 느꼈습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 2. 메가리자몽Y -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.6</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10035.png" alt="" loading="lazy">메가리자몽Y (수컷)</h3><span class="badge">서브 메가</span>
+    <span class="types"><span class="type" style="background:var(--t-fire)">불꽃</span><span class="type" style="background:var(--t-flying)">비행</span></span>
+    <div class="meta"><span>도구 <b>리자몽나이트Y</b></span><span>특성 <b>맹화 → 가뭄</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">155</span><span class="v">155</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim down">93</span><span class="v down">111</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">98</span><span class="v">98</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim up">177</span><span class="v up">232</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">105</span><span class="v">135</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">152</span><span class="v">152</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>오버히트</div>
+      <div class="move"><span class="type" style="background:var(--t-fire)">불꽃</span>화염방사</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>솔라빔</div>
+      <div class="move"><span class="type" style="background:var(--t-dragon)">드래곤</span>용의파동</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>C</dt><dd>하마돈과 브리두라스를 오버히트 한 방에 쓰러뜨리기 위한 특공 특화입니다.</dd>
+    <dt>S</dt><dd>풀 배분입니다(원문에 설명은 없습니다).</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>서브 메가입니다. 스텔스록을 깔지 않을 것 같은 파티와 날씨 파티를 상대로 내보내며, 거의 선봉으로 냅니다.</li>
+    <li>스텔스록 담당이라도 HP·특방 특화가 아니라면 하마돈과 브리두라스는 오버히트로 대체로 쓰러뜨릴 수 있습니다. 그래서 한카리아스가 없는 파티에도 꽤 자주 냈습니다. 특공 특화 오버히트를 쓰는 리자몽이 지금은 없다 보니 상대가 대비하지 않았습니다.</li>
+    <li>네 번째 기술은 처음에 대타출동이었습니다. 받이에 강해지고, 하마돈의 하품에 맞춰 써서 쉽게 이기려는 의도였습니다. 하지만 받이 파티가 전혀 없었고 오버히트와도 궁합이 나빴습니다. 그래서 보만다나 망나뇽과 마주쳐도 체력을 깎을 수 있는 용의파동으로 바꿨습니다.</li>
+    <li>화력 차이가 워낙 커서, 낼 수 있는 상대라면 루카리오보다 더 믿고 내보냈습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 3. 누리레느 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.730</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy">누리레느 (수컷)</h3><span class="badge">출발점</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>기합의띠</b></span><span>특성 <b>급류</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">157</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">84</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">94</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">195</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">136</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">112</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>문포스</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>물거품아리아</div>
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>미스트필드</div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>CS</dt><dd>특공·스피드 풀 배분입니다(원문에 설명은 없습니다).</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>파티를 짜기 시작한 포켓몬이며 거의 선봉으로 냅니다.</li>
+    <li>마스카나, 개굴닌자, 에이스번처럼 선봉 대면부터 수 읽기 싸움이 되는 포켓몬을 상대로도 선봉으로 낼 수 있다는 점이 훌륭합니다.</li>
+    <li>보통 앙코르가 들어가는 자리에는, 하마돈에게 더 강해지도록 미스트필드를 넣었습니다.</li>
+    <li>선봉에서 상대 누리레느와 마주치면 거의 집니다. 그래서 가능하면 타부자고와 세트로 선출하려 했습니다.</li>
+    <li>메가리자몽Y를 상대로도, 상대가 내구에 배분하지 않았다면 급류가 발동한 물거품아리아에 이어 루카리오의 철제광선이나 기합구슬로 쓰러뜨릴 수 있습니다. 전개 자체는 꽤 나쁘지만 억지로 선출한 적도 있습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 4. 따라큐 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.778</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/778.png" alt="" loading="lazy">따라큐 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ghost)">고스트</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>탈</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">131</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">156</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">101</span><span class="bar"><i style="width:3.1%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">63</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">125</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">148</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>치근거리기</div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>우드해머</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤</div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>야습</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>AS</dt><dd>공격·스피드 풀 배분에 남은 포인트를 HP와 방어에 1씩 줬습니다(원문에 설명은 없습니다).</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>막판에 쓸어 담는 역할과 스토퍼를 겸합니다. 대체로 세 번째로 내보냅니다.</li>
+    <li>우드해머는 비 파티, 에써르+거북왕 조합, 하마돈, 누리레느를 의식한 기술입니다. 이유는 모르겠지만 낮은 레이트대에 비 파티가 많았습니다.</li>
+    <li>당연한 이야기지만 따라큐를 선출하면 교체전을 거의 할 수 없습니다. 그래서 작성자는 지금 환경의 따라큐를 개인적으로 좋아하지 못한다고 했습니다. 스칼렛·바이올렛 때의 구애스카프형이나, 코라이돈에게 교체로 내보내는 울퉁불퉁멧형은 좋아했다고 합니다.</li>
+    <li>지금 환경에서는 대쓰여너, 다크펫+빠르모트, 에써르+거북왕, 날씨 파티 등에 맞설 수 있는 "정의 쪽" 포켓몬이라고 봅니다. 그래도 이 포켓몬이 사용률 5위 안에 드는 환경이 정상이라고는 생각하지 않는다고 적었습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 5. 타부자고 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.1000</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1000.png" alt="" loading="lazy">타부자고</h3><span class="badge">선출률 최하 · 승률 높음</span>
+    <span class="types"><span class="type" style="background:var(--t-steel)">강철</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>먹다남은음식</b></span><span>특성 <b>황금몸</b></span><span>성격 <b>차분</b> (특방↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">194</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">72</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">115</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">153</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v up">148</span><span class="bar"><i style="width:75%"></i></span><span class="p">24</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">114</span><span class="bar"><i style="width:31.25%"></i></span><span class="p">10</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼</div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>러스터캐논</div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>나쁜음모</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>HP회복</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>배분</dt><dd>M-6 시즌 모건(モーガン) 님의 배분을 그대로 가져왔습니다. 수치별 의도는 원문에 없습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>상대 누리레느 대책이자 받이 포켓몬에 강한 자리입니다.</li>
+    <li>선출률은 여섯 마리 중 가장 낮았지만, 내보낸 판의 승률은 높았습니다.</li>
+    <li>환경의 플라엣테가 명상·대타출동형뿐이라 수 읽기 싸움이 되는 것이 싫어서, 골드러시가 아니라 러스터캐논을 골랐습니다.</li>
+    <li>플라엣테가 더 적었다면 강철 타점을 버리고 10만볼트를 넣어도 괜찮았을 것 같다고 했습니다.</li>
+  </ul></div>
+</article>
+
+<!-- 6. 하마돈 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.450</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/450.png" alt="" loading="lazy">하마돈 (수컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-ground)">땅</span></span>
+    <div class="meta"><span>도구 <b>자뭉열매</b></span><span>특성 <b>모래날림</b></span><span>성격 <b>장난꾸러기</b> (방어↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">215</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v">132</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">165</span><span class="bar"><i style="width:37.5%"></i></span><span class="p">12</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">79</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">114</span><span class="bar"><i style="width:68.75%"></i></span><span class="p">22</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">67</span><span class="bar"><i style="width:0"></i></span><span class="p">0</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-ground)">땅</span>지진</div>
+      <div class="move"><span class="type" style="background:var(--t-rock)">바위</span>스텔스록</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>하품</div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>게으름피우기</div>
+    </div>
+  </div>
+  <div class="aim"><dl>
+    <dt>H-B-D</dt><dd>HP 풀 배분에 방어 12, 특방 22입니다. 수치별 의도는 원문에 없습니다.</dd>
+  </dl></div>
+  <div class="desc"><ul>
+    <li>쿠션이자 스텔스록 담당입니다.</li>
+    <li>상대의 대타출동이나 리샘열매 누리레느 등에 걸리면 그대로 지는 전개가 만들어지기 쉽습니다. 그래서 상대 파티에 잘 통할 때만 내보내도록 했습니다.</li>
+    <li>메가리자몽Y를 상대할 때는 선봉 하마돈으로 하품 → 스텔스록을 쓰는 것이 가장 좋은 전개라서 선출하고 싶은 포켓몬입니다.</li>
+  </ul></div>
+</article>
+
+<h2>기본 선출</h2>
+<div class="selections">
+  <div class="sel"><div class="lineup">누리레느 + 메가루카리오Z + 따라큐</div><p>가장 많이 낸 선출입니다. 누리레느가 선봉, 루카리오가 두 번째, 따라큐가 세 번째입니다.</p></div>
+  <div class="sel"><div class="lineup">메가리자몽Y + 하마돈 + 따라큐</div><p>리자몽을 낼 때 가장 많았던 것 같다고 한 선출입니다.</p></div>
+</div>
+<p style="margin-top:12px">정해진 틀 없이 상대에 맞춰 유연하게 선출했습니다. 다만 메가 두 마리를 함께 선출할 수는 없습니다.</p>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-8 싱글배틀(2026.11.04 ~ 12.02 10:59)에서 레이트 2000을 달성했습니다. 결과 화면 스크린샷 기준으로 마스터볼급 랭크 I, 순위 <b>996위</b>, 레이트 <b>2010.958</b>입니다. 시즌이 진행 중인 시점의 기록입니다.</li>
+  <li>작성자는 M-A 때부터 느꼈다며, 애초에 <b>메가진화 시스템 자체를 좋아하기 어렵다</b>고 했습니다.</li>
+  <li>스칼렛·바이올렛에서도 전설 포켓몬 환경(특히 두 마리 허용)은 싫어했습니다. 그런데 메가는 기본적으로 두 마리를 함께 선출할 수 없어서, 선출 단계의 수 읽기가 한층 더 심해진다고 봅니다.</li>
+  <li>준전설 포켓몬이 없고 구애안경·구애머리띠처럼 파워 있는 도구도 없습니다. 그래서 메가가 아닌 포켓몬을 에이스로 삼는 전개가 약하고 자유도가 낮다고 했습니다.</li>
+  <li>메가 포켓몬은 도구를 들 수 없어 상대의 대책을 뚫고 넘어가기 어렵습니다. 그러면 교체전을 할 수밖에 없는데, 받이가 성립하기 어려운 포켓몬이 일정 수 있다는 점도 좋지 않다고 봅니다.</li>
+  <li>자신이 쓰는 것은 괜찮지만, 대쓰여너가 사용률 10위 안에 드는 환경은 재미없다고 했습니다. 대쓰여너를 비롯해 선출 압박이 큰 포켓몬이 많아서, 가위바위보에 불과한 대전도 있다고 적었습니다.</li>
+  <li>챔피언스의 시스템으로 메가진화나 Z, 테라스탈이 없는 대전을 하고 싶다고 했습니다. 지금으로서는 스칼렛·바이올렛 쪽이 더 재미있다는 평가입니다(일격기나 글라이온 같은 예외는 제외).</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>대면 구축 (対面構築)</dt><dd>교체보다 1대1 대면에서 이기는 것을 중심으로 짠 파티</dd>
+  <dt>다시마케 / 다시카치 (出し負け / 出し勝ち)</dt><dd>선봉 대면에서 밀림 / 선봉 대면에서 유리함</dd>
+  <dt>스테로 (ステロ)</dt><dd>스텔스록</dd>
+  <dt>루카Z / 리자Y / 가부Z (ルカZ / リザY / ガブZ)</dt><dd>메가루카리오Z / 메가리자몽Y / 메가한카리아스Z</dd>
+  <dt>아시레 / 사후고 / 카바 / 부리 / 구소쿠 / 만다 (アシレ / サフゴ / カバ / ブリ / グソク / マンダ)</dt><dd>누리레느 / 타부자고 / 하마돈 / 브리두라스 / 갑주무사 / 보만다</dd>
+  <dt>이에카메 / 주페파모 (イエカメ / ジュペパモ)</dt><dd>에써르+거북왕 / 다크펫+빠르모트 조합</dd>
+  <dt>텟테코 / 라스카 / 오바히 / 류하 (てってこ / ラスカ / オバヒ / 龍波)</dt><dd>철제광선 / 러스터캐논 / 오버히트 / 용의파동</dd>
+  <dt>미스피 / 고루라 / 10만 (ミスフィ / ゴルラ / 10万)</dt><dd>미스트필드 / 골드러시 / 10만볼트</dd>
+  <dt>쇼세쓰와쿠 (諸説枠)</dt><dd>평가가 갈리는 자리</dd>
+  <dt>CS / HD</dt><dd>특공·스피드 풀 배분 / HP·특방 위주 배분</dd>
+  <dt>템플릿 (テンプレ)</dt><dd>가장 흔한 기술·배분 구성</dd>
+  <dt>잇텐요미 (一点読み)</dt><dd>상대 구성이나 행동을 한 가지로 단정하고 움직이는 것</dd>
+  <dt>마크 / 메타 (マーク / メタ)</dt><dd>환경에서 집중적으로 견제·대책을 당하는 것</dd>
+  <dt>스위퍼 / 스토퍼 / 쿠션</dt><dd>막판에 쓸어 담는 역할 / 상대 에이스를 멈추는 역할 / 공격을 받아 주는 받이</dd>
+  <dt>아토나게 (後投げ)</dt><dd>교체로 내보내기</dd>
+  <dt>타쿠 / 선출 타쿠 (択 / 選出択)</dt><dd>수 읽기 싸움 / 선출 단계의 수 읽기</dd>
+  <dt>사이클 (サイクル)</dt><dd>교체전</dd>
+  <dt>이지 윈 (イージーウィン)</dt><dd>쉽게 이김</dd>
+  <dt>2메가 선출 (2メガ選出)</dt><dd>메가 후보 두 마리를 함께 선출하는 것</dd>
+  <dt>준전 (準伝)</dt><dd>준전설 포켓몬</dd>
+  <dt>75% 버팀, 18.75%</dt><dd>데미지 난수 기준 확률</dd>
+  <dt>파동의방호 (はどうのぼうご)</dt><dd>메가루카리오Z의 특성입니다. 한국어판 정식 명칭은 확인하지 못했습니다(확인 필요).</dd>
+</dl>
+
+<footer>원문: <a href="https://pokesol.app/u/poke_kiroku_9843/articles/5f9140a60293f1b2">pokesol.app/u/poke_kiroku_9843 (【シーズンM-8 レート2000】ルカリオZ対面)</a>. 실수치·포인트·성격은 pokesol 포켓몬 카드와 스테이터스 화면 스크린샷을 대조했습니다. 메가리자몽Y의 메가 후 실수치·타입·특성은 원문에 없어 같은 공식으로 계산·보완했고, PP는 원문에 화면이 없어 넣지 않았습니다.</footer>
+</div>
+</body>
+</html>
