@@ -1222,5 +1222,11 @@
   "status": "ok",
   "file": "parties/poke_kiroku_9843-M8-party.html",
   "at": "2026-11-22T17:33:23"
+ },
+ "https://pokesol.app/u/shou/articles/f4533584d186d457": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/shou-M8-party.html",
+  "at": "2026-11-23T13:42:02"
  }
 }
