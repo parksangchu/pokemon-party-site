@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>m_11121995 M-8 레이트 2016 물 통일 비 파티</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 좁은 본문 컬럼 + 포켓몬별 카드(기본정보 | 실수치·포인트 막대 | 기술) */
+:root{
+  --bg:#f3f2f7; --surface:#ffffff; --ink:#1d1b29; --muted:#625e78; --line:#dddbe7;
+  --accent:#5b3fd0; --accent-soft:#ece7ff; --bar:#f08a24; --bar-bg:#e6e4ee;
+  --up:#d6336c; --down:#2f7bd6;
+  --display:"Gothic A1","Apple SD Gothic Neo",sans-serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  /* 타입 색 */
+  --t-ghost:#6d5a9e; --t-poison:#9b46c2; --t-ice:#3fb8d6; --t-dark:#4a3f3a; --t-psychic:#e8456f;
+  --t-fire:#e5482f; --t-normal:#9a9a8a; --t-water:#3a86e0; --t-fairy:#e57bd8; --t-ground:#a7672c;
+  --t-dragon:#4c57d6; --t-rock:#b0a571; --t-steel:#5c9eb0; --t-fight:#ee7b14; --t-bug:#8aa324; --t-grass:#4fa83d;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#14131b; --surface:#1d1b27; --ink:#ecebf4; --muted:#a29fb8; --line:#33303f;
+    --accent:#a996ff; --accent-soft:#2a2442; --bar:#f59a3c; --bar-bg:#2d2b39; --up:#ff6f9a; --down:#6aaeff;
+    color-scheme:dark; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-block:40px 80px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(26px,4vw,36px);font-weight:800}
+h2{font-size:22px;font-weight:800;margin-top:48px;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+h3{font-size:16px;font-weight:600;margin:18px 0 6px}
+p{margin:0 0 10px}
+ul{margin:0 0 10px;padding-left:20px}
+li{margin:2px 0}
+a{color:var(--accent)}
+.eyebrow{font:600 12px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.lede{color:var(--muted);max-width:68ch;margin-top:12px}
+.result{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.chip b{display:block;font:600 18px/1.2 var(--display)}
+.note{background:var(--accent-soft);border-radius:8px;padding:12px 14px;font-size:14px;margin-top:16px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.steps{display:grid;gap:14px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.step h3{margin-top:0}
+/* 포켓몬 카드 */
+.mon{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:22px;overflow:hidden}
+.mon-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mon-head .no{font:500 12px var(--mono);color:var(--muted)}
+.mon-head h3{margin:0;font-size:20px;font-weight:800}
+.types{display:flex;gap:4px}
+.type{font:600 11px/1 var(--display);color:#fff;padding:4px 7px;border-radius:4px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);width:100%}
+.meta b{color:var(--ink);font-weight:600}
+.mon-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:0}
+.stats{padding:14px 18px;border-right:1px solid var(--line)}
+.moves{padding:14px 18px}
+.stat{display:grid;grid-template-columns:48px 44px 44px minmax(0,1fr) 26px;align-items:center;gap:8px;font-size:13px;padding:3px 0;font-variant-numeric:tabular-nums}
+.stat .k{color:var(--muted)}
+.stat .v{font-family:var(--mono);text-align:right}
+.stat .v.dim{color:var(--muted)}
+.stat .bar{height:7px;background:var(--bar-bg);border-radius:4px;overflow:hidden}
+.stat .bar i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.stat .p{font-family:var(--mono);text-align:right}
+.stat.hdr{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.up{color:var(--up)} .down{color:var(--down)}
+.move{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.move:last-child{border-bottom:0}
+.move .type{min-width:44px;text-align:center}
+.move .pp{margin-left:auto;font:500 12px var(--mono);color:var(--muted)}
+.aim{padding:12px 18px;border-top:1px solid var(--line);font-size:14px;background:color-mix(in srgb,var(--accent-soft) 45%,transparent)}
+.aim dt{font-weight:600;font-size:12px;color:var(--accent);letter-spacing:.04em}
+.aim dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.aim dd{margin:0}
+.desc{padding:14px 18px;border-top:1px solid var(--line);font-size:14.5px}
+.desc ul{max-width:72ch}
+.badge{display:inline-block;font:600 11px/1 var(--display);background:var(--accent);color:var(--surface);padding:4px 7px;border-radius:4px;vertical-align:2px;margin-left:4px}
+.selections{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.sel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.sel .lineup{font:700 15px var(--display);margin-bottom:4px}
+.sel p{font-size:13.5px;color:var(--muted);margin:0}
+dl.gloss{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 16px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-size:14px}
+dl.gloss dt{font-weight:600}
+dl.gloss dd{margin:0;color:var(--muted)}
+footer{margin-top:48px;font-size:13px;color:var(--muted)}
+@media (max-width:720px){
+  .mon-body{grid-template-columns:1fr}
+  .stats{border-right:0;border-bottom:1px solid var(--line)}
+  dl.gloss{grid-template-columns:1fr}
+  dl.gloss dd{margin-bottom:6px}
+}
+</style>
+<style id="pkicon-css">.pkicon{width:40px;height:40px;image-rendering:pixelated;vertical-align:middle;margin:-8px 2px -8px -6px}.mon-head .pkicon{width:56px;height:56px;margin:-12px 4px -12px -8px}</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">포켓몬 챔피언스 · 랭크배틀 싱글</div>
+  <h1>m_11121995의 시즌 M-8 레이트 2016 파티 "라티핫삼을 목표로 했더니 어째선지 물타입 통일이 됐다"</h1>
+  <p class="lede">일본 유저 m_11121995의 pokesol 글을 한국어판 용어 기준으로 정리했습니다. BW 시절의 라티오스+핫삼, 왕구리+킹드라+핫삼 같은 "때리기 위해 돌리는 사이클"을 지금 환경에서 재현하려다 여섯 마리가 모두 물타입이 된 비 파티입니다. 메가갑주무사 또는 메가아쿠스타, 탈출버튼 왕구리, 스카프 누리레느 또는 구슬 대쓰여너를 골라 선공기·후공 유턴·퀵턴·탈출버튼으로 에이스를 계속 내보냅니다. 작성자는 이 파티로 시즌 M-8에서 레이트 2000을 넘겼습니다.</p>
+  <div class="result">
+    <div class="chip">레이트 (11.28 시점)<b>2016.289</b></div>
+    <div class="chip">순위 (11.28 시점)<b>1626위</b></div>
+    <div class="chip">시즌 / 레귤레이션<b>M-8 / 진행 중</b></div>
+    <div class="chip">룰<b>싱글배틀</b></div>
+  </div>
+  <div class="note">레이트와 순위는 원문에 적힌 <b>11월 28일 시점</b> 값입니다. 시즌이 진행 중이라 최종 기록이 아닙니다. 챔피언스에서는 노력치가 <b>포인트제</b>입니다. 능력치 하나에 최대 32, 합계 66입니다. 막대와 오른쪽 숫자가 포인트이고, 그 왼쪽 숫자가 실수치입니다. 원문에는 스테이터스 화면이나 카드가 없고 성격과 포인트만 글로 적혀 있어서, <b>실수치는 성격·포인트로 계산한 값</b>입니다(레벨 50, 개체값 최대 기준). PP와 메가진화 포켓몬의 특성·타입도 원문에 없어 이 사이트의 다른 파티 문서에 적힌 값을 옮겼습니다.</div>
+</header>
+
+<h2>파티 한눈에 보기</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>#</th><th>포켓몬</th><th>특성</th><th>도구</th><th>성격</th><th>기술</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10316.png" alt="" loading="lazy"><b>메가갑주무사</b></td><td>위기회피 → 단단한발톱 (원문 미기재)</td><td>갑주무사나이트</td><td>고집</td><td>만나자마자 / 기습 / 아이언헤드 / 유턴</td></tr>
+    <tr><td>2</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/186.png" alt="" loading="lazy"><b>왕구리</b></td><td>잔비</td><td>탈출버튼</td><td>대담</td><td>파도타기 / 방어 / 앙코르 / 멸망의노래</td></tr>
+    <tr><td>3</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10280.png" alt="" loading="lazy"><b>메가아쿠스타</b></td><td>원문 미기재</td><td>아쿠스타나이트</td><td>고집</td><td>아쿠아제트 / 아쿠아브레이크 / 아이스스피너 / 퀵턴</td></tr>
+    <tr><td>4</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy"><b>누리레느</b></td><td>급류</td><td>구애스카프</td><td>겁쟁이</td><td>물거품아리아 / 문포스 / 퀵턴 / 에너지볼</td></tr>
+    <tr><td>5</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/902.png" alt="" loading="lazy"><b>대쓰여너</b> ♀</td><td>쓱쓱</td><td>생명의구슬</td><td>조심</td><td>하이드로펌프 / 섀도볼 / 냉동빔 / 퀵턴</td></tr>
+    <tr><td>6</td><td><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10236.png" alt="" loading="lazy"><b>히스이 대검귀</b></td><td>예리함</td><td>검은안경</td><td>고집</td><td>비검천중파 / 칼춤 / 성스러운칼 / 기습</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>작성자 소개와 배경</h2>
+<ul>
+  <li>올해 31세가 된, 스스로 "BW 세대 추억팔이 아저씨"라고 소개하는 유저입니다.</li>
+  <li>BW 이후로는 SV를 조금 만진 정도였고, 결혼하고 아이가 태어나면서 한동안 대전에서 떠나 있었습니다. 스마트폰으로 대전할 수 있게 됐다는 소식을 듣고 포켓몬 챔피언스로 본격 복귀했습니다.</li>
+  <li>BW 시절 좋아하던 파티는 라티오스+핫삼, 왕구리+킹드라+핫삼입니다. 탈출버튼이나 후공 유턴으로 에이스를 피해 없이 내보내 높은 화력을 꽂는 방식입니다. 받아 내기 위해서가 아니라 <b>때리기 위해 사이클을 돌리는</b> 공격적인 사이클전을 좋아했습니다.</li>
+  <li>십수 년 만에 돌아왔지만 하고 싶은 것은 그대로였습니다. 그 시절 조합을 지금 환경에서 재현할 수 없을지 생각하며 짜다 보니 어째선지 물타입 통일이 됐고, 시즌 M-8에서 레이트 2000을 달성해 기록으로 남기려고 글을 썼습니다.</li>
+</ul>
+
+<h2>파티를 짠 과정</h2>
+<div class="steps">
+  <div class="step">
+    <h3>① 그 시절의 왕구리+킹드라+핫삼을 찾아서</h3>
+    <ul>
+      <li>복귀해서 가장 먼저 생각한 것이 BW 시절 좋아하던 왕구리+킹드라+핫삼의 재현입니다.</li>
+      <li>비가 내릴 때 빠른 스피드와 높은 화력을 밀어붙이는 "현대판 킹드라"를 찾다가, <b>쓱쓱 + 생명의구슬을 든 특수형 대쓰여너</b>에 도달했습니다.</li>
+      <li>비를 내리는 역할은 예전부터 익숙한 탈출버튼 왕구리, 그리고 가장 좋아하는 핫삼을 붙였습니다.</li>
+      <li>후공 유턴이나 탈출버튼으로 비 에이스를 내보내 높은 화력을 꽂는다는, BW 때와 똑같은 발상입니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>② 미안해, 핫삼</h3>
+    <ul>
+      <li>복귀 초반에는 핫삼을 썼습니다. 그런데 대전을 거듭할수록 상대가 쓰는 <b>메가갑주무사</b>가 너무 강했습니다.</li>
+      <li>높은 물리 내구와 화력, 만나자마자와 기습이라는 두 가지 선공기, 그리고 후공 유턴까지 갖췄습니다. 따져 보니 작성자가 핫삼에게 바라던 요소를 거의 다 갖고 있었습니다.</li>
+      <li>사이클을 돌리면 만나자마자를 다시 쓸 수 있다는 성질도 작성자가 좋아하는 싸움 방식과 잘 맞았습니다.</li>
+      <li>상대 갑주무사에게 실컷 당한 끝에 자신도 쓰기로 했습니다. 이렇게 <b>갑주무사 + 왕구리 + 대쓰여너</b>라는 파티의 원형이 만들어졌습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>③ 메가리자몽Y가 너무 힘들다</h3>
+    <ul>
+      <li>이 조합을 축으로 짰지만 메가리자몽Y가 유난히 부담스러웠습니다. 비를 빼앗기는 데다, 파티의 축인 메가갑주무사는 불꽃 기술에 4배 약점입니다.</li>
+      <li>그래서 또 하나의 메가진화로 <b>메가아쿠스타</b>를 넣었습니다. 메가아쿠스타의 퀵턴으로 왕구리를 내보내 날씨를 되찾는 움직임이 쓰기 쉬웠고, 매번 비슷하게 재현할 수 있었습니다.</li>
+      <li>리자몽Y 상대가 아니더라도 비가 내릴 때 메가아쿠스타의 화력이 훌륭해서 비 에이스로도 우수했습니다.</li>
+      <li>BW 시절의 자신에게 "아쿠스타로 물리 기술을 쓰고 있다"고 말해도 아마 믿지 않을 것이라고 작성자는 덧붙였습니다.</li>
+    </ul>
+  </div>
+  <div class="step">
+    <h3>④ 대쓰여너의 보완을 찾다</h3>
+    <p>대쓰여너는 매우 강하지만, 악타입이 낀 파티를 상대로는 내기 어렵다는 문제가 있었습니다. 그래서 아래 조건으로 특수 어태커를 찾았습니다.</p>
+    <ul>
+      <li>적당히 단단할 것</li>
+      <li>적당히 빠를 것</li>
+      <li>메가진화 자리를 쓰지 않을 것</li>
+      <li>페어리타입일 것</li>
+    </ul>
+    <p>도달한 답이 <b>구애스카프를 든 누리레느</b>입니다. 비가 내릴 때 물 기술의 화력, 문포스의 공격 범위, 퀵턴을 통한 대면 조작이 갑주무사와 매우 잘 맞았습니다. 점차 갑주무사 + 왕구리 + 누리레느가 가장 안정적인 선출이 됐습니다. 작성자는 라티오스+핫삼을 목표로 하던 자신에게 라티오스 자리는 결국 스카프 누리레느였을지도 모른다고 적었습니다.</p>
+  </div>
+  <div class="step">
+    <h3>⑤ 어, 물타입 통일이 되겠는데?</h3>
+    <ul>
+      <li>여기까지 쓰다 보니 선출의 대부분이 <b>메가아쿠스타 또는 메가갑주무사 + 왕구리 + 대쓰여너 또는 누리레느</b>였습니다.</li>
+      <li>그러다 한 마리만 더 물타입을 넣으면 물타입 통일이 된다는 것을 깨달았습니다.</li>
+      <li>상대 대쓰여너와 에써르의 기술이 그대로 통하는 것을 끊어 줄 악타입이 필요하기도 해서, 마지막 한 자리에 물·악타입인 <b>히스이 대검귀</b>를 넣었습니다.</li>
+      <li>이렇게 물타입 통일 비 파티가 완성됐습니다. 물타입 통일을 짰다기보다, 짜 놓은 파티가 거의 물타입 통일이어서 통일로 맞췄다는 쪽이 정확하다고 합니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>파티 컨셉</h2>
+<div class="steps">
+  <div class="step">
+    <h3>때리고, 돌리고, 또 때린다</h3>
+    <ul>
+      <li>비로 올라간 물 기술의 화력에 선공기, 후공 유턴, 퀵턴, 탈출버튼을 섞어 쓰는 <b>공격적인 사이클 파티</b>입니다.</li>
+      <li>받아 넘기기 위한 사이클이 아니라, 높은 화력을 꽂을 기회를 만들기 위한 사이클을 의식합니다.</li>
+      <li>물 기술이 상대 파티에 그대로 통하지 않으면, 물 기술을 여러 번 받게 만들어 통하는 상태를 만듭니다.</li>
+      <li>선출도 단순합니다. 기본적으로 메가진화 한 마리와 특수 어태커 한 마리를 고르고 왕구리를 곁들이면 됩니다.</li>
+      <li>하고 싶은 것이 분명하고 사이클을 즐겁게 돌릴 수 있어서, 초보자나 작성자 같은 복귀 유저에게도 추천한다고 했습니다.</li>
+    </ul>
+  </div>
+</div>
+
+<h2>개체 소개</h2>
+
+<!-- 1. 메가갑주무사 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.768</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10316.png" alt="" loading="lazy">메가갑주무사</h3><span class="badge">파티의 축</span>
+    <span class="types"><span class="type" style="background:var(--t-bug)">벌레</span><span class="type" style="background:var(--t-steel)">강철</span></span>
+    <div class="meta"><span>도구 <b>갑주무사나이트</b></span><span>특성 <b>위기회피 → 단단한발톱</b> (원문 미기재)</span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">181</span><span class="v">181</span><span class="bar"><i style="width:96.88%"></i></span><span class="p">31</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">194</span><span class="v up">222</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">160</span><span class="v">195</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">72</span><span class="v down">81</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">110</span><span class="v">140</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">63</span><span class="v">63</span><span class="bar"><i style="width:9.38%"></i></span><span class="p">3</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-bug)">벌레</span>만나자마자<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>기습<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-steel)">강철</span>아이언헤드<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-bug)">벌레</span>유턴<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>파티의 축이자, 작성자에게는 "현대판 핫삼"입니다.</li>
+    <li>높은 물리 내구를 살린 <b>후공 유턴</b>과, 만나자마자·기습 두 가지 선공기로 상대를 묶어 두는 능력이 매우 뛰어납니다.</li>
+    <li>교체해서 다시 나오면 만나자마자를 또 쓸 수 있으므로, 사이클을 돌리는 동안 만나자마자를 여러 번 넣는 것을 의식해서 운용합니다.</li>
+    <li>배분은 HP 31·공격 32·스피드 3이며, 원문에 배분 의도 설명은 없습니다.</li>
+  </ul></div>
+</article>
+<!-- 2. 왕구리 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.186</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/186.png" alt="" loading="lazy">왕구리</h3><span class="badge">거의 고정 선출</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span></span>
+    <div class="meta"><span>도구 <b>탈출버튼</b></span><span>특성 <b>잔비</b></span><span>성격 <b>대담</b> (방어↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">197</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">85</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v up">127</span><span class="bar"><i style="width:65.62%"></i></span><span class="p">21</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">110</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">120</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">103</span><span class="bar"><i style="width:40.62%"></i></span><span class="p">13</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>파도타기<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>방어<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>앙코르<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>멸망의노래<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>파티의 윤활유입니다. 선출에서 거의 고정으로 들어갑니다.</li>
+    <li>단순히 비를 내리는 역할만 하는 것이 아닙니다. 탈출버튼으로 대면을 조작하고, 앙코르로 상대가 이쪽을 발판 삼아 랭크를 올리는 상황을 막고, 멸망의노래로 마무리하는 등 <b>화력 이외의 부분</b>을 맡습니다.</li>
+    <li>BW로부터 십수 년이 지났어도 결국 탈출버튼을 든 왕구리를 쓰고 있다고 작성자는 적었습니다.</li>
+    <li>배분은 HP 32·방어 21·스피드 13이며, 원문에 배분 의도 설명은 없습니다.</li>
+  </ul></div>
+</article>
+<!-- 3. 메가아쿠스타 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.121</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10280.png" alt="" loading="lazy">메가아쿠스타</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-psychic)">에스퍼</span></span>
+    <div class="meta"><span>도구 <b>아쿠스타나이트</b></span><span>특성 <b>원문 미기재</b> (메가 후는 다른 문서 기준 천하장사)</span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span class="v">메가 전</span><span class="v">메가 후</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span class="v dim">137</span><span class="v">137</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">공격</span><span class="v dim">139</span><span class="v up">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span class="v dim">105</span><span class="v">125</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span class="v dim">108</span><span class="v down">135</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span class="v dim">105</span><span class="v">125</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span class="v dim">167</span><span class="v">172</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아제트<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>아쿠아브레이크<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>아이스스피너<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>퀵턴<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>메가리자몽Y를 의식해서 넣은 두 번째 메가진화입니다.</li>
+    <li><b>퀵턴으로 빠지면서 왕구리를 내보내</b> 날씨를 비로 되돌리는 움직임이 매우 뛰어납니다.</li>
+    <li>비가 내릴 때 아쿠아브레이크의 화력이 훌륭하고, 선공기 아쿠아제트로 상대를 묶어 두는 능력도 좋습니다.</li>
+    <li>대면을 조작하면서 자신도 에이스로 활약할 수 있는 포켓몬입니다.</li>
+    <li>배분은 HP 2·공격 32·스피드 32이며, 원문에 배분 의도 설명은 없습니다.</li>
+  </ul></div>
+</article>
+<!-- 4. 누리레느 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.730</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/730.png" alt="" loading="lazy">누리레느</h3><span class="badge">기본 선출</span>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-fairy)">페어리</span></span>
+    <div class="meta"><span>도구 <b>구애스카프</b></span><span>특성 <b>급류</b></span><span>성격 <b>겁쟁이</b> (스피드↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">165</span><span class="bar"><i style="width:31.25%"></i></span><span class="p">10</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">84</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">95</span><span class="bar"><i style="width:3.12%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v">170</span><span class="bar"><i style="width:75%"></i></span><span class="p">24</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">137</span><span class="bar"><i style="width:3.12%"></i></span><span class="p">1</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v up">121</span><span class="bar"><i style="width:93.75%"></i></span><span class="p">30</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>물거품아리아<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fairy)">페어리</span>문포스<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>퀵턴<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-grass)">풀</span>에너지볼<span class="pp">PP 12</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>대쓰여너를 내기 어려운 파티를 상대하려고 넣은 특수 어태커입니다.</li>
+    <li>적당한 내구와 스피드에, 비로 보강된 화력을 함께 갖췄습니다.</li>
+    <li>특히 <b>갑주무사와 함께 돌리는 공격적인 사이클</b>이 강력해서, 지금은 기본 선출의 한 자리를 맡고 있습니다.</li>
+    <li>배분은 HP 10·방어 1·특공 24·특방 1·스피드 30이며, 원문에 배분 의도 설명은 없습니다.</li>
+  </ul></div>
+</article>
+<!-- 5. 대쓰여너 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.902</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/902.png" alt="" loading="lazy">대쓰여너 (암컷)</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-ghost)">고스트</span></span>
+    <div class="meta"><span>도구 <b>생명의구슬</b></span><span>특성 <b>쓱쓱</b></span><span>성격 <b>조심</b> (특공↑ 공격↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">195</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v down">100</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">87</span><span class="bar"><i style="width:6.25%"></i></span><span class="p">2</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v up">167</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">95</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">130</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>하이드로펌프<span class="pp">PP 8</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ghost)">고스트</span>섀도볼<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-ice)">얼음</span>냉동빔<span class="pp">PP 12</span></div>
+      <div class="move"><span class="type" style="background:var(--t-water)">물</span>퀵턴<span class="pp">PP 20</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>작성자가 "현대판 킹드라"라고 부르는 비 에이스입니다.</li>
+    <li>비가 내릴 때의 압도적인 스피드와 화력이 매력입니다.</li>
+    <li>상대 파티에 따라 누리레느와 번갈아 씁니다.</li>
+    <li>배분은 방어 2·특공 32·스피드 32이며, 원문에 배분 의도 설명은 없습니다.</li>
+  </ul></div>
+</article>
+<!-- 6. 히스이 대검귀 -->
+<article class="mon">
+  <div class="mon-head">
+    <span class="no">No.503</span><h3><img class="pkicon" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10236.png" alt="" loading="lazy">히스이 대검귀</h3>
+    <span class="types"><span class="type" style="background:var(--t-water)">물</span><span class="type" style="background:var(--t-dark)">악</span></span>
+    <div class="meta"><span>도구 <b>검은안경</b></span><span>특성 <b>예리함</b></span><span>성격 <b>고집</b> (공격↑ 특공↓)</span></div>
+  </div>
+  <div class="mon-body">
+    <div class="stats">
+      <div class="stat hdr"><span></span><span></span><span class="v">실수치</span><span>포인트</span><span></span></div>
+      <div class="stat"><span class="k">HP</span><span></span><span class="v">185</span><span class="bar"><i style="width:62.5%"></i></span><span class="p">20</span></div>
+      <div class="stat"><span class="k">공격</span><span></span><span class="v up">176</span><span class="bar"><i style="width:100%"></i></span><span class="p">32</span></div>
+      <div class="stat"><span class="k">방어</span><span></span><span class="v">100</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특공</span><span></span><span class="v down">108</span><span class="bar"><i style="width:0%"></i></span><span class="p">0</span></div>
+      <div class="stat"><span class="k">특방</span><span></span><span class="v">90</span><span class="bar"><i style="width:15.62%"></i></span><span class="p">5</span></div>
+      <div class="stat"><span class="k">스피드</span><span></span><span class="v">114</span><span class="bar"><i style="width:28.12%"></i></span><span class="p">9</span></div>
+    </div>
+    <div class="moves">
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>비검천중파<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-normal)">노말</span>칼춤<span class="pp">PP 20</span></div>
+      <div class="move"><span class="type" style="background:var(--t-fight)">격투</span>성스러운칼<span class="pp">PP 16</span></div>
+      <div class="move"><span class="type" style="background:var(--t-dark)">악</span>기습<span class="pp">PP 8</span></div>
+    </div>
+  </div>
+  <div class="desc"><ul>
+    <li>물타입 통일을 완성한 마지막 한 마리입니다.</li>
+    <li>상대 대쓰여너와 에써르의 기술이 파티 전체에 그대로 통하는 것을 끊으려면 악타입이 필요했고, 물타입 통일이라는 점도 맞아서 넣었습니다.</li>
+    <li>비검천중파로 공격하면서 압정뿌리기를 깔 수 있다는 점도 파티 컨셉에 맞는다고 작성자는 봅니다.</li>
+    <li>다만 솔직히 <b>거의 선출하지 않았습니다</b>. 이 자리는 아직 검토할 여지가 많고, 더 좋은 포켓몬이 있을 수 있다고 했습니다.</li>
+    <li>배분은 HP 20·공격 32·특방 5·스피드 9이며, 원문에 배분 의도 설명은 없습니다.</li>
+  </ul></div>
+</article>
+<h2>선출</h2>
+<p>기본적으로 메가진화와 특수 어태커의 조합만 고르면 됩니다. 왕구리는 거의 고정입니다.</p>
+<div class="selections">
+  <div class="sel"><div class="lineup">기본 선출: 메가갑주무사 + 왕구리 + 누리레느</div><p>가장 안정적인 선출입니다. 갑주무사의 물리 화력과 누리레느의 특수 화력을 왕구리를 거쳐 가며 밀어붙입니다.</p></div>
+  <div class="sel"><div class="lineup">아쿠스타 축: 메가아쿠스타 + 왕구리 + 누리레느 또는 대쓰여너</div><p>리자몽Y가 든 파티처럼 갑주무사를 통과시키기 어려운 상대에게 냅니다. 비가 내릴 때의 빠른 물리 화력과 특수 화력을 밀어붙이는 선출입니다.</p></div>
+  <div class="sel"><div class="lineup">대쓰여너 축: 메가갑주무사 + 왕구리 + 대쓰여너</div><p>대쓰여너의 공격이 잘 통하는 파티에 냅니다. 파티의 원형이자 왕구리+킹드라+핫삼의 모습이 가장 많이 남아 있는 선출입니다.</p></div>
+</div>
+
+<h2>결과와 소감</h2>
+<ul>
+  <li>시즌 M-8 싱글배틀, <b>레이트 2016.289</b>, <b>1626위</b>입니다. 11월 28일 시점 기록입니다.</li>
+  <li>BW 때로부터 십수 년이 지나 결혼하고 아이도 태어나면서, 포켓몬을 둘러싼 환경도 작성자 자신의 환경도 많이 달라졌습니다. 그래도 후공 유턴이나 탈출버튼으로 에이스를 내보내 높은 화력을 꽂는 순간은 여전히 즐겁다고 했습니다.</li>
+  <li>선출이 쉽고 공격적인 사이클전의 재미를 맛볼 수 있는 파티라고 봅니다. 초보자는 물론, 예전에 라티오스+핫삼이나 왕구리+킹드라+핫삼을 쓰던 같은 세대에게도 한번 써 보기를 권했습니다.</li>
+  <li>스마트폰으로 대전할 수 있게 되어 다시 포켓몬을 즐기고 있다는 것이 기쁘다고 했습니다.</li>
+  <li>31세, 라티오스+핫삼을 짜려다 물타입 통일이 됐지만 하는 일은 BW 때와 크게 다르지 않습니다. 다만 핫삼은 없어졌다는 말로 글을 맺었습니다.</li>
+</ul>
+
+<h2>용어 메모</h2>
+<dl class="gloss">
+  <dt>라티핫삼 (ラティハッサム)</dt><dd>라티오스+핫삼 조합. BW 시절의 대표적인 공격형 사이클</dd>
+  <dt>토노구도라핫삼 (トノグドラハッサム)</dt><dd>왕구리+킹드라+핫삼. 잔비 왕구리로 비를 내리고 쓱쓱 킹드라를 에이스로 쓰는 BW 시절 비 파티</dd>
+  <dt>물 통일 (水統一)</dt><dd>여섯 마리를 모두 물타입으로 맞춘 파티. 여기서는 메가진화 전 타입 기준입니다</dd>
+  <dt>후공 유턴 (後攻とんぼ)</dt><dd>상대보다 늦게 움직여 유턴을 쓰는 것. 뒤에 나오는 포켓몬이 공격을 받지 않고 등장합니다</dd>
+  <dt>무상 착지 (無償着地)</dt><dd>에이스를 피해 없이 필드에 내보내는 것</dd>
+  <dt>묶기 (縛り)</dt><dd>선공기 등으로 상대가 움직이기 전에 쓰러뜨릴 수 있는 상태로 만들어 행동을 제한하는 것</dd>
+  <dt>일관 (一貫)</dt><dd>한 타입의 기술이 상대 파티 전체에 반감·무효 없이 통하는 상태. "일관을 끊는다"는 그 기술을 받아 낼 타입을 넣는다는 뜻</dd>
+  <dt>대면 조작 (対面操作)</dt><dd>유턴·퀵턴·탈출버튼 등으로 유리한 대면을 만드는 것</dd>
+  <dt>기점 회피 (起点回避)</dt><dd>상대가 이쪽을 발판 삼아 랭크업 기술 등을 쌓는 상황을 막는 것</dd>
+  <dt>라스이치 (ラスイチ)</dt><dd>파티의 마지막 한 자리</dd>
+  <dt>메가 자리 (メガ枠)</dt><dd>메가진화를 맡는 포켓몬 자리</dd>
+  <dt>복귀세 (復帰勢)</dt><dd>오랜만에 대전으로 돌아온 유저</dd>
+  <dt>압정뿌리기 (撒菱)</dt><dd>비검천중파가 명중하면 상대 필드에 깔리는 설치기</dd>
+</dl>
+
+<footer>원문: <a href="https://pokesol.app/u/m_11121995/articles/cfed60467d3be77d">pokesol.app/u/m_11121995 「【M-8 レート2016】ラティハッサムを目指していたら、なぜか水統一になっていた。」</a>. 원문에는 이미지와 카드가 없어 대조할 스크린샷이 없습니다. 포인트는 본문 값이며 여섯 마리 모두 합계 66입니다. 실수치는 성격·포인트로 계산했고, 종족값은 이 사이트의 다른 파티 문서(스크린샷 대조분)에 적힌 같은 포켓몬의 실수치와 맞는지 확인했습니다. PP, 메가갑주무사·메가아쿠스타의 특성과 타입은 원문에 없어 다른 파티 문서의 값을 옮겼습니다.</footer>
+</div>
+</body>
+</html>
