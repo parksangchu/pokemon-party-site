@@ -1258,5 +1258,11 @@
   "status": "ok",
   "file": "parties/m_11121995-M8-party.html",
   "at": "2026-11-28T12:36:12"
+ },
+ "https://pokesol.app/u/neruseel/articles/34fd97dfe112ad49": {
+  "tries": 0,
+  "status": "ok",
+  "file": "parties/neruseel-M8-party.html",
+  "at": "2026-11-28T23:25:15"
  }
 }
